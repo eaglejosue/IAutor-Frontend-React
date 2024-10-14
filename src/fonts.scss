@@ -1,0 +1,37 @@
+// Weights
+$hairline-weight: 100;
+$thin-weight: 200;
+$light-weight: 300;
+$normal-weight: 400;
+$medium-weight: 500;
+$semibold-weight: 600;
+$bold-weight: 700;
+$xbold-weight: 800;
+$black-weight: 900;
+
+// Synonyms
+$regular-weight: $normal-weight;
+$book-weight: $light-weight;
+$xlight-weight: $hairline-weight;
+$ultralight-weight: $hairline-weight;
+$heavy-weight: $xbold-weight;
+
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+// Use 'em
+
+body {
+  font-family: "Inter", inter;
+}
+
+p {
+  font-weight: $normal-weight;
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: $bold-weight;
+}

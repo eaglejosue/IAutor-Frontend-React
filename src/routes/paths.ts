@@ -1,0 +1,19 @@
+interface Paths {
+  [key: string]: string;
+}
+
+export default {
+  LOGIN: "/login",
+  SIGIN: "/sigin",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+  HOME: "/",
+  NOT_FOUND: "*",
+  MY_ACCOUNT: '/my-account',
+  DEGUST: '/degust',
+  PRICING_PLANS: '/pricing-plans',
+  INCOMES: '/incomes',
+  TERMS: '/terms',
+  USERS: '/users',
+
+} as Paths;
