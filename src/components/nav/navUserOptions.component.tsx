@@ -73,6 +73,12 @@ const NavUserOptions = ({userNameColor = 'black'}: Props) => {
           </>
         }
 
+        {user?.type === EnumUserTypes.Admin &&
+          <>
+            <Dropdown.Item onClick={() => navigate(paths.CHAPTERS)}>Capitulos</Dropdown.Item>
+          </>
+        }
+
         <Dropdown.Divider />
         <Dropdown.Item onClick={() => logout()}>Sair</Dropdown.Item>
 
