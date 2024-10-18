@@ -15,5 +15,6 @@ export default {
   INCOMES: '/incomes',
   TERMS: '/terms',
   USERS: '/users',
+  CHAPTERS: '/chapters',
 
 } as Paths;

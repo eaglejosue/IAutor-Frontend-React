@@ -18,6 +18,7 @@ const MyAccount = lazy(() => import("../pages/my-account/MyAccount"));
 const Incomes = lazy(() => import("../pages/admin/incomes/Incomes"));
 const Terms = lazy(() => import("../pages/admin/terms/Terms"));
 const Users = lazy(() => import("../pages/admin/users/Users"));
+const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
 
 interface Routes {
   path: string;
@@ -57,6 +58,7 @@ const routes: Routes[] = [
   { path: paths.INCOMES, element: getRouteElement(Incomes, true) },
   { path: paths.TERMS, element: getRouteElement(Terms, true) },
   { path: paths.USERS, element: getRouteElement(Users, true) },
+  { path: paths.CHAPTERS, element: getRouteElement(Chapters, true) },
 ];
 
 export default createBrowserRouter(routes);
