@@ -8,7 +8,6 @@ import { CpfValidator } from '../../../common/validation/cpfValidator';
 import { BirthDateValidator } from '../../../common/validation/birthDateValidator';
 import CustomInput from '../../../components/forms/customInput/customInput';
 import CustomSelect from '../../../components/forms/customSelect/customSelect';
-import UploadCloudinary from '../../../components/uploadCloudinary/uploadCloudinary.component';
 
 import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 
@@ -46,17 +45,6 @@ const UserForm = (p: UserFormProps) => {
   useEffect(() => {
     setIsPasswordMatch(watch("password") === watch("confirmPassword"));
   }, [watch("password"), watch("confirmPassword")]);
-
-  const handleUploadImgPerfil = (error: any, result: any) => {
-    if (error) {
-      console.error("UploadImgPerfil error:", error);
-      toast.error('Erro ao salvar imagem. Tente novamente!', { position: 'top-center' });
-      return;
-    }
-
-    if (result.event === 'success')
-      setProfileImgUrl(result.info.secure_url);
-  };
 
   const onSubmit = async (data: any) => {
     const isValid = await trigger(["password", "confirmPassword"]);
@@ -130,50 +118,21 @@ const UserForm = (p: UserFormProps) => {
         <hr />
 
         <div className='col-auto mt-3 pr-0'>
-          <div className='d-flex justify-content-start'>
-            <UploadCloudinary onUpload={handleUploadImgPerfil}>
-              {({ open }) => (
-                <button
-                  className='btn p-0 my-2 border-0 bg-transparent'
-                  type='button'
-                  onClick={open}
-                  style={{ outline: 'none', position: 'relative' }}
-                >
-                  <div
-                    className="rounded-circle bg-light d-flex justify-content-center align-items-center"
-                    style={{ width: '100px', height: '100px', position: 'relative' }}
-                  >
-                    {profileImgUrl ? (
-                      <img
-                        src={profileImgUrl}
-                        alt="Participante"
-                        className="rounded-circle"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                    ) : (
-                      <span className="material-symbols-outlined" style={{ fontSize: '45px', color: '#6c63ff' }}>
-                        person
-                      </span>
-                    )}
-                  </div>
-                  <div
-                    className="d-flex justify-content-center align-items-center bg-body-bg rounded-circle"
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      position: 'absolute',
-                      bottom: '5px',
-                      right: '5px',
-                      border: '1px solid #ccc'
-                    }}
-                  >
-                    <span className="material-symbols-outlined" style={{ fontSize: '16px', color: '#6c63ff' }}>
-                      edit
-                    </span>
-                  </div>
-                </button>
-              )}
-            </UploadCloudinary>
+          <div className="rounded-circle bg-light d-flex justify-content-center align-items-center"
+            style={{ width: '100px', height: '100px', position: 'relative' }}
+          >
+            {profileImgUrl ? (
+              <img
+                src={profileImgUrl}
+                alt="User"
+                className="rounded-circle"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            ) : (
+              <span className="material-symbols-outlined" style={{ fontSize: '45px', color: '#6c63ff' }}>
+                person
+              </span>
+            )}
           </div>
         </div>
 
@@ -358,8 +317,10 @@ const UserForm = (p: UserFormProps) => {
       }
 
       <div className='d-flex justify-content-end mt-4'>
-        <button className="btn border-1 btn-white text-dark py-2 px-4 mx-2" disabled={isLoading}
-          style={{ border: '1px solid #4200FF' }}
+        <button className='btn rounded-5 f-14 px-4 py-2 mx-2'
+          type='button'
+          style={{ border: '1px solid #dee2e6' }}
+          disabled={isLoading}
           onClick={(e) => {
             e.preventDefault();
             p.handleClose();
@@ -367,8 +328,12 @@ const UserForm = (p: UserFormProps) => {
         >
           Cancelar
         </button>
-        <button type="submit" className="btn bg-IAutor fw-bold text-body-bg py-2 px-4" disabled={isLoading}>
-          Salvar
+        <button className='btn btn-primary text-white rounded-5 f-14 px-4 py-2'
+          type="submit"
+          disabled={isLoading}
+        >
+          Salvar Informações
+          {isLoading && <span className="spinner-border spinner-border-sm text-light ms-2" role="status" aria-hidden="true"></span>}
         </button>
       </div>
 

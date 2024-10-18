@@ -1,8 +1,6 @@
 import { useEffect, useState  } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { toast } from 'react-toastify';
 import { useGoogleLogin } from '@react-oauth/google';
 
@@ -11,6 +9,7 @@ import { LoginService } from '../../common/http/api/loginService';
 import { LoginRequest } from '../../common/models/login.request';
 import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 
+import GoogleSvg24 from '../../assets/svg/icons8-google-24.svg';
 import paths from '../../routes/paths';
 import Logo from '../../assets/img/Logo.png';
 
@@ -248,12 +247,13 @@ const Login = () => {
               </div>
 
               <div className='d-flex w-100 justify-content-center align-items-center mt-3'>
-                <button className='btn btn-outline-primary rounded-5 f-14 px-4 py-2 f-14 w-100'
+                <button className='btn rounded-5 f-14 px-4 py-2 f-14 w-100'
                   type='button'
+                  style={{ border: '1px solid #dee2e6' }}
                   onClick={() => googleLogin()}
                   disabled={isLoading}
                 >
-                  <FontAwesomeIcon icon={faGoogle} className='mx-2' />
+                  <img className='mx-2' width="24" height="24" src={GoogleSvg24} alt="google-logo"/>
                   Entrar com o Google
                 </button>
               </div>

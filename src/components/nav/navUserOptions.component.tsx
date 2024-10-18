@@ -60,21 +60,9 @@ const NavUserOptions = ({userNameColor = 'black'}: Props) => {
           </>
         }
 
-        {(user?.type === EnumUserTypes.Admin || user?.type === EnumUserTypes.Influencer || user?.type === EnumUserTypes.Agent) &&
-          <>
-            <Dropdown.Divider />
-            <Dropdown.Item onClick={() => navigate(paths.INCOMES)}>Faturamento</Dropdown.Item>
-          </>
-        }
-
         {user?.type === EnumUserTypes.Admin &&
           <>
             <Dropdown.Item onClick={() => navigate(paths.USERS)}>Usuários</Dropdown.Item>
-          </>
-        }
-
-        {user?.type === EnumUserTypes.Admin &&
-          <>
             <Dropdown.Item onClick={() => navigate(paths.CHAPTERS)}>Capitulos</Dropdown.Item>
           </>
         }

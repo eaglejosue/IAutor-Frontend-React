@@ -14,7 +14,7 @@ import { handleMoneyChange } from '../../../components/forms/customInput/masks';
 import Nav from '../../../components/nav/nav.component';
 import CustomButton from '../../../components/forms/customButton/customButton';
 import DropdownSelect from '../../../components/forms/dropdownSelect/dropdownSelect';
-import IAutorFavIcon from '../../../assets/img/favicon-32x32.png';
+import IAutorFavIcon from '../../../assets/img/favicon-92x92.png';
 import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 import SearchInput from '../../../components/forms/searchInput/searchInput';
 
@@ -231,7 +231,7 @@ const Incomes = () => {
     <>
       <Nav />
 
-      <main className='main bg-iautorpb-4' style={{ minHeight: '676px', flex: 1 }}>
+      <main className='main bg-iautor pb-4' style={{ minHeight: '676px', flex: 1 }}>
         <section className='container' id='title'>
           <div className='row'>
             <p className='mt-4 p-0 f-12'>

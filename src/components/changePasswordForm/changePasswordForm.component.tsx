@@ -141,9 +141,8 @@ const ChangePasswordForm = (p: ChangePasswordFormProps) => {
       </div>
 
       <div className='d-flex justify-content-end mt-4'>
-        <button
+        <button className='btn btn-primary text-white rounded-5 f-14 px-4 p-2'
           type="submit"
-          className="btn bg-IAutor fw-bold text-body-bg p-2"
           disabled={isLoading || p.isLoading}
         >
           Alterar Senha

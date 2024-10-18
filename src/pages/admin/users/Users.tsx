@@ -215,7 +215,7 @@ const Users = () => {
           >
             edit
           </span>
-          {record.isActive && record.id > 1 &&
+          {record.isActive &&
             <span className="material-symbols-outlined"
               onClick={() => handleDeleteClick(record.id)}
               style={{ cursor: 'pointer', fontSize: '20px' }}
@@ -234,7 +234,7 @@ const Users = () => {
     <>
       <Nav />
 
-      <main className='main bg-iautorpb-4' style={{ minHeight: '676px', flex: 1 }}>
+      <main className='main bg-iautor pb-4' style={{ minHeight: '676px', flex: 1 }}>
         <section className='container' id='title'>
           <div className='row'>
             <p className='mt-4 p-0 f-12'>
@@ -335,13 +335,13 @@ const Users = () => {
           </Modal.Body>
           <Modal.Footer>
             <button
-              className="btn border-1 btn-white text-dark py-2 px-4"
-              style={{ border: '1px solid #4200FF' }}
+              className="btn border-1 rounded-5 f-14 px-4 py-2"
+              style={{ border: '1px solid #dee2e6' }}
               onClick={handleExitCancel}>
               Não
             </button>
             <button
-              className="btn bg-IAutor fw-bold text-body-bg py-2 px-4"
+              className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
               onClick={handleExitConfirm}>
               Sim
             </button>

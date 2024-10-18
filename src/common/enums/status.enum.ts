@@ -16,4 +16,5 @@ export enum EnumUserTypes {
   Operator = 2,
   Influencer = 3,
   Agent = 4,
+  Other = 5,
 }

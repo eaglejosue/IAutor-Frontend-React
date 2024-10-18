@@ -19,20 +19,20 @@ const Footer = (p: FooterProps) => {
             style={{ fontSize: 16, lineHeight: '18px' }}
           >
             <li>
-              <p className="text-center f-14 mt-4">Copyright © 2024 IAutor | Todos os direitos reservados.</p>
+              <p className="text-center f-14 mt-4">Copyright © 2024 IAutor | Todos os direitos reservados</p>
             </li>
             <li className='bg-primary d-flex justify-content-center align-items-center'
-              style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px', marginLeft: '10px' }}>
+              style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px', marginLeft: '15px' }}>
               <a href='#' target='_blank'>
                 <FontAwesomeIcon icon={faFacebookF} style={{ color: 'white' }} />
               </a>
             </li>
-            <li className='bg-primary d-flex justify-content-center align-items-center'
+            {/* <li className='bg-primary d-flex justify-content-center align-items-center'
               style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
               <a href='#' target='_blank'>
                 <FontAwesomeIcon icon={faTiktok} style={{ color: 'white' }} />
               </a>
-            </li>
+            </li> */}
             <li className='bg-primary d-flex justify-content-center align-items-center'
               style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
               <a href='#' target='_blank'>
@@ -42,7 +42,7 @@ const Footer = (p: FooterProps) => {
           </ul>
         </div>
         :
-        <div className='container bg-white rounded-4 shadow'>
+        <div className='container bg-white shadow rounded'>
           <div className='row mx-5'>
             <ul className="nav justify-content-center pt-5"
               style={{ fontSize: 16, lineHeight: '18px' }}
@@ -77,12 +77,12 @@ const Footer = (p: FooterProps) => {
                   <FontAwesomeIcon icon={faFacebookF} style={{ color: 'white' }} />
                 </a>
               </li>
-              <li className='bg-primary d-flex justify-content-center align-items-center'
+              {/* <li className='bg-primary d-flex justify-content-center align-items-center'
                 style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
                 <a href='#' target='_blank'>
                   <FontAwesomeIcon icon={faTiktok} style={{ color: 'white' }} />
                 </a>
-              </li>
+              </li> */}
               <li className='bg-primary d-flex justify-content-center align-items-center'
                 style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
                 <a href='#' target='_blank'>

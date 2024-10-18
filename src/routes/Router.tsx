@@ -17,7 +17,7 @@ const TrocarSenha = lazy(() => import('../pages/reset-password/ResetPassword'));
 const MyAccount = lazy(() => import("../pages/my-account/MyAccount"));
 const Incomes = lazy(() => import("../pages/admin/incomes/Incomes"));
 const Terms = lazy(() => import("../pages/admin/terms/Terms"));
-const Users = lazy(() => import("../pages/admin/users/Users"));
+const Users = lazy(() => import("../pages/admin/users/users"));
 const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
 
 interface Routes {
@@ -54,11 +54,11 @@ const routes: Routes[] = [
   { path: paths.RESET_PASSWORD, element: getRouteElement(TrocarSenha) },
   { path: paths.HOME, element: getRouteElement(Home) },
   { path: paths.NOT_FOUND, element: getRouteElement(PageNotFound) },
-  { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true) },
-  { path: paths.INCOMES, element: getRouteElement(Incomes, true) },
-  { path: paths.TERMS, element: getRouteElement(Terms, true) },
-  { path: paths.USERS, element: getRouteElement(Users, true) },
-  { path: paths.CHAPTERS, element: getRouteElement(Chapters, true) },
+  { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true, true) },
+  { path: paths.INCOMES, element: getRouteElement(Incomes, true, true) },
+  { path: paths.TERMS, element: getRouteElement(Terms, true, true) },
+  { path: paths.USERS, element: getRouteElement(Users, true, true) },
+  { path: paths.CHAPTERS, element: getRouteElement(Chapters, true, true) },
 ];
 
 export default createBrowserRouter(routes);

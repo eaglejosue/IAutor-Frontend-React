@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
-import NavEmptyWithColor from '../../components/nav/navEmptyWithColor.component';
 import CustomInput from '../../components/forms/customInput/customInput';
 import { LoginService } from '../../common/http/api/loginService';
 
@@ -47,80 +46,80 @@ const ForgotPassword = () => {
   };
 
   return (
-    <>
-      <NavEmptyWithColor />
+    <main className='bg-iautor pb-4'
+      style={{ minHeight: '940px' }}
+    >
 
-      <main className='mainLogin bg-iautorpb-4'
-        style={{ minHeight: '495px' }}
-      >
+      <section className='container'>
+        <div className='row justify-content-center'>
 
-        <section className='container'>
-          <div className='row justify-content-center'>
+          <div className='col-3 bg-white p-5'
+            style={{ borderRadius: '9px', position: 'absolute', zIndex: 1, top: '7%', textAlign: 'center' }}
+          >
 
-            <div className='col-3 bg-white p-5'
-              style={{ borderRadius: '9px', position: 'absolute', zIndex: 1, top: '7%', textAlign: 'center' }}
-            >
+            <div className='d-flex w-100 justify-content-center'>
+              <img src={Logo} alt="Logo"
+                onClick={() => navigate(paths.HOME)}
+                style={{ cursor: 'pointer' }}
+              />
+            </div>
 
-              <div className='d-flex w-100 justify-content-center'>
-                <img src={Logo} alt="Logo"
-                  onClick={() => navigate(paths.HOME)}
-                  style={{ cursor: 'pointer' }}
+            <div className='my-4'>
+              <p className='f-14'>
+                Insira seu e-mail abaixo para recuperar sua senha!
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className='mt-5'>
+              <div className='mt-3'>
+                <CustomInput
+                  type='email'
+                  disabled={isLoading}
+                  placeholder='Insira seu E-mail'
+                  register={register}
+                  errors={errors.email}
+                  name='email'
+                  setValue={setValue}
+                  validationSchema={{
+                    required: 'E-mail é obrigatório',
+                    maxLength: { value: 50, message: "E-mail deve conter no máximo 50 caracteres" }
+                  }}
                 />
               </div>
 
-              <div className='my-4'>
-                <p className='f-14'>
-                  Insira seu e-mail abaixo para recuperar sua senha!
-                </p>
+              <div className='d-flex w-100 justify-content-center align-items-center mt-4'>
+                <button className='btn btn-secondary text-white rounded-5 f-14 px-4 py-2 f-14 w-100'
+                  type='submit'
+                  disabled={isLoading}
+                >
+                  Enviar
+                  {isLoading &&
+                    <span
+                      className="spinner-border spinner-border-sm text-light ms-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                  }
+                </button>
               </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} className='mt-5'>
-                <div className='mt-3'>
-                  <CustomInput
-                    type='email'
-                    disabled={isLoading}
-                    label='E-mail'
-                    register={register}
-                    errors={errors.email}
-                    name='email'
-                    setValue={setValue}
-                    validationSchema={{ required: 'E-mail é obrigatório' }}
-                  />
-                </div>
+              <div className='d-flex w-100 justify-content-center align-items-center mt-2'>
+                <button className='btn btn-primary rounded-5 f-14 px-4 py-2 f-14 w-100'
+                  type='button'
+                  disabled={isLoading}
+                  onClick={() => navigate(paths.LOGIN)}
+                >
+                  <FontAwesomeIcon icon={faChevronLeft} className='mx-2' />
+                  Voltar
+                </button>
+              </div>
 
-                <div className='d-flex w-100 justify-content-center align-items-center'>
-                  <button className='btn bg-IAutor text-white w-100 my-3'
-                    type='submit'
-                    disabled={isLoading}
-                  >
-                    Enviar
-                    {isLoading &&
-                      <span
-                        className="spinner-border spinner-border-sm text-light ms-2"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                    }
-                  </button>
-                </div>
+            </form>
 
-                <div className='d-flex w-100 justify-content-center align-items-center'>
-                  <button className='btn btn-white text-dark f-14 w-100 p-2'
-                    style={{ border: '1px solid #4200FF' }}
-                    type='button'
-                    onClick={() => navigate(paths.LOGIN)}
-                  >
-                    <FontAwesomeIcon icon={faChevronLeft} className='mx-2' />
-                    Voltar
-                  </button>
-                </div>
-              </form>
-
-            </div>
           </div>
-        </section>
-      </main>
-    </>
+        </div>
+      </section>
+    </main>
   );
 };
 

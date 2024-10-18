@@ -11,7 +11,6 @@ import { BirthDateValidator } from '../../common/validation/birthDateValidator';
 import Nav from '../../components/nav/nav.component';
 import CustomInput from '../../components/forms/customInput/customInput';
 import ChangePasswordForm from '../../components/changePasswordForm/changePasswordForm.component';
-import UploadCloudinary from '../../components/uploadCloudinary/uploadCloudinary.component';
 
 const MyAccount = () => {
   const navigate = useNavigate();
@@ -99,17 +98,6 @@ const MyAccount = () => {
       });
   };
 
-  const handleUploadImgPerfil = (error: any, result: any) => {
-    if (error) {
-      console.error("UploadImgPerfil error:", error);
-      toast.error('Erro ao salvar imagem. Tente novamente!', { position: 'top-center' });
-      return;
-    }
-
-    if (result.event === 'success')
-      setUrlImgPerfil(result.info.secure_url);
-  };
-
   return (
     <>
       <Nav />
@@ -120,28 +108,21 @@ const MyAccount = () => {
 
         <section className='container' id='title'>
           <div className='row'>
-            <p className='mt-4 p-0 f-12'>
+            <p className='p-0 f-14'>
               <span className='fw-bold'>Home/ </span>Minha Conta
             </p>
-            <h1 className='mt-0 p-0'>Minha Conta</h1>
           </div>
         </section>
 
         <section className='container my-3' id='videos'>
           <div className='row'>
 
-            <div className='col-none col-sm-none col-md-none col-lg-4 d-none d-lg-block' id='sub-menu'
-              style={{ paddingLeft: '0' }}
-            >
-
-              <div className='d-flex justify-content-between align-items-center bg-white rounded p-3'
-                style={{
-                  borderRadius: '4px',
-                  boxShadow: '0px 0px 4px 0px rgba(30, 47, 101, 0.25)'
-                }}
-              >
+            <div className='col-lg-4 d-none d-lg-block pe-4 ps-0' id='sub-menu'>
+              <div className='d-flex justify-content-between bg-white shadow rounded p-3'>
                 <div className='d-flex align-items-center'>
-                  <span className="material-symbols-outlined text-primary" style={{ borderWidth: '3px', borderStyle: 'solid', borderColor: '#4200FF', borderRadius: '5px', fontSize: '30px' }} >
+                  <span className="material-symbols-outlined"
+                    style={{ borderWidth: '3px', borderStyle: 'solid', borderRadius: '5px' }}
+                  >
                     page_info
                   </span>
                   <span className='mx-3'>
@@ -154,22 +135,11 @@ const MyAccount = () => {
               </div>
             </div>
 
-            <div className='col-12 col-md-12 col-lg-8 bg-white rounded p-4' id='user-form'
-              style={{
-                borderRadius: '4px',
-                boxShadow: '0px 0px 4px 0px rgba(30, 47, 101, 0.25)'
-              }}
-            >
+            <div className='col-12 col-md-12 col-lg-8 bg-white shadow rounded p-4' id='user-form'>
 
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div className='d-flex justify-content-start'>
-                  <div className='p-3 bg-bgIcon border-0 rounded'>
-                    <span className="material-symbols-outlined text-primary"
-                      style={{ borderWidth: '3px', borderStyle: 'solid', borderColor: '#4200FF', borderRadius: '5px' }} >
-                      page_info
-                    </span>
-                  </div>
-                  <div className='mx-3'>
+                <div className='row'>
+                  <div className='col-auto'>
                     <p className="m-0 p-0 fw-bold f-20">Dados Pessoais</p>
                     <p className='f-16'>Visualize ou altere abaixo os seus dados pessoais.</p>
                   </div>
@@ -178,51 +148,22 @@ const MyAccount = () => {
 
                 <div className='row'>
 
-                  <div className='col-auto'>
-                    <div className='d-flex justify-content-start'>
-                      <UploadCloudinary onUpload={handleUploadImgPerfil}>
-                        {({ open }) => (
-                          <button
-                            className='btn p-0 my-2 border-0 bg-transparent'
-                            type='button'
-                            onClick={open}
-                            style={{ outline: 'none', position: 'relative' }}
-                          >
-                            <div
-                              className="rounded-circle bg-light d-flex justify-content-center align-items-center"
-                              style={{ width: '100px', height: '100px', position: 'relative' }}
-                            >
-                              {urlImgPerfil ? (
-                                <img
-                                  src={urlImgPerfil}
-                                  alt="Participante"
-                                  className="rounded-circle"
-                                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
-                              ) : (
-                                <span className="material-symbols-outlined" style={{ fontSize: '45px', color: '#6c63ff' }}>
-                                  person
-                                </span>
-                              )}
-                            </div>
-                            <div
-                              className="d-flex justify-content-center align-items-center bg-body-bg rounded-circle"
-                              style={{
-                                width: '24px',
-                                height: '24px',
-                                position: 'absolute',
-                                bottom: '5px',
-                                right: '5px',
-                                border: '1px solid #ccc'
-                              }}
-                            >
-                              <span className="material-symbols-outlined" style={{ fontSize: '16px', color: '#6c63ff' }}>
-                                edit
-                              </span>
-                            </div>
-                          </button>
-                        )}
-                      </UploadCloudinary>
+                  <div className='col-auto mt-3'>
+                    <div className="rounded-circle bg-light d-flex justify-content-center align-items-center"
+                      style={{ width: '100px', height: '100px', position: 'relative' }}
+                    >
+                      {urlImgPerfil ? (
+                        <img
+                          src={urlImgPerfil}
+                          alt="User"
+                          className="rounded-circle"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <span className="material-symbols-outlined" style={{ fontSize: '45px', color: '#6c63ff' }}>
+                          person
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -317,9 +258,8 @@ const MyAccount = () => {
                 </div>
 
                 <div className='d-flex justify-content-end mt-4'>
-                  <button
+                  <button className='btn btn-primary text-white rounded-5 f-14 px-4 p-2'
                     type="submit"
-                    className="btn bg-IAutor fw-bold text-body-bg p-2"
                     disabled={isLoading}
                   >
                     Salvar Informações
