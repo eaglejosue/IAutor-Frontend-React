@@ -15,13 +15,11 @@ const Chapters = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  //const [selectedUser, setSelectedUser] = useState<UserModel>(new UserModel());
-  const [isExitConfirmationModalOpen, setIsExitConfirmationModalOpen] =
-    useState(false);
+  const [isExitConfirmationModalOpen, setIsExitConfirmationModalOpen] = useState(false);
   const [chapters, setChapters] = useState<ChapterModel[]>([]);
   const [chapterEdit, setChapterEdit] = useState<ChapterModel>();
   const [chapterDeleteId, setChapterDeleteId] = useState<number>(0);
-  
+
   const [inactivationModalOpen, setInactivationModalOpen] =
     useState<boolean>(false);
 
@@ -48,7 +46,6 @@ const Chapters = () => {
       });
   };
 
-  /* Handlers */
   const handleSearchClick = () => {
     getChapters(
       new ChapterFilter({
@@ -56,61 +53,68 @@ const Chapters = () => {
       }),
     );
   };
+
   const handleAddClick = () => {
-    //setSelectedUser(new UserModel());
     setChapterEdit(undefined);
     setIsFormModalOpen(true);
   };
-  const handleCloseModal = (c: boolean) => {
+
+  const handleCloseModal = (c: boolean = true) => {
     if (c) setIsExitConfirmationModalOpen(true);
     else handleExitConfirm();
   };
 
-  const handleExitConfirm = () => {
-    setIsFormModalOpen(false);
-
+  const handleExitCancel = () => {
     setIsExitConfirmationModalOpen(false);
   };
-  /* Handlers */
+
+  const handleExitConfirm = () => {
+    setIsFormModalOpen(false);
+    setIsExitConfirmationModalOpen(false);
+  };
+
   const handlerEdit = (chapter: ChapterModel) => {
     setChapterEdit(chapter);
     setIsFormModalOpen(true);
   };
+
   const handlerDeleteCancel = () => {
     setInactivationModalOpen(false);
   };
-  const handlerDelete = (id:number) => {
+
+  const handlerDelete = (id: number) => {
     setInactivationModalOpen(true);
     setChapterDeleteId(id)
-
   }
-  const handlerDeleteCancelConfirm=() =>{
-    
+
+  const handlerDeleteCancelConfirm = () => {
+    setIsLoading(true);
+
     _chapterService
-    .delete(chapterDeleteId)
-    .then(() => {
-      toast.success('Capitulo inativado com sucesso!', {
-        position: 'top-center',
-        style: { minWidth: 400 }
+      .delete(chapterDeleteId)
+      .then(() => {
+        toast.success('Capitulo inativado com sucesso!', {
+          position: 'top-center',
+          style: { minWidth: 400 }
+        });
+      })
+      .catch((e) => {
+        let message = 'Error ao salvar dados.';
+        if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        toast.error(message, {
+          position: 'top-center',
+          style: { minWidth: 400 }
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-    })
-    .catch((e) => {
-      let message = 'Error ao salvar dados.';
-      if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
-      if (e.response?.data?.detail) message = e.response?.data?.detail;
-      toast.error(message, {
-        position: 'top-center',
-        style: { minWidth: 400 }
-      });
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
-    
+
     setInactivationModalOpen(false);
   }
 
-  
+
   return (
     <>
       <Nav />
@@ -161,33 +165,18 @@ const Chapters = () => {
           />
         </section>
 
-        <Modal
-          show={isFormModalOpen}
-          onHide={() => handleCloseModal(false)}
-          centered
-          size="lg"
-          backdrop="static"
-        >
-          <Modal.Header closeButton className="bg-white border-0">
+        <Modal show={isFormModalOpen} onHide={() => handleCloseModal(false)} centered size="lg" backdrop="static">
+          <Modal.Header closeButton className="bg-white border-0 pb-0">
             <Modal.Title>
               {chapterEdit == undefined ? "Criar novo capítulo" : "Editar capítulo"}
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body className="bg-white">
-            {
-              //@ts-ignore
-              <ChapterForm handleClose={handleCloseModal} chapter={chapterEdit}
-              />
-            }
+          <Modal.Body className="bg-white pt-0">
+            <ChapterForm chapter={chapterEdit} handleClose={(c) => handleCloseModal(c)}  />
           </Modal.Body>
         </Modal>
 
-        <Modal
-          show={inactivationModalOpen}
-          onHide={() => setInactivationModalOpen(false)}
-          backdrop="static"
-          keyboard={false}
-        >
+        <Modal show={inactivationModalOpen} onHide={() => setInactivationModalOpen(false)} backdrop="static" keyboard={false}>
           <Modal.Header closeButton>
             <Modal.Title>Confirmar Inativação</Modal.Title>
           </Modal.Header>
@@ -197,15 +186,36 @@ const Chapters = () => {
           <Modal.Footer>
             <button
               className="btn border-1 btn-white text-dark py-2 px-4"
-              style={{ border: "1px solid #4200FF" }}
-              onClick={handlerDeleteCancel}
-            >
+              style={{ border: '1px solid #4200FF' }}
+              onClick={handlerDeleteCancel}>
               Não
             </button>
             <button
-              className="btn btn-success text-white fw-bold  py-2 px-4"
-              onClick={handlerDeleteCancelConfirm}
-            >
+              className="btn bg-IAutor fw-bold text-body-bg py-2 px-4"
+              onClick={handlerDeleteCancelConfirm}>
+              Sim
+            </button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal show={isExitConfirmationModalOpen} onHide={() => setIsExitConfirmationModalOpen(false)} backdrop="static" keyboard={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmar Saída</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <p className='mb-1'>Você tem certeza que deseja sair?</p>
+            <p className='mb-1'>Todas as alterações não salvas serão perdidas.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              className="btn border-1 rounded-5 f-14 px-4 py-2"
+              style={{ border: '1px solid #dee2e6' }}
+              onClick={handleExitCancel}>
+              Não
+            </button>
+            <button
+              className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
+              onClick={handleExitConfirm}>
               Sim
             </button>
           </Modal.Footer>

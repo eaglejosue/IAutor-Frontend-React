@@ -1,8 +1,9 @@
 import { Table, Tag } from 'antd';
-import { ChapterModel } from "../../../common/models/chapter.model"
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
+
+import { ChapterModel } from "../../../common/models/chapter.model"
 
 interface ChapterTableProps {
   data: ChapterModel[],
@@ -17,15 +18,12 @@ const ChapterTable = (props: ChapterTableProps) => {
 
   const handleDeleteClick = (id: number) => {
     props.handlerDelete(id);
-    //setIdToInactivate(id);
-    //setInactivationModalOpen(true);
   };
 
   const handleEditClick = (chapter: ChapterModel) => {
     props.handlerEdit(chapter)
-    //setSelectedUser(user);
-    //setIsFormModalOpen(true);
   };
+
   const columns = [
     {
       title: "Titulo",
@@ -47,6 +45,13 @@ const ChapterTable = (props: ChapterTableProps) => {
           : "N/A",
       align: "center" as "center",
       sorter: (a: any, b: any) => a.createdAt.localeCompare(b.createdAt),
+    },
+    {
+      title: 'Alterado por',
+      dataIndex: 'updatedBy',
+      render: (updatedBy: string) => updatedBy ? updatedBy : 'N/A',
+      align: 'center' as 'center',
+      sorter: (a: any, b: any) => a.updatedBy.localeCompare(b.updatedBy),
     },
     {
       title: "Data alteração",

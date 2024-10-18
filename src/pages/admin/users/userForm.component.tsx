@@ -8,7 +8,6 @@ import { CpfValidator } from '../../../common/validation/cpfValidator';
 import { BirthDateValidator } from '../../../common/validation/birthDateValidator';
 import CustomInput from '../../../components/forms/customInput/customInput';
 import CustomSelect from '../../../components/forms/customSelect/customSelect';
-
 import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 
 export interface UserFormProps {
