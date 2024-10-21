@@ -13,6 +13,7 @@ interface CustomSelectProps {
   label: string;
   loading?: boolean;
   divClassName?: string;
+  selectedValue?:any;
 }
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -25,12 +26,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   divClassName = '',
   label,
   loading,
+  selectedValue
 }) => {
   const inputFor = `custom-select-${uuidv4()}`;
   const styles = { paddingTop: "0.75rem", paddingBottom: "0.5rem" };
   const [selectedOption, setSelectedOption] = useState("");
   const [hasValue, setHasValue] = useState(true);
-
+  
   const labelProps = useSpring({
     top: hasValue ? "-10px" : "10px",
     fontSize: hasValue ? "12px" : "16px",
@@ -56,7 +58,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         >
           <option value=""></option>
           {options?.map((option, index) => (
-            <option key={index} value={option.value}>
+            <option key={index} value={option.value} selected={selectedValue == option.value} >
               {option.label}
             </option>
           ))}
