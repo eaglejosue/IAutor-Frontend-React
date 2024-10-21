@@ -90,16 +90,15 @@ const Terms = () => {
     <>
       <Nav />
 
-      <main
-        className="main bg-iautorpx-4 pb-4"
-        style={{ minHeight: "676px" }}
+      <main className='main bg-iautor px-4 pb-4'
+        style={{ minHeight: '676px' }}
       >
-        <section className="container" id="title">
-          <div className="row">
-            <p className="mt-4 p-0 f-12">
-              <span className="fw-bold">Home/ </span>Termos
+
+        <section className='container' id='title'>
+          <div className='row'>
+            <p className='p-0 f-14'>
+              <span className='fw-bold'>Termos</span>
             </p>
-            <h1 className="mt-0 p-0">Termos</h1>
           </div>
         </section>
 
@@ -118,15 +117,8 @@ const Terms = () => {
                 }}
               >
                 <div className="d-flex align-items-center">
-                  <span
-                    className="material-symbols-outlined text-primary"
-                    style={{
-                      borderWidth: "3px",
-                      borderStyle: "solid",
-                      borderColor: "#4200FF",
-                      borderRadius: "5px",
-                      fontSize: "30px",
-                    }}
+                  <span className="material-symbols-outlined"
+                    style={{ borderWidth: '3px', borderStyle: 'solid', borderRadius: '5px' }}
                   >
                     assignment
                   </span>
@@ -152,14 +144,8 @@ const Terms = () => {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="d-flex justify-content-start">
                   <div className="p-3 bg-bgIcon border-0 rounded">
-                    <span
-                      className="material-symbols-outlined text-primary"
-                      style={{
-                        borderWidth: "3px",
-                        borderStyle: "solid",
-                        borderColor: "#4200FF",
-                        borderRadius: "5px",
-                      }}
+                    <span className="material-symbols-outlined"
+                      style={{ borderWidth: '3px', borderStyle: 'solid', borderRadius: '5px' }}
                     >
                       assignment
                     </span>

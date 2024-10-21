@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-import NavUserOptions from './navUserOptions.component';
+import NavUserOptions from './nav-user-options.component';
 import useScreenSize from '../../hooks/useScreenSize';
 import useUserLogged from '../../hooks/useUserLogged';
 import paths from '../../routes/paths';
@@ -51,7 +51,7 @@ const Nav = () => {
                     Login
                   </button>
                   <button className='btn bg-secondary text-white rounded-5 f-14 px-4 py-2'
-                    onClick={() => navigate(paths.DEGUST)}
+                    onClick={() => navigate(paths.NEW_HISTORY)}
                   >
                     Experimente Criar uma História
                   </button>

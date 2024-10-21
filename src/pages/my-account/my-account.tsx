@@ -102,14 +102,14 @@ const MyAccount = () => {
     <>
       <Nav />
 
-      <main className='main bg-iautorpx-4 pb-4'
+      <main className='main bg-iautor px-4 pb-4'
         style={{ minHeight: '676px' }}
       >
 
         <section className='container' id='title'>
           <div className='row'>
             <p className='p-0 f-14'>
-              <span className='fw-bold'>Home/ </span>Minha Conta
+              <span className='fw-bold'>Minha Conta</span>
             </p>
           </div>
         </section>

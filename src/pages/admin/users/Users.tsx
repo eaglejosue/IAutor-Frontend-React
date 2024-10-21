@@ -10,7 +10,7 @@ import { UserFilter } from '../../../common/models/filters/user.filter';
 import Nav from '../../../components/nav/nav.component';
 import SearchInput from '../../../components/forms/searchInput/searchInput';
 import CustomButton from '../../../components/forms/customButton/customButton';
-import UserForm from './userForm.component';
+import UserForm from './user.component';
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -312,13 +312,13 @@ const Users = () => {
           </Modal.Body>
           <Modal.Footer>
             <button
-              className="btn border-1 btn-white text-dark py-2 px-4"
-              style={{ border: '1px solid #4200FF' }}
+              className="btn border-1 rounded-5 f-14 px-4 py-2"
+              style={{ border: '1px solid #dee2e6' }}
               onClick={handleDeleteCancel}>
               Não
             </button>
             <button
-              className="btn bg-IAutor fw-bold text-body-bg py-2 px-4"
+              className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
               onClick={handleDeleteConfirm}>
               Sim
             </button>

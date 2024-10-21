@@ -2,21 +2,21 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { ProtectedRoute } from './ProtectedRoute';
+import { ProtectedRoute } from './protected-route';
 import paths from './paths';
 
 import PageLoading from '../components/pageLoading/pageLoading.component';
 import Footer from '../components/footer/footer.component';
 
-const PageNotFound = lazy(() => import('../pages/page-not-found/PageNotFound'));
-const Home = lazy(() => import('../pages/home/Home'));
-const Login = lazy(() => import('../pages/login/Login'));
-const SigIn = lazy(() => import('../pages/sigin/SigIn'));
-const EsqueceuSenha = lazy(() => import('../pages/forgot-password/ForgotPassword'));
-const TrocarSenha = lazy(() => import('../pages/reset-password/ResetPassword'));
-const MyAccount = lazy(() => import("../pages/my-account/MyAccount"));
-const Incomes = lazy(() => import("../pages/admin/incomes/Incomes"));
-const Terms = lazy(() => import("../pages/admin/terms/Terms"));
+const PageNotFound = lazy(() => import('../pages/page-not-found/page-not-found'));
+const Home = lazy(() => import('../pages/home/home'));
+const Login = lazy(() => import('../pages/login/login'));
+const SigIn = lazy(() => import('../pages/sigin/sigin'));
+const EsqueceuSenha = lazy(() => import('../pages/forgot-password/forgot-password'));
+const TrocarSenha = lazy(() => import('../pages/reset-password/reset-password'));
+const MyAccount = lazy(() => import("../pages/my-account/my-account"));
+const Incomes = lazy(() => import("../pages/admin/incomes/incomes"));
+const Terms = lazy(() => import("../pages/admin/terms/terms"));
 const Users = lazy(() => import("../pages/admin/users/users"));
 const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
 
@@ -52,9 +52,11 @@ const routes: Routes[] = [
   { path: paths.SIGIN, element: getRouteElement(SigIn, false, true) },
   { path: paths.FORGOT_PASSWORD, element: getRouteElement(EsqueceuSenha) },
   { path: paths.RESET_PASSWORD, element: getRouteElement(TrocarSenha) },
-  { path: paths.HOME, element: getRouteElement(Home) },
   { path: paths.NOT_FOUND, element: getRouteElement(PageNotFound) },
+  { path: paths.HOME, element: getRouteElement(Home) },
   { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true, true) },
+  { path: paths.MY_HISTORIES, element: getRouteElement(MyAccount, true, true) },
+  { path: paths.CREATE_HISTORY, element: getRouteElement(MyAccount, true, true) },
   { path: paths.INCOMES, element: getRouteElement(Incomes, true, true) },
   { path: paths.TERMS, element: getRouteElement(Terms, true, true) },
   { path: paths.USERS, element: getRouteElement(Users, true, true) },
