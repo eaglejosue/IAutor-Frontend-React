@@ -64,6 +64,7 @@ const NavUserOptions = ({userNameColor = 'black'}: Props) => {
           <>
             <Dropdown.Item onClick={() => navigate(paths.USERS)}>Usuários</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.CHAPTERS)}>Capitulos</Dropdown.Item>
+            <Dropdown.Item onClick={() => navigate(paths.QUESTIONS)}>Perguntas</Dropdown.Item>
           </>
         }
 
