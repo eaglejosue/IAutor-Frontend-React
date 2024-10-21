@@ -17,8 +17,9 @@ const TrocarSenha = lazy(() => import('../pages/reset-password/ResetPassword'));
 const MyAccount = lazy(() => import("../pages/my-account/MyAccount"));
 const Incomes = lazy(() => import("../pages/admin/incomes/Incomes"));
 const Terms = lazy(() => import("../pages/admin/terms/Terms"));
-const Users = lazy(() => import("../pages/admin/users/users"));
+const Users = lazy(() => import("../pages/admin/users/Users"));
 const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
+const Questions = lazy(() =>  import("../pages/admin/questions/questions"));
 
 interface Routes {
   path: string;
@@ -59,6 +60,7 @@ const routes: Routes[] = [
   { path: paths.TERMS, element: getRouteElement(Terms, true, true) },
   { path: paths.USERS, element: getRouteElement(Users, true, true) },
   { path: paths.CHAPTERS, element: getRouteElement(Chapters, true, true) },
+  { path: paths.QUESTIONS, element: getRouteElement(Questions, true, true) },
 ];
 
 export default createBrowserRouter(routes);
