@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
-import Nav from '../../components/nav/nav.component';
+import Sidebar from '../../components/nav/sidebar.component';
+import NavUserOptions from '../../components/nav/nav-user-options.component';
 
 const MyHistories = () => {
   //
@@ -10,17 +11,34 @@ const MyHistories = () => {
   }, []);
 
   return (
-    <>
-      <Nav />
+    <div className="d-flex"
+      style={{ height: '100vh' }}
+    >
+      <Sidebar />
 
-      <main className='main mb-6'
-        style={{ minHeight: '367px' }}
-      >
+      <div className="flex-grow-1">
+        <NavUserOptions pageName='Criar História' />
 
-        {/* TODO */}
+        <main className='main bg-white'>
+          <div className='row'>
 
-      </main>
-    </>
+            <div className='col-4 border-end'>
+              a
+            </div>
+
+            <div className='col-4 border-end'>
+              a
+            </div>
+
+            <div className='col-4'>
+              a
+            </div>
+
+          </div>
+        </main>
+      </div>
+
+    </div>
   );
 };
 

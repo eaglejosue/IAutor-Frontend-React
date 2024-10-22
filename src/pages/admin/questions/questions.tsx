@@ -1,15 +1,14 @@
 import SearchInput from "../../../components/forms/searchInput/searchInput";
-import Nav from "../../../components/nav/nav.component";
 import CustomButton from "../../../components/forms/customButton/customButton";
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-
 import { toast } from 'react-toastify';
 import { QuestionService } from "../../../common/http/api/questionService";
 import { QuestionModel } from "../../../common/models/question.model";
 import { QuestionFilter } from "../../../common/models/filters/question.filter";
 import QuestionTable from "./question.table";
 import QuestionForm from "./question.component";
+import NavUserOptions from "../../../components/nav/nav-user-options.component";
 
 const Questions = () => {
   const _questionService = new QuestionService();
@@ -118,7 +117,8 @@ const Questions = () => {
 
   return (
     <>
-      <Nav />
+      <NavUserOptions />
+
       <main
         className="main bg-iautorpb-4"
         style={{ minHeight: "676px", flex: 1 }}
@@ -173,9 +173,7 @@ const Questions = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-white pt-0">
-            { //@ts-ignore
-              <QuestionForm question={questionEdit} handleClose={(c) => handleCloseModal(c)}  />
-            }
+            <QuestionForm question={questionEdit} handleClose={(c) => handleCloseModal(c)} />
           </Modal.Body>
         </Modal>
 
@@ -188,13 +186,13 @@ const Questions = () => {
           </Modal.Body>
           <Modal.Footer>
             <button
-              className="btn border-1 btn-white text-dark py-2 px-4"
-              style={{ border: '1px solid #4200FF' }}
+              className="btn border-1 rounded-5 f-14 px-4 py-2"
+              style={{ border: '1px solid #dee2e6' }}
               onClick={handlerDeleteCancel}>
               Não
             </button>
             <button
-              className="btn bg-IAutor fw-bold text-body-bg py-2 px-4"
+              className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
               onClick={handlerDeleteCancelConfirm}>
               Sim
             </button>

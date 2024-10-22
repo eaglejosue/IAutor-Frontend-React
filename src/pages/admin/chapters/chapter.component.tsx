@@ -92,6 +92,7 @@ const ChapterForm = (p: ChapterFormProps) => {
         <CustomInput
           type='text'
           disabled={isLoading}
+          label='Título *'
           placeholder='Título'
           register={register}
           errors={errors.title}
@@ -107,6 +108,7 @@ const ChapterForm = (p: ChapterFormProps) => {
         <CustomInput
           type='number'
           disabled={isLoading}
+          label='Número do capítulo *'
           placeholder='Número do capítulo'
           register={register}
           errors={errors.chapterNumber}

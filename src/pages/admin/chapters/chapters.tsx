@@ -1,14 +1,14 @@
 import SearchInput from "../../../components/forms/searchInput/searchInput";
-import Nav from "../../../components/nav/nav.component";
 import CustomButton from "../../../components/forms/customButton/customButton";
 import { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
-import ChapterForm from "./chapter.component";
+import { toast } from 'react-toastify';
 import { ChapterFilter } from "../../../common/models/filters/chapter.filter";
 import { ChapterService } from "../../../common/http/api/chapterService";
 import { ChapterModel } from "../../../common/models/chapter.model";
 import ChapterTable from "./chapters.table";
-import { toast } from 'react-toastify';
+import ChapterForm from "./chapter.component";
+import NavUserOptions from "../../../components/nav/nav-user-options.component";
 
 const Chapters = () => {
   const _chapterService = new ChapterService();
@@ -117,7 +117,8 @@ const Chapters = () => {
 
   return (
     <>
-      <Nav />
+      <NavUserOptions />
+
       <main
         className="main bg-iautorpb-4"
         style={{ minHeight: "676px", flex: 1 }}

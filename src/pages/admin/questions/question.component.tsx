@@ -9,7 +9,6 @@ import CustomSelect from "../../../components/forms/customSelect/customSelect";
 import { ChapterFilter } from "../../../common/models/filters/chapter.filter";
 import { ChapterService } from "../../../common/http/api/chapterService";
 import { ChapterModel } from "../../../common/models/chapter.model";
-import { Any } from "react-spring";
 
 export interface QuestionFormProps {
   question: QuestionModel | undefined;
@@ -20,7 +19,7 @@ const QuestionForm = (p: QuestionFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const _questionService = new QuestionService();
   const _chapterService = new ChapterService();
-  const [chapters,setChapters] = useState([{ value: '-1', label: 'Selecione' }]);
+  const [chapters, setChapters] = useState([{ value: '-1', label: 'Selecione' }]);
 
   useEffect(() => {
     setValue('title', p.question?.title);
@@ -29,18 +28,17 @@ const QuestionForm = (p: QuestionFormProps) => {
     getChapters()
   }, []);
 
-  //
   const getChapters = (filter?: ChapterFilter) => {
     setIsLoading(true);
     _chapterService
       .getAll(filter ?? new ChapterFilter())
       .then((response: any) => {
         //setChapters(response?.length ? response : []);
-        let data:[]=[]
-        if(response?.length>0){
-          response.map((e:ChapterModel,i:number)=>{
+        let data: [] = []
+        if (response?.length > 0) {
+          response.map((e: ChapterModel, _: number) => {
             //@ts-ignore
-              data.push({ value: e.id, label: e.title });
+            data.push({ value: e.id, label: e.title });
           });
         }
         setChapters(data)
@@ -50,7 +48,7 @@ const QuestionForm = (p: QuestionFormProps) => {
         if (e.response?.data?.length > 0 && e.response.data[0].message)
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
+          console.log("Erro: ", message, e);
       })
       .finally(() => {
         setIsLoading(false);
@@ -126,6 +124,7 @@ const QuestionForm = (p: QuestionFormProps) => {
         <CustomInput
           type='text'
           disabled={isLoading}
+          label='Título *'
           placeholder='Título'
           register={register}
           errors={errors.title}
@@ -141,7 +140,8 @@ const QuestionForm = (p: QuestionFormProps) => {
         <CustomInput
           type='number'
           disabled={isLoading}
-          placeholder='Mínimo de caracteres do capítulo'
+          label='Mínimo de caracteres *'
+          placeholder='Mínimo de caracteres'
           register={register}
           errors={errors.minLimitCharacters}
           name='minLimitCharacters'
@@ -153,10 +153,11 @@ const QuestionForm = (p: QuestionFormProps) => {
           customValidation={(value) => (!isNaN(Number(value)) && Number(value) > 0 && Number(value) < 100000)
             || 'Número deve ser um número entre 1 e 100000'}
         />
-         <CustomInput
+        <CustomInput
           type='number'
           disabled={isLoading}
-            placeholder='Máximo de caracteres do capítulo'
+          label='Máximo de caracteres *'
+          placeholder='Máximo de caracteres'
           register={register}
           errors={errors.maxLimitCharacters}
           name='maxLimitCharacters'
@@ -168,17 +169,17 @@ const QuestionForm = (p: QuestionFormProps) => {
           customValidation={(value) => (!isNaN(Number(value)) && Number(value) > 0 && Number(value) < 100000)
             || 'Número deve ser um número entre 1 e 100000'}
         />
-         <CustomSelect
-                label='Capítulo *'
-                disabled={isLoading}
-                register={register}
-                errors={errors.type}
-                name='chapterId'
-                selectedValue={p.question?.chapterId}
-                divClassName='col-4 mb-4 mt-4'
-                validationSchema={{ required: 'Capítulo é obrigatório' }}
-                options={chapters}
-              />
+        <CustomSelect
+          label='Capítulo *'
+          disabled={isLoading}
+          register={register}
+          errors={errors.type}
+          name='chapterId'
+          selectedValue={p.question?.chapterId}
+          divClassName='col-4 mb-4 mt-4'
+          validationSchema={{ required: 'Capítulo é obrigatório' }}
+          options={chapters}
+        />
       </div>
 
       {isLoading &&

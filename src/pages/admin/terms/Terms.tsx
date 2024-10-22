@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 
-import Nav from "../../../components/nav/nav.component";
 import constParams from "../../../common/constants/constParams";
 import { ParamModel } from "../../../common/models/param.model";
 import { ParamService } from "../../../common/http/api/paramService";
+import NavUserOptions from "../../../components/nav/nav-user-options.component";
 
 const Terms = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -88,7 +88,7 @@ const Terms = () => {
 
   return (
     <>
-      <Nav />
+      <NavUserOptions />
 
       <main className='main bg-iautor px-4 pb-4'
         style={{ minHeight: '676px' }}

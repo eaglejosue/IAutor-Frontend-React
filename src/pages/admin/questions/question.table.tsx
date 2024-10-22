@@ -29,7 +29,6 @@ const QuestionTable = (props: QuestionTableProps) => {
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
-    
     {
       title: "Data cadastro",
       dataIndex: "createdAt",

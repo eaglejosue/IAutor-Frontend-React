@@ -2,7 +2,6 @@ import { Table, Tag } from 'antd';
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
-
 import { ChapterModel } from "../../../common/models/chapter.model"
 
 interface ChapterTableProps {
@@ -26,7 +25,7 @@ const ChapterTable = (props: ChapterTableProps) => {
 
   const columns = [
     {
-      title: "Titulo",
+      title: "Título",
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },

@@ -15,8 +15,9 @@ $custom-gray-2: #EDEDED;
 $custom-bg: #F0EEF6;
 $danger: #F72B50;
 $icon: #757575;
-$bgIcon: #F2F1FA;
-$btnDisabled: #EBEBEB;
+$bg-icon: #F2F1FA;
+$pink: #FFEEEE;
+$disabled: #EBEBEB;
 
 $theme-colors: (
   "primary": $primary,
@@ -27,8 +28,9 @@ $theme-colors: (
   "muted": $muted,
   "danger":$danger,
   "icon": $icon,
-  "bgIcon": $bgIcon,
-  "btnDisabled": $btnDisabled
+  "bg-icon": $bg-icon,
+  "disabled": $disabled,
+  "pink": $pink,
 );
 
 $custom-colors: (
@@ -36,7 +38,7 @@ $custom-colors: (
   "custom-gray-1": $custom-gray-1,
   "custom-gray-2": $custom-gray-2,
   "custom-bg": $custom-bg,
-  "body-bg" : $body-bg
+  "body-bg" : $body-bg,
 );
 
 .bg-iautor {

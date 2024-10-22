@@ -7,10 +7,10 @@ import { Table, Tag } from 'antd';
 import { UserService } from '../../../common/http/api/userService';
 import { UserModel } from '../../../common/models/user.model';
 import { UserFilter } from '../../../common/models/filters/user.filter';
-import Nav from '../../../components/nav/nav.component';
 import SearchInput from '../../../components/forms/searchInput/searchInput';
 import CustomButton from '../../../components/forms/customButton/customButton';
 import UserForm from './user.component';
+import NavUserOptions from '../../../components/nav/nav-user-options.component';
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -232,7 +232,7 @@ const Users = () => {
 
   return (
     <>
-      <Nav />
+      <NavUserOptions />
 
       <main className='main bg-iautor pb-4' style={{ minHeight: '676px', flex: 1 }}>
         <section className='container' id='title'>

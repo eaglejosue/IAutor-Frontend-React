@@ -15,7 +15,7 @@ const SigIn = lazy(() => import('../pages/sigin/sigin'));
 const EsqueceuSenha = lazy(() => import('../pages/forgot-password/forgot-password'));
 const TrocarSenha = lazy(() => import('../pages/reset-password/reset-password'));
 const MyAccount = lazy(() => import("../pages/my-account/my-account"));
-const Incomes = lazy(() => import("../pages/admin/incomes/incomes"));
+const MyHistories = lazy(() => import("../pages/my-histories/my-histories"));
 const Terms = lazy(() => import("../pages/admin/terms/terms"));
 const Users = lazy(() => import("../pages/admin/users/users"));
 const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
@@ -29,22 +29,21 @@ interface Routes {
 const getRouteElement = (
   Component: React.ElementType,
   protectRoute = false,
-  showOnlyIcons = false
+  footerShowOnlyIcons = false,
+  footer = true
 ): React.ReactNode => {
   return (
-    <div className='container-fluid'>
-      <Suspense fallback={<PageLoading />}>
-        <ToastContainer position='top-center' autoClose={7000} />
-        {protectRoute ? (
-          <ProtectedRoute>
-            <Component />
-          </ProtectedRoute>
-        ) : (
+    <Suspense fallback={<PageLoading />}>
+      <ToastContainer position='top-center' autoClose={7000} />
+      {protectRoute ? (
+        <ProtectedRoute>
           <Component />
-        )}
-        <Footer showOnlyIcons={showOnlyIcons} />
-      </Suspense>
-    </div>
+        </ProtectedRoute>
+      ) : (
+        <Component />
+      )}
+      {footer && <Footer showOnlyIcons={footerShowOnlyIcons} />}
+    </Suspense>
   );
 };
 
@@ -56,9 +55,8 @@ const routes: Routes[] = [
   { path: paths.NOT_FOUND, element: getRouteElement(PageNotFound) },
   { path: paths.HOME, element: getRouteElement(Home) },
   { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true, true) },
-  { path: paths.MY_HISTORIES, element: getRouteElement(MyAccount, true, true) },
-  { path: paths.CREATE_HISTORY, element: getRouteElement(MyAccount, true, true) },
-  { path: paths.INCOMES, element: getRouteElement(Incomes, true, true) },
+  { path: paths.MY_HISTORIES, element: getRouteElement(MyHistories, true, true, false) },
+  { path: paths.NEW_HISTORY, element: getRouteElement(MyAccount, true, true) },
   { path: paths.TERMS, element: getRouteElement(Terms, true, true) },
   { path: paths.USERS, element: getRouteElement(Users, true, true) },
   { path: paths.CHAPTERS, element: getRouteElement(Chapters, true, true) },
