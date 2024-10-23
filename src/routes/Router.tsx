@@ -15,6 +15,7 @@ const SigIn = lazy(() => import('../pages/sigin/sigin'));
 const EsqueceuSenha = lazy(() => import('../pages/forgot-password/forgot-password'));
 const TrocarSenha = lazy(() => import('../pages/reset-password/reset-password'));
 const MyAccount = lazy(() => import("../pages/my-account/my-account"));
+const NewHistory = lazy(() => import("../pages/my-histories/new-history"));
 const MyHistories = lazy(() => import("../pages/my-histories/my-histories"));
 const Terms = lazy(() => import("../pages/admin/terms/terms"));
 const Users = lazy(() => import("../pages/admin/users/users"));
@@ -56,7 +57,7 @@ const routes: Routes[] = [
   { path: paths.HOME, element: getRouteElement(Home) },
   { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true, true) },
   { path: paths.MY_HISTORIES, element: getRouteElement(MyHistories, true, true, false) },
-  { path: paths.NEW_HISTORY, element: getRouteElement(MyAccount, true, true) },
+  { path: paths.NEW_HISTORY, element: getRouteElement(NewHistory, true, true, false) },
   { path: paths.TERMS, element: getRouteElement(Terms, true, true) },
   { path: paths.USERS, element: getRouteElement(Users, true, true) },
   { path: paths.CHAPTERS, element: getRouteElement(Chapters, true, true) },

@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
 import useScreenSize from '../../hooks/useScreenSize';
 import paths from '../../routes/paths';
@@ -21,7 +23,8 @@ const Nav = () => {
         </div>
         <div className='col-md'>
           <a href='#' className='btn btn-outline-secondary rounded-5 f-14 px-4 py-2'>
-            Ver Planos <span style={{ color: '#DB3737' }}>{'->'}</span>
+            Ver Planos
+            <FontAwesomeIcon icon={faChevronRight} className='text-primary ms-2 pt-1' />
           </a>
         </div>
         <div className='col-md-auto text-end'>

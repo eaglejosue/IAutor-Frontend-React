@@ -44,7 +44,7 @@ const SigIn = () => {
       navigate(paths.MY_ACCOUNT);
     }
     else {
-      navigate(redirect?.length ? `${redirect}?logged=true` : paths.MY_HISTORIES);
+      navigate(redirect?.length ? `${redirect}?logged=true` : paths.NEW_HISTORY);
     }
     reset();
   }

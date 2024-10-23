@@ -148,7 +148,7 @@ const MyAccount = () => {
 
                 <div className='row'>
 
-                  <div className='col-auto mt-3'>
+                  <div className='col-auto mt-2'>
                     <div className="rounded-circle bg-light d-flex justify-content-center align-items-center"
                       style={{ width: '100px', height: '100px', position: 'relative' }}
                     >
