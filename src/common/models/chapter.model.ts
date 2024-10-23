@@ -2,7 +2,7 @@ import { BaseModel } from "./base.model";
 
 export class ChapterModel extends BaseModel {
     title!: string;
-    chapterNumber!: string;
+    chapterNumber!: number;
 
   
     constructor(j?: any) {

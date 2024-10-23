@@ -16,6 +16,7 @@ export default {
   TERMS: '/terms',
   USERS: '/users',
   CHAPTERS: '/chapters',
-  QUESTIONS:'/questions'
+  QUESTIONS:'/questions',
+  PLANS:'/plans',
 
 } as Paths;

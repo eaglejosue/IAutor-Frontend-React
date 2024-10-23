@@ -14,6 +14,7 @@ import { Any } from "react-spring";
 export interface QuestionFormProps {
   question: QuestionModel | undefined;
   handleClose: (c?: boolean) => void;
+  confirmaSalvar():void | null
 }
 
 const QuestionForm = (p: QuestionFormProps) => {
@@ -79,6 +80,10 @@ const QuestionForm = (p: QuestionFormProps) => {
             position: 'top-center',
             style: { minWidth: 400 }
           });
+         
+          if(p.confirmaSalvar!=null){
+            p.confirmaSalvar()
+          }
           p.handleClose(false);
         })
         .catch((e) => {

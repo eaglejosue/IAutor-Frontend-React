@@ -10,6 +10,7 @@ import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 export interface ChapterFormProps {
   chapter: ChapterModel | undefined;
   handleClose: (c?: boolean) => void;
+  confirmaSalvar():void | null
 }
 
 const ChapterForm = (p: ChapterFormProps) => {
@@ -46,6 +47,9 @@ const ChapterForm = (p: ChapterFormProps) => {
             style: { minWidth: 400 }
           });
           p.handleClose(false);
+          if(p.confirmaSalvar!=null){
+            p.confirmaSalvar()
+          }
         })
         .catch((e) => {
           let message = 'Error ao salvar dados.';
