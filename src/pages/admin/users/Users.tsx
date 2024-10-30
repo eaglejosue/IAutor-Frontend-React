@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Modal } from "react-bootstrap";
-import { format } from 'date-fns';
-import { pt } from 'date-fns/locale';
-import { Table, Tag } from 'antd';
 
 import { UserService } from '../../../common/http/api/userService';
 import { UserModel } from '../../../common/models/user.model';
 import { UserFilter } from '../../../common/models/filters/user.filter';
-import Nav from '../../../components/nav/nav.component';
 import SearchInput from '../../../components/forms/searchInput/searchInput';
 import CustomButton from '../../../components/forms/customButton/customButton';
-import UserForm from './userForm.component';
+import UserForm from './user.component';
+import UserTable from './user.table';
+import NavUserOptions from '../../../components/nav/nav-user-options.component';
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [isExitConfirmationModalOpen, setIsExitConfirmationModalOpen] = useState(false);
 
@@ -53,7 +49,7 @@ const Users = () => {
     }));
   };
 
-  const handleEditClick = (user: UserModel) => {
+  const handleEdit = (user: UserModel) => {
     setSelectedUser(user);
     setIsFormModalOpen(true);
   };
@@ -79,7 +75,7 @@ const Users = () => {
     setIsExitConfirmationModalOpen(false);
   };
 
-  const handleDeleteClick = (id: number) => {
+  const handleDelete = (id: number) => {
     setIdToInactivate(id);
     setInactivationModalOpen(true);
   };
@@ -110,131 +106,14 @@ const Users = () => {
       });
   };
 
-  const columns = [
-    {
-      title: '',
-      dataIndex: 'profileImgUrl',
-      align: 'center' as 'center',
-      render: (_: any, record: UserModel) => record.profileImgUrl &&
-        <img src={record.profileImgUrl} alt={record.fullname} className="rounded-circle"
-          style={{ width: '45px', height: '45px', objectFit: 'cover' }}
-        />
-    },
-    {
-      title: 'Nome',
-      dataIndex: 'fullname',
-      sorter: (a: any, b: any) => a.fullname.localeCompare(b.fullname),
-    },
-    {
-      title: 'E-mail',
-      dataIndex: 'email',
-      sorter: (a: any, b: any) => a.email.localeCompare(b.email),
-    },
-    {
-      title: 'Login',
-      dataIndex: 'signInWith',
-      render: (signInWith: string) => (
-        <Tag color={signInWith === 'Google' ? 'purple' : 'green'}>{signInWith === 'Google' ? 'Google' : 'Padrão'}</Tag>
-      ),
-      filters: [
-        { text: 'Padrão', value: 'Default' },
-        { text: 'Google', value: 'Google' },
-      ],
-      onFilter: (value: any, record: UserModel) => record.signInWith === value,
-      filterSearch: true,
-    },
-    {
-      title: 'Tipo',
-      dataIndex: 'type',
-      render: (type: string) => (
-        <Tag color={type === 'Default' ? 'blue' : type === 'Admin' ? 'red' : type === 'Operator' ? 'geekblue' : type === 'Influencer' ? 'volcano' : 'green'}>
-          {type === 'Default' ? 'Comum' : type === 'Admin' ? 'Administrador' : type === 'Operator' ? 'Operador' : type === 'Influencer' ? 'Influencer' : 'Agente'}
-        </Tag>
-      ),
-      filters: [
-        { text: 'Comum', value: 'Default' },
-        { text: 'Administrador', value: 'Admin' },
-        { text: 'Operador', value: 'Operator' },
-        { text: 'Influencer', value: 'Influencer' },
-        { text: 'Agente', value: 'Agent' },
-      ],
-      onFilter: (value: any, record: UserModel) => record.type === value,
-      filterSearch: true,
-    },
-    {
-      title: 'Data de nascimento',
-      dataIndex: 'birthDate',
-      render: (birthDate: string) => birthDate ? format(new Date(birthDate), 'dd/MM/yyyy', { locale: pt }) : 'N/A',
-      align: 'center' as 'center',
-      sorter: (a: any, b: any) => a.birthDate.localeCompare(b.birthDate),
-    },
-    {
-      title: 'Data cadastro',
-      dataIndex: 'createdAt',
-      render: (createdAt: string) => createdAt ? format(new Date(createdAt), 'dd/MM/yyyy', { locale: pt }) : 'N/A',
-      align: 'center' as 'center',
-      sorter: (a: any, b: any) => a.createdAt.localeCompare(b.createdAt),
-    },
-    {
-      title: 'Alterado por',
-      dataIndex: 'updatedBy',
-      render: (updatedBy: string) => updatedBy ? updatedBy : 'N/A',
-      align: 'center' as 'center',
-      sorter: (a: any, b: any) => a.updatedBy.localeCompare(b.updatedBy),
-    },
-    {
-      title: 'Data alteração',
-      dataIndex: 'updatedAt',
-      render: (updatedAt: string) => updatedAt ? format(new Date(updatedAt), 'dd/MM/yyyy', { locale: pt }) : 'N/A',
-      align: 'center' as 'center',
-      sorter: (a: any, b: any) => a.updatedAt.localeCompare(b.updatedAt),
-    },
-    {
-      title: 'Status',
-      dataIndex: 'isActive',
-      render: (isActive: boolean) => (
-        <Tag color={isActive ? 'geekblue' : 'red'}>{isActive ? 'Ativo' : 'Inativo'}</Tag>
-      ),
-      align: 'center' as 'center',
-      filters: [
-        { text: 'Ativo', value: true },
-        { text: 'Inativo', value: false },
-      ],
-      onFilter: (value: any, record: UserModel) => record.isActive === value,
-      filterSearch: true,
-    },
-    {
-      title: 'Ação',
-      key: 'action',
-      render: (record: UserModel) => (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-          <span className="material-symbols-outlined"
-            onClick={() => handleEditClick(record)}
-            style={{ cursor: 'pointer', fontSize: '20px', marginRight: '0.3rem' }}
-            title='Editar'
-          >
-            edit
-          </span>
-          {record.isActive &&
-            <span className="material-symbols-outlined"
-              onClick={() => handleDeleteClick(record.id)}
-              style={{ cursor: 'pointer', fontSize: '20px' }}
-              title='Deletar'
-            >
-              delete
-            </span>
-          }
-        </div>
-      ),
-      align: 'center' as 'center',
-    },
-  ];
-
   return (
     <>
-      <Nav />
+      <NavUserOptions />
 
-      <main className='main bg-iautor pb-4' style={{ minHeight: '676px', flex: 1 }}>
+      <main className='main bg-iautor pb-4'
+        style={{ height: '70vh' }}
+      >
+
         <section className='container' id='title'>
           <div className='row'>
             <p className='mt-4 p-0 f-12'>
@@ -271,26 +150,11 @@ const Users = () => {
         </section>
 
         <section className='container mt-3 px-0' id='table-perfis'>
-          <Table
-            className='custom-table'
-            columns={columns}
-            rowKey="id"
-            dataSource={users}
-            locale={{ emptyText: 'Nenhum dado disponível.' }}
-            loading={isLoading}
-            pagination={{
-              current: currentPage,
-              pageSize: itemsPerPage,
-              total: users.length,
-              onChange: (page, pageSize) => {
-                setCurrentPage(page);
-                setItemsPerPage(pageSize);
-              },
-              defaultPageSize: 10,
-              showSizeChanger: true,
-              pageSizeOptions: [10, 20, 50, 100],
-              locale: { items_per_page: ' itens' }
-            }}
+          <UserTable
+            data={users}
+            isLoading={isLoading}
+            handlerEdit={handleEdit}
+            handlerDelete={handleDelete}
           />
         </section>
 
@@ -312,13 +176,13 @@ const Users = () => {
           </Modal.Body>
           <Modal.Footer>
             <button
-              className="btn border-1 btn-white text-dark py-2 px-4"
-              style={{ border: '1px solid #4200FF' }}
+              className="btn border-1 rounded-5 f-14 px-4 py-2"
+              style={{ border: '1px solid #dee2e6' }}
               onClick={handleDeleteCancel}>
               Não
             </button>
             <button
-              className="btn bg-IAutor fw-bold text-body-bg py-2 px-4"
+              className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
               onClick={handleDeleteConfirm}>
               Sim
             </button>

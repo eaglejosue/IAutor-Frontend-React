@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faTiktok, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { faFacebookF, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 import useScreenSize from '../../hooks/useScreenSize';
 import Logo from '../../assets/img/Logo.png';
@@ -10,6 +10,7 @@ export interface FooterProps {
 
 const Footer = (p: FooterProps) => {
   const { isExtraSmallScreen, isSmallScreen } = useScreenSize();
+
   return (
     <footer>
       {p.showOnlyIcons
@@ -27,12 +28,6 @@ const Footer = (p: FooterProps) => {
                 <FontAwesomeIcon icon={faFacebookF} style={{ color: 'white' }} />
               </a>
             </li>
-            {/* <li className='bg-primary d-flex justify-content-center align-items-center'
-              style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
-              <a href='#' target='_blank'>
-                <FontAwesomeIcon icon={faTiktok} style={{ color: 'white' }} />
-              </a>
-            </li> */}
             <li className='bg-primary d-flex justify-content-center align-items-center'
               style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
               <a href='#' target='_blank'>
@@ -77,12 +72,6 @@ const Footer = (p: FooterProps) => {
                   <FontAwesomeIcon icon={faFacebookF} style={{ color: 'white' }} />
                 </a>
               </li>
-              {/* <li className='bg-primary d-flex justify-content-center align-items-center'
-                style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
-                <a href='#' target='_blank'>
-                  <FontAwesomeIcon icon={faTiktok} style={{ color: 'white' }} />
-                </a>
-              </li> */}
               <li className='bg-primary d-flex justify-content-center align-items-center'
                 style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
                 <a href='#' target='_blank'>

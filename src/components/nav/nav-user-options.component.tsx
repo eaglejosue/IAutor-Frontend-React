@@ -1,21 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 import { EnumUserTypes } from '../../common/enums/status.enum';
 import paths from '../../routes/paths';
-import UserSvg from '../../assets/svg/user.svg';
-import UserWhiteSvg from '../../assets/svg/user-white.svg';
-import useScreenSize from '../../hooks/useScreenSize';
 
 export interface Props {
-  userNameColor?: string
+  pageName?: string
 }
 
-const NavUserOptions = ({userNameColor = 'black'}: Props) => {
+const NavUserOptions = (p: Props) => {
   const navigate = useNavigate();
-  const { isExtraSmallScreen, isSmallScreen } = useScreenSize();
   const [user, setUser] = useState<AuthenticatedUserModel>();
 
   useEffect(() => {
@@ -30,10 +28,20 @@ const NavUserOptions = ({userNameColor = 'black'}: Props) => {
   };
 
   return (
-    <Dropdown>
-      <Dropdown.Toggle className='bg-transparent border-0 p-0' style={{ color: userNameColor }}>
-        <img src={userNameColor === 'black' ? UserSvg : UserWhiteSvg} style={{ marginRight: '5px', marginBottom: '3px' }} />
-        {user && (user.name.length > 15 && (isExtraSmallScreen || isSmallScreen) ? user.firstname : user.name)}
+    <Dropdown className='col-auto text-end'>
+      <Dropdown.Toggle className='bg-transparent border-0 p-0' style={{ color: 'black' }}>
+        {user?.profileImgUrl
+          ?
+          <img src={user.profileImgUrl} alt={user.firstname}
+            className='rounded-circle me-1'
+            style={{ width: '32px', height: '32px', objectFit: 'cover' }}
+          />
+          :
+          <a target='_blank' style={{ color: 'black' }}>
+            <FontAwesomeIcon icon={faUser} />
+          </a>
+        }
+
       </Dropdown.Toggle>
 
       <Dropdown.Menu style={{ minWidth: '200px', overflow: 'hidden', padding: '10px' }}>
@@ -53,15 +61,10 @@ const NavUserOptions = ({userNameColor = 'black'}: Props) => {
           }
         </Dropdown.Item>
 
-        {(user?.type === EnumUserTypes.Admin || user?.type === EnumUserTypes.Operator) &&
+        {user?.type === EnumUserTypes.Admin &&
           <>
             <Dropdown.Divider />
             <Dropdown.Item onClick={() => navigate(paths.TERMS)}>Termos</Dropdown.Item>
-          </>
-        }
-
-        {user?.type === EnumUserTypes.Admin &&
-          <>
             <Dropdown.Item onClick={() => navigate(paths.USERS)}>Usuários</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.CHAPTERS)}>Capitulos</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.QUESTIONS)}>Perguntas</Dropdown.Item>

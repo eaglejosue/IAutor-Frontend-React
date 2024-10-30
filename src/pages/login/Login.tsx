@@ -69,7 +69,7 @@ const Login = () => {
       navigate(paths.MY_ACCOUNT);
     }
     else {
-      navigate(redirect?.length ? `${redirect}?logged=true` : paths.HOME);
+      navigate(redirect?.length ? `${redirect}?logged=true` : paths.NEW_HISTORY);
     }
     reset();
   }

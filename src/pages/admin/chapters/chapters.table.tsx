@@ -2,7 +2,6 @@ import { Table, Tag } from 'antd';
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
-
 import { ChapterModel } from "../../../common/models/chapter.model"
 
 export enum ChapterMode{

@@ -44,7 +44,7 @@ const SigIn = () => {
       navigate(paths.MY_ACCOUNT);
     }
     else {
-      navigate(redirect?.length ? `${redirect}?logged=true` : paths.HOME);
+      navigate(redirect?.length ? `${redirect}?logged=true` : paths.NEW_HISTORY);
     }
     reset();
   }
@@ -119,7 +119,7 @@ const SigIn = () => {
             position: 'top-center',
             style: { minWidth: 400 }
           });
-          navigate(paths.HOME);
+          navigate(paths.MY_HISTORIES);
           reset();
         })
         .catch((e) => {

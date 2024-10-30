@@ -6,6 +6,7 @@ import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 import { QuestionModel } from "../../../common/models/question.model";
 import { QuestionService } from "../../../common/http/api/questionService";
 
+
 export interface QuestionFormProps {
   question: QuestionModel | undefined;
   handleClose: (c?: boolean) => void;
@@ -98,6 +99,7 @@ const QuestionForm = (p: QuestionFormProps) => {
         <CustomInput
           type='text'
           disabled={isLoading}
+          label='Título *'
           placeholder='Título'
           register={register}
           errors={errors.title}
@@ -125,7 +127,7 @@ const QuestionForm = (p: QuestionFormProps) => {
           customValidation={(value) => (!isNaN(Number(value)) && Number(value) > 0 && Number(value) < 100000)
             || 'Número deve ser um número entre 1 e 100000'}
         />
-         <CustomInput
+        <CustomInput
           type='number'
           disabled={isLoading}
             placeholder='Máximo de caracteres da pergunta'

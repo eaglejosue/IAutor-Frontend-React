@@ -2,22 +2,23 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { ProtectedRoute } from './ProtectedRoute';
+import { ProtectedRoute } from './protected-route';
 import paths from './paths';
 
 import PageLoading from '../components/pageLoading/pageLoading.component';
 import Footer from '../components/footer/footer.component';
 
-const PageNotFound = lazy(() => import('../pages/page-not-found/PageNotFound'));
-const Home = lazy(() => import('../pages/home/Home'));
-const Login = lazy(() => import('../pages/login/Login'));
-const SigIn = lazy(() => import('../pages/sigin/SigIn'));
-const EsqueceuSenha = lazy(() => import('../pages/forgot-password/ForgotPassword'));
-const TrocarSenha = lazy(() => import('../pages/reset-password/ResetPassword'));
-const MyAccount = lazy(() => import("../pages/my-account/MyAccount"));
-const Incomes = lazy(() => import("../pages/admin/incomes/Incomes"));
-const Terms = lazy(() => import("../pages/admin/terms/Terms"));
-const Users = lazy(() => import("../pages/admin/users/Users"));
+const PageNotFound = lazy(() => import('../pages/page-not-found/page-not-found'));
+const Home = lazy(() => import('../pages/home/home'));
+const Login = lazy(() => import('../pages/login/login'));
+const SigIn = lazy(() => import('../pages/sigin/sigin'));
+const EsqueceuSenha = lazy(() => import('../pages/forgot-password/forgot-password'));
+const TrocarSenha = lazy(() => import('../pages/reset-password/reset-password'));
+const MyAccount = lazy(() => import("../pages/my-account/my-account"));
+const NewHistory = lazy(() => import("../pages/my-histories/new-history"));
+const MyHistories = lazy(() => import("../pages/my-histories/my-histories"));
+const Terms = lazy(() => import("../pages/admin/terms/terms"));
+const Users = lazy(() => import("../pages/admin/users/users"));
 const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
 const Questions = lazy(() =>  import("../pages/admin/questions/questions"));
 const Plans = lazy(()=>import("../pages/admin/plans/plans"));
@@ -30,22 +31,21 @@ interface Routes {
 const getRouteElement = (
   Component: React.ElementType,
   protectRoute = false,
-  showOnlyIcons = false
+  footerShowOnlyIcons = false,
+  footer = true
 ): React.ReactNode => {
   return (
-    <div className='container-fluid'>
-      <Suspense fallback={<PageLoading />}>
-        <ToastContainer position='top-center' autoClose={7000} />
-        {protectRoute ? (
-          <ProtectedRoute>
-            <Component />
-          </ProtectedRoute>
-        ) : (
+    <Suspense fallback={<PageLoading />}>
+      <ToastContainer position='top-center' autoClose={7000} />
+      {protectRoute ? (
+        <ProtectedRoute>
           <Component />
-        )}
-        <Footer showOnlyIcons={showOnlyIcons} />
-      </Suspense>
-    </div>
+        </ProtectedRoute>
+      ) : (
+        <Component />
+      )}
+      {footer && <Footer showOnlyIcons={footerShowOnlyIcons} />}
+    </Suspense>
   );
 };
 
@@ -54,10 +54,11 @@ const routes: Routes[] = [
   { path: paths.SIGIN, element: getRouteElement(SigIn, false, true) },
   { path: paths.FORGOT_PASSWORD, element: getRouteElement(EsqueceuSenha) },
   { path: paths.RESET_PASSWORD, element: getRouteElement(TrocarSenha) },
-  { path: paths.HOME, element: getRouteElement(Home) },
   { path: paths.NOT_FOUND, element: getRouteElement(PageNotFound) },
+  { path: paths.HOME, element: getRouteElement(Home) },
   { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true, true) },
-  { path: paths.INCOMES, element: getRouteElement(Incomes, true, true) },
+  { path: paths.MY_HISTORIES, element: getRouteElement(MyHistories, true, true, false) },
+  { path: paths.NEW_HISTORY, element: getRouteElement(NewHistory, true, true, false) },
   { path: paths.TERMS, element: getRouteElement(Terms, true, true) },
   { path: paths.USERS, element: getRouteElement(Users, true, true) },
   { path: paths.CHAPTERS, element: getRouteElement(Chapters, true, true) },
