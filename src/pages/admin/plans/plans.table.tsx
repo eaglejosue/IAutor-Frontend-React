@@ -11,6 +11,7 @@ interface PlansTableProps {
   isLoading: boolean,
   handlerEdit(chapter: PlanModel): void | null
   handlerDelete(plano: PlanModel): void | null
+  handleDuplicateClick(plano: PlanModel): void | null
 }
 
 const PlansTable = (props: PlansTableProps) => {
@@ -21,8 +22,11 @@ const PlansTable = (props: PlansTableProps) => {
     props.handlerDelete(plano);
   };
 
-  const handleEditClick = (chapter: PlanModel) => {
-    props.handlerEdit(chapter)
+  const handleEditClick = (plano: PlanModel) => {
+    props.handlerEdit(plano)
+  };
+  const handleDuplicateClick = (plano: PlanModel) => {
+    props.handleDuplicateClick(plano)
   };
 
   const formatPrice = (amount: number): string => {
@@ -129,7 +133,9 @@ const PlansTable = (props: PlansTableProps) => {
             >
               delete
             </span>
+            
           )}
+          
         </div>
       ),
       align: "center" as "center",

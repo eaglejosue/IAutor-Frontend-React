@@ -21,6 +21,7 @@ const QuestionForm = (p: QuestionFormProps) => {
     setValue('title', p.question?.title);
     setValue('maxLimitCharacters', p.question?.maxLimitCharacters);
     setValue('minLimitCharacters', p.question?.minLimitCharacters);
+    setValue('subject', p.question?.subject);
   }, []);
 
   //

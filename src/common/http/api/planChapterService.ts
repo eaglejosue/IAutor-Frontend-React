@@ -3,8 +3,8 @@ import { PlanModelChapterQuestions } from "../../models/plan.model";
 import { HttpClient } from "../httpClient";
 import queryString from 'query-string';
 
-export class PlanService {
-  private endpoint = "/plans";
+export class PlanChapterService {
+  private endpoint = "/planchapter";
   private _httpClient!: HttpClient;
 
   constructor() {

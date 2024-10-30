@@ -20,17 +20,22 @@ import CustomButton from "../../../components/forms/customButton/customButton";
 import { ChapterQuestions, PlanModel, PlanModelChapterQuestions } from "../../../common/models/plan.model";
 import { toast } from 'react-toastify';
 import { PlanService } from "../../../common/http/api/planService";
+import { PlanChapterService } from "../../../common/http/api/planChapterService";
+
 interface PlanFormProps{
   handleModal(isOpen:boolean):void
+  planEdit:PlanModel
 }
 
 interface PlanChapterQuestion{
   ChapterId:number | undefined;
   Questions:[QuestionModel]
+
 }
 
 const PlanForm =(props:PlanFormProps) =>{
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [duplicateModalOpen, setDuplicateModalOpen] = useState<boolean>(false);
   const [chapters, setChapters] = useState<ChapterModel[]>([]);
   const [chaptersSelected, setChaptersSelected] = useState<ChapterModel |null>(null);
   const [chaptersPlan, setChaptersPlan] = useState<ChapterModel[]>([]);
@@ -42,7 +47,7 @@ const PlanForm =(props:PlanFormProps) =>{
   const [questions, setQuestions] = useState<QuestionModel[]>([]);
   const [planChapterQuestion,setPlanChapterQuestion] = useState<PlanChapterQuestion[]>([]);
   const _planService = new PlanService();
-  
+  const _planChapterService = new PlanChapterService();
   const {
     setValue,
     register,
@@ -55,17 +60,70 @@ const PlanForm =(props:PlanFormProps) =>{
     SetFormModalOpenCapitulo(isClose)
   }
   
+  //carregar o plano
+  useEffect(()=>{
+     if(props.planEdit){
+      setValue('title', props.planEdit?.title);
+      setValue('price', props.planEdit?.price);
+      setValue('currency', props.planEdit?.currency);
+      setValue('maxLimitSendDataIA', props.planEdit?.maxLimitSendDataIA);
+      setValue('initialValidityPeriod', props.planEdit?.initialValidityPeriod.toString().split('T')[0]);
+      setValue('finalValidityPeriod', props.planEdit?.finalValidityPeriod.toString().split('T')[0]);
+      setValue('caractersLimitFactor', props.planEdit?.caractersLimitFactor);
+      setIsLoading(true);
+      _planChapterService
+        .getById(props.planEdit.id)
+        .then((response: any) => {
+         //console.log(response)
+          if(response?.length){
+            //setChaptersPlan()
+            let planChapterList:PlanChapterQuestion[]=[]
+            
+            var chapters = response.map((r:any)=>{
+              let chapter = r.chapter;
+              chapter.selected = true;  
+              var questions = r.planChapterQuestions?.map((question:any)=>{
+                  return question.question
+              })
+              planChapterList.push({ChapterId: chapter.id,Questions : questions})
+              return chapter
+            })
+             setPlanChapterQuestion(planChapterList)
+             setChaptersPlan(chapters)
+          }
+         
+        })
+        .catch((e: any) => {
+          let message = "Error ao obter plano.";
+          if (e.response?.data?.length > 0 && e.response.data[0].message)
+            message = e.response.data[0].message;
+          if (e.response?.data?.detail) message = e.response?.data?.detail;
+          console.log("Erro: ", message, e);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+      
+     }
+  },[])
   //abre fecha/modal de pergunta
   const handleCloseModalPergunta= (isClose:boolean) => {
     setIsFormModalOpenPergunta(isClose)
   };
   
+  const handlerConfirmDuplicate =()=>{
+    setDuplicateModalOpen(false)
+   // handleSubmit(onSubmit)
+  }
   //salva form
    //@ts-ignore
   const onSubmit = async (data: any) => {
     let plan = new PlanModel({
       ...data,
+      price : Number(data.price.toString().replace("R$","").replace(",",".")),
+      id:props.planEdit?.id
     });
+
     //@ts-ignore
     const questionPlan: PlanModelChapterQuestions = {...plan }
     //@ts-ignore
@@ -77,6 +135,7 @@ const PlanForm =(props:PlanFormProps) =>{
         questionPlan.chapterPlanQuestion.push(chapterQuestion)
       })
     })
+
 
     if (questionPlan.id === undefined) {
       _planService
@@ -99,7 +158,7 @@ const PlanForm =(props:PlanFormProps) =>{
         })
         .finally(() => {
           setIsLoading(false);
-          
+          props.handleModal(false)
         });
     } else {
       _planService
@@ -122,6 +181,7 @@ const PlanForm =(props:PlanFormProps) =>{
         })
         .finally(() => {
           setIsLoading(false);
+          props.handleModal(false)
         });
     }
     setIsLoading(false)
@@ -158,7 +218,9 @@ const PlanForm =(props:PlanFormProps) =>{
   const handlerCheckChapterCapitulo= (item:ChapterModel,checked:boolean) =>{
    item.selected = checked;
    if(checked)
-      setChaptersPlan(prevState => ([...prevState, item]))
+      if(chaptersPlan.find(r=>r.id ==item.id) ==null){
+        setChaptersPlan(prevState => ([...prevState, item]))
+      }
     else{
       var array = [...chaptersPlan]; // make a separate copy of the array
       var index = array.indexOf(item)
@@ -299,7 +361,7 @@ const PlanForm =(props:PlanFormProps) =>{
               maxLength={500}
             />
             <CustomInput
-              type="number"
+              type="money"
               disabled={isLoading}
               placeholder="Preço do plano"
               register={register}
@@ -310,12 +372,6 @@ const PlanForm =(props:PlanFormProps) =>{
               validationSchema={{
                 required: "Preço do plano é obrigatório",
               }}
-              customValidation={(value) =>
-                (!isNaN(Number(value)) &&
-                  Number(value) > 0 &&
-                  Number(value) < 100000) ||
-                "Valor deve ser um número entre 1 e 100000"
-              }
             />
             <CustomInput
               type="text"
@@ -367,10 +423,6 @@ const PlanForm =(props:PlanFormProps) =>{
               validationSchema={{
                 required: "Data de início de vigência obrigatória",
               }}
-              customValidation={(value) =>
-                (!isDate(value) && new Date(value) > new Date()) ||
-                "Data inicial de vigência deve ser maior que hoje"
-              }
             />
             <CustomInput
               type="date"
@@ -463,9 +515,7 @@ const PlanForm =(props:PlanFormProps) =>{
                                     <th>Pergunta</th>
                                     <th>Tema</th>
                                     <th>
-                                      <div className="form-check">
-                                       
-                                      </div>
+                                      <div className="form-check"></div>
                                     </th>
                                   </tr>
                                 </thead>
@@ -473,11 +523,15 @@ const PlanForm =(props:PlanFormProps) =>{
                                   {planChapterQuestion
                                     ?.filter((r) => r.ChapterId == item.id)
                                     .map(
-                                      (item: PlanChapterQuestion, i: number) => {
+                                      (
+                                        item: PlanChapterQuestion,
+                                        i: number,
+                                      ) => {
                                         return (
                                           <ItemTable
-                                              //@ts-ignore
-                                            questions={item.Questions} chapter={item}
+                                            //@ts-ignore
+                                            questions={item.Questions}
+                                            chapter={item}
                                             key={i.toString()}
                                           />
                                         );
@@ -507,39 +561,62 @@ const PlanForm =(props:PlanFormProps) =>{
                   })}
               </Accordion>
             )}
-            <Divider className="mt-2 " />
           </div>
 
           {chaptersPlan.length > 0 && (
-            <div className="d-flex justify-content-end mt-4">
-              <button
-                className="btn rounded-5 f-14 px-4 py-2 mx-2"
-                type="button"
-                style={{ border: "1px solid #dee2e6" }}
-                disabled={isLoading}
-                onClick={(e) => {
-                  e.preventDefault();
-                  props.handleModal(false);
-                }}
-              >
-                Cancelar
-              </button>
-              <button
-                className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
-                type="submit"
-                disabled={isLoading}
-              >
-                Salvar Informações
-                {isLoading && (
-                  <span
-                    className="spinner-border spinner-border-sm text-light ms-2"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                )}
-              </button>
-            </div>
+            <>
+              <div className="row mt-5">
+                <div className="col-6 ">
+                  <button
+                    className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
+                    type="button"
+                    hidden={true}
+                    onClick={()=>setDuplicateModalOpen(true)}
+                    disabled={isLoading}
+                  >
+                    Duplicar este plano
+                    {isLoading && (
+                      <span
+                        className="spinner-border spinner-border-sm text-light ms-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                  </button>
+                </div>
+                <div className="col-6 text-end">
+                  <button
+                    className="btn rounded-5 f-14 px-4 py-2 mx-2"
+                    type="button"
+                    style={{ border: "1px solid #dee2e6" }}
+                    disabled={isLoading}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      props.handleModal(false);
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
+                    type="submit"
+                    disabled={isLoading}
+                  >
+                    Salvar Informações
+                    {isLoading && (
+                      <span
+                        className="spinner-border spinner-border-sm text-light ms-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </>
           )}
+
+       
         </form>
         <Modal
           show={isFormModalOpenPergunta}
@@ -549,11 +626,11 @@ const PlanForm =(props:PlanFormProps) =>{
           backdrop="static"
         >
           <Modal.Header closeButton className="bg-white border-0 pb-0">
-            <Modal.Title>Perguntas do capitulo - {chaptersSelected?.title}</Modal.Title>
+            <Modal.Title>
+              Perguntas do capitulo - {chaptersSelected?.title}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-white pt-0">
-
-
             <section className="container border-top" id="filter">
               <div className="row my-4">
                 <div
@@ -574,9 +651,14 @@ const PlanForm =(props:PlanFormProps) =>{
                 </div>
               </div>
             </section>
-            <QuestionTable data={questions} addItemsPlan={handlerAddQuestions} 
-            //@ts-ignore
-            handlerDelete={null} handlerEdit={null}   mode={QuestionMode.registerPlan} />
+            <QuestionTable
+              data={questions}
+              addItemsPlan={handlerAddQuestions}
+              //@ts-ignore
+              handlerDelete={null}
+              handlerEdit={null}
+              mode={QuestionMode.registerPlan}
+            />
           </Modal.Body>
         </Modal>
 
@@ -593,7 +675,6 @@ const PlanForm =(props:PlanFormProps) =>{
           <Modal.Body className="bg-white pt-0">
             <Divider />
             {
-              //@ts-ignore
               <ChapterTable
                 isLoading={false}
                 data={chapters}
@@ -605,6 +686,36 @@ const PlanForm =(props:PlanFormProps) =>{
             }
           </Modal.Body>
         </Modal>
+        <Modal
+          show={duplicateModalOpen}
+          onHide={() => setDuplicateModalOpen(false)}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmar duplicação de plano</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Você tem certeza que deseja duplicar este plano?</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              className="btn border-1 rounded-5 f-14 px-4 py-2"
+              style={{ border: "1px solid #dee2e6" }}
+              onClick={() => setDuplicateModalOpen(false)}
+            >
+              Não
+            </button>
+            <button
+              className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
+              type="submit"
+              onClick={handlerConfirmDuplicate}
+            >
+              Sim
+            </button>
+          </Modal.Footer>
+        </Modal>
+       
       </>
     );
 }
