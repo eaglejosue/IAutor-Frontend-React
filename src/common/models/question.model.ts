@@ -6,7 +6,8 @@ export class QuestionModel extends BaseModel {
     minLimitCharacters!:number;
     chapterId!:number;
     selected!:boolean;
-  
+    subject!:string;
+
     constructor(j?: any) {
       super(j);
       if (j) {
@@ -15,6 +16,7 @@ export class QuestionModel extends BaseModel {
         this.minLimitCharacters = j.minLimitCharacters;
         this.chapterId = j.chapterId;
         this.selected = j.selected;
+        this.subject = j.subject;
       }
     }
   }

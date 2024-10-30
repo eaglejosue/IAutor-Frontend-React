@@ -2,47 +2,56 @@ import { Table, Tag } from 'antd';
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
-import { QuestionModel } from '../../../common/models/question.model';
+import { PlanModel } from '../../../common/models/plan.model';
 
 
-export enum QuestionMode{
-  registerQuestion,
-  registerPlan
-}
 
-interface QuestionTableProps {
-  data: QuestionModel[],
+interface PlansTableProps {
+  data: PlanModel[],
   isLoading: boolean,
-  handlerEdit(question: QuestionModel): void
-  handlerDelete(id: Number): void
-  mode: QuestionMode
-  addItemsPlan(items:QuestionModel[]):void | null;
+  handlerEdit(chapter: PlanModel): void | null
+  handlerDelete(plano: PlanModel): void | null
 }
 
-const QuestionTable = (props: QuestionTableProps) => {
+const PlansTable = (props: PlansTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [questionsSelected, setQuestionsSelected] = useState<QuestionModel[]>([]);
 
-  const handleDeleteClick = (id: number) => {
-    props.handlerDelete(id);
+  const handleDeleteClick = (plano: PlanModel) => {
+    props.handlerDelete(plano);
   };
 
-  const handleEditClick = (question: QuestionModel) => {
-    props.handlerEdit(question)
+  const handleEditClick = (chapter: PlanModel) => {
+    props.handlerEdit(chapter)
   };
 
-  const columnsRegister = [
+  const formatPrice = (amount: number): string => {
+    return Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    }).format(amount);
+}
+  const columns= [
     {
-      title: "Titulo",
+      title: "Nr do plano",
+      dataIndex: "id",
+      sorter: (a: any, b: any) =>
+        a.chapterNumber.localeCompare(b.id),
+    },
+    {
+      title: "Plano",
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
     {
-      title: "Tema",
-      dataIndex: "subject",
-      sorter: (a: any, b: any) => a.title.localeCompare(b.subject),
-    },
+        title: "Preço",
+        dataIndex: "price",
+        sorter: (a: any, b: any) => a.title.localeCompare(b.price),
+        render: (price: number) =>
+          price
+            ? formatPrice(price)
+            : "N/A",
+      },
     {
       title: "Data cadastro",
       dataIndex: "createdAt",
@@ -83,14 +92,15 @@ const QuestionTable = (props: QuestionTableProps) => {
         { text: "Ativo", value: true },
         { text: "Inativo", value: false },
       ],
-      onFilter: (value: any, record: QuestionModel) =>
+      onFilter: (value: any, record: PlanModel) =>
         record.isActive === value,
       filterSearch: true,
     },
+   
     {
       title: "Ação",
       key: "action",
-      render: (record: QuestionModel) => (
+      render: (record: PlanModel) => (
         <div
           style={{
             display: "flex",
@@ -113,7 +123,7 @@ const QuestionTable = (props: QuestionTableProps) => {
           {record.isActive && (
             <span
               className="material-symbols-outlined"
-              onClick={() => handleDeleteClick(record.id)}
+              onClick={() => handleDeleteClick(record)}
               style={{ cursor: "pointer", fontSize: "20px" }}
               title="Deletar"
             >
@@ -125,52 +135,14 @@ const QuestionTable = (props: QuestionTableProps) => {
       align: "center" as "center",
     },
   ];
-  const handlerCheckQeustion=(capitulo:QuestionModel,checked:boolean)=>{
-    
-    capitulo.selected = checked;
-    if(checked)
-       setQuestionsSelected(prevState => ([...prevState, capitulo]))
-     else{
-       var array = [...questionsSelected]; // make a separate copy of the array
-       var index = array.indexOf(capitulo)
-       if (index !== -1) {
-         array.splice(index, 1);
-         setQuestionsSelected(array);
-       }
-     }
-   
-  }
-  const columnsRegisterPlan = [
-    {
-      title: "Titulo",
-      dataIndex: "title",
-      sorter: (a: any, b: any) => a.title.localeCompare(b.title),
-    },
-    {
-      title: "Tema",
-      dataIndex: "subject",
-      sorter: (a: any, b: any) => a.title.localeCompare(b.subject),
-    },
-    {
-      title: "Ação",
-      key: "action",
-      render: (record: QuestionModel) => (
-        <div
-        >
-          <input type='checkbox'   onChange={(e)=> handlerCheckQeustion(record,e.target.checked)}  ></input>
-         
-        </div>
-      ),
-      align: "center" as "center",
-    },
-  ];
+
+
   return (
-    <>
     <Table
       className='custom-table'
+      columns={columns}
       rowKey="id"
       dataSource={props.data}
-      columns={props.mode == QuestionMode.registerQuestion? columnsRegister:columnsRegisterPlan}
       locale={{ emptyText: 'Nenhum dado disponível.' }}
       loading={props.isLoading}
       pagination={{
@@ -187,23 +159,7 @@ const QuestionTable = (props: QuestionTableProps) => {
         locale: { items_per_page: ' itens' }
       }}
     />
-    
-   {props.mode == QuestionMode.registerPlan && <div className="d-flex justify-content-end mt-4">
-              <button
-                className="btn btn-primary rounded-5 f-14 px-4 py-2 mx-2"
-                type="button"
-                style={{ border: "1px solid #dee2e6" }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  props.addItemsPlan(questionsSelected)
-                  //props.handleModal(false);
-                }}
-              >
-                Adicionar perguntas ao capítulo
-              </button>
-            </div>}
-    </>
   )
 }
 
-export default QuestionTable
+export default PlansTable

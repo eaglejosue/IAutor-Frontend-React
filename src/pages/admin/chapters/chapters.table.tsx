@@ -5,11 +5,19 @@ import { pt } from 'date-fns/locale';
 
 import { ChapterModel } from "../../../common/models/chapter.model"
 
+export enum ChapterMode{
+  registerChapter,
+  registerPlan
+}
+
 interface ChapterTableProps {
   data: ChapterModel[],
+  handlerOnChangeAddPlan(capitulo:ChapterModel,checked:boolean): void | null,
   isLoading: boolean,
-  handlerEdit(chapter: ChapterModel): void
-  handlerDelete(id: Number): void
+  handlerEdit(chapter: ChapterModel): void | null
+  handlerDelete(id: Number): void | null
+  mode: ChapterMode
+
 }
 
 const ChapterTable = (props: ChapterTableProps) => {
@@ -24,18 +32,23 @@ const ChapterTable = (props: ChapterTableProps) => {
     props.handlerEdit(chapter)
   };
 
-  const columns = [
-    {
-      title: "Titulo",
-      dataIndex: "title",
-      sorter: (a: any, b: any) => a.title.localeCompare(b.title),
-    },
+  const handlerCheckCapitulo=(capitulo:ChapterModel,e:any)=>{
+
+    props.handlerOnChangeAddPlan(capitulo,e.target.checked)
+  }
+  const columnsRegister = [
     {
       title: "Nr do capítulo",
       dataIndex: "chapterNumber",
       sorter: (a: any, b: any) =>
         a.chapterNumber.localeCompare(b.chapterNumber),
     },
+    {
+      title: "Titulo",
+      dataIndex: "title",
+      sorter: (a: any, b: any) => a.title.localeCompare(b.title),
+    },
+ 
     {
       title: "Data cadastro",
       dataIndex: "createdAt",
@@ -80,6 +93,7 @@ const ChapterTable = (props: ChapterTableProps) => {
         record.isActive === value,
       filterSearch: true,
     },
+   
     {
       title: "Ação",
       key: "action",
@@ -119,10 +133,37 @@ const ChapterTable = (props: ChapterTableProps) => {
     },
   ];
 
+  const columnsRegisterPlan = [
+    {
+      title: "Nr do capítulo",
+      dataIndex: "chapterNumber",
+      sorter: (a: any, b: any) =>
+        a.chapterNumber.localeCompare(b.chapterNumber),
+    },
+    {
+      title: "Titulo",
+      dataIndex: "title",
+      sorter: (a: any, b: any) => a.title.localeCompare(b.title),
+    },
+ 
+  
+    {
+      title: "Ação",
+      key: "action",
+      render: (record: ChapterModel) => (
+        <div
+        >
+          <input type='checkbox' checked={record.selected} onChange={(e)=> handlerCheckCapitulo(record,e)}  ></input>
+         
+        </div>
+      ),
+      align: "center" as "center",
+    },
+  ];
   return (
     <Table
       className='custom-table'
-      columns={columns}
+      columns={props.mode == ChapterMode.registerChapter? columnsRegister:columnsRegisterPlan}
       rowKey="id"
       dataSource={props.data}
       locale={{ emptyText: 'Nenhum dado disponível.' }}

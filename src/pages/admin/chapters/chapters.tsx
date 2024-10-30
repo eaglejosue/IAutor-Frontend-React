@@ -7,7 +7,7 @@ import ChapterForm from "./chapter.component";
 import { ChapterFilter } from "../../../common/models/filters/chapter.filter";
 import { ChapterService } from "../../../common/http/api/chapterService";
 import { ChapterModel } from "../../../common/models/chapter.model";
-import ChapterTable from "./chapters.table";
+import ChapterTable, { ChapterMode } from "./chapters.table";
 import { toast } from 'react-toastify';
 
 const Chapters = () => {
@@ -159,9 +159,11 @@ const Chapters = () => {
         <section className="container mt-3 px-0" id="table-perfis">
           <ChapterTable
             data={chapters}
+            
             isLoading={isLoading}
             handlerEdit={handlerEdit}
             handlerDelete={handlerDelete}
+            mode={ChapterMode.registerChapter}
           />
         </section>
 
@@ -172,7 +174,7 @@ const Chapters = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-white pt-0">
-            <ChapterForm chapter={chapterEdit} handleClose={(c) => handleCloseModal(c)}  />
+            <ChapterForm chapter={chapterEdit} handleClose={(c) => handleCloseModal(c)} confirmaSalvar={null}  />
           </Modal.Body>
         </Modal>
 
@@ -185,13 +187,13 @@ const Chapters = () => {
           </Modal.Body>
           <Modal.Footer>
             <button
-              className="btn border-1 btn-white text-dark py-2 px-4"
-              style={{ border: '1px solid #4200FF' }}
+             className="btn border-1 rounded-5 f-14 px-4 py-2"
+             style={{ border: '1px solid #dee2e6' }}
               onClick={handlerDeleteCancel}>
               Não
             </button>
             <button
-              className="btn bg-IAutor fw-bold text-body-bg py-2 px-4"
+              className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
               onClick={handlerDeleteCancelConfirm}>
               Sim
             </button>

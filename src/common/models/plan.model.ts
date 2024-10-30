@@ -7,7 +7,8 @@ export class PlanModel extends BaseModel {
     maxLimitSendDataIA!:number;
     initialValidityPeriod!:Date;
     finalValidityPeriod!:Date;
-  
+    caractersLimitFactor!:number;
+
     constructor(j?: any) {
       super(j);
       if (j) {
@@ -17,8 +18,25 @@ export class PlanModel extends BaseModel {
         this.maxLimitSendDataIA = j.maxLimitSendDataIA;
         this.initialValidityPeriod = j.initialValidityPeriod;
         this.finalValidityPeriod = j.finalValidityPeriod;
-        
+        this.caractersLimitFactor = j.caractersLimitFactor;
       }
     }
+  }
+
+  export interface PlanModelChapterQuestions{
+    id:number;
+    title: string;
+    price:number;
+    currency:string;
+    maxLimitSendDataIA:number;
+    initialValidityPeriod:Date;
+    finalValidityPeriod:Date;
+    caractersLimitFactor:number;
+    chapterPlanQuestion:[ChapterQuestions]
+  }
+
+  export interface ChapterQuestions{
+    chapterId:number | undefined;
+    questionId:number;
   }
   

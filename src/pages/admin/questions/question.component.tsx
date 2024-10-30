@@ -5,11 +5,6 @@ import CustomInput from "../../../components/forms/customInput/customInput";
 import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 import { QuestionModel } from "../../../common/models/question.model";
 import { QuestionService } from "../../../common/http/api/questionService";
-import CustomSelect from "../../../components/forms/customSelect/customSelect";
-import { ChapterFilter } from "../../../common/models/filters/chapter.filter";
-import { ChapterService } from "../../../common/http/api/chapterService";
-import { ChapterModel } from "../../../common/models/chapter.model";
-import { Any } from "react-spring";
 
 export interface QuestionFormProps {
   question: QuestionModel | undefined;
@@ -20,43 +15,15 @@ export interface QuestionFormProps {
 const QuestionForm = (p: QuestionFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const _questionService = new QuestionService();
-  const _chapterService = new ChapterService();
-  const [chapters,setChapters] = useState([{ value: '-1', label: 'Selecione' }]);
 
   useEffect(() => {
     setValue('title', p.question?.title);
     setValue('maxLimitCharacters', p.question?.maxLimitCharacters);
     setValue('minLimitCharacters', p.question?.minLimitCharacters);
-    getChapters()
   }, []);
 
   //
-  const getChapters = (filter?: ChapterFilter) => {
-    setIsLoading(true);
-    _chapterService
-      .getAll(filter ?? new ChapterFilter())
-      .then((response: any) => {
-        //setChapters(response?.length ? response : []);
-        let data:[]=[]
-        if(response?.length>0){
-          response.map((e:ChapterModel,i:number)=>{
-            //@ts-ignore
-              data.push({ value: e.id, label: e.title });
-          });
-        }
-        setChapters(data)
-      })
-      .catch((e: any) => {
-        let message = "Error ao obter capitulos.";
-        if (e.response?.data?.length > 0 && e.response.data[0].message)
-          message = e.response.data[0].message;
-        if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+
   const {
     setValue,
     register,
@@ -146,7 +113,7 @@ const QuestionForm = (p: QuestionFormProps) => {
         <CustomInput
           type='number'
           disabled={isLoading}
-          placeholder='Mínimo de caracteres do capítulo'
+          placeholder='Mínimo de caracteres da pergunta'
           register={register}
           errors={errors.minLimitCharacters}
           name='minLimitCharacters'
@@ -161,7 +128,7 @@ const QuestionForm = (p: QuestionFormProps) => {
          <CustomInput
           type='number'
           disabled={isLoading}
-            placeholder='Máximo de caracteres do capítulo'
+            placeholder='Máximo de caracteres da pergunta'
           register={register}
           errors={errors.maxLimitCharacters}
           name='maxLimitCharacters'
@@ -173,17 +140,21 @@ const QuestionForm = (p: QuestionFormProps) => {
           customValidation={(value) => (!isNaN(Number(value)) && Number(value) > 0 && Number(value) < 100000)
             || 'Número deve ser um número entre 1 e 100000'}
         />
-         <CustomSelect
-                label='Capítulo *'
-                disabled={isLoading}
-                register={register}
-                errors={errors.type}
-                name='chapterId'
-                selectedValue={p.question?.chapterId}
-                divClassName='col-4 mb-4 mt-4'
-                validationSchema={{ required: 'Capítulo é obrigatório' }}
-                options={chapters}
-              />
+        <CustomInput
+          type='text'
+          disabled={isLoading}
+          placeholder='Tema'
+          register={register}
+          errors={errors.subject}
+          name='subject'
+          setValue={setValue}
+          divClassName='col-6 mt-4'
+          validationSchema={{
+            required: 'Tema é obrigatório',
+            maxLength: { value: 100, message: "Tema deve conter no máximo 100 caracteres" }
+          }}
+          maxLength={500}
+        />
       </div>
 
       {isLoading &&
@@ -192,7 +163,7 @@ const QuestionForm = (p: QuestionFormProps) => {
         </div>
       }
 
-      <div className='d-flex justify-content-end'>
+      <div className='d-flex justify-content-end mt-4'>
         <button className='btn rounded-5 f-14 px-4 py-2 mx-2'
           type='button'
           style={{ border: '1px solid #dee2e6' }}

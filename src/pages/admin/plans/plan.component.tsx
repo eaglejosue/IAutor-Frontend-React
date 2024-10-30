@@ -4,10 +4,8 @@ import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 import { useForm } from "react-hook-form";
 import { Divider } from "antd";
 import { Accordion, Table,Button, Modal  } from "react-bootstrap";
-import { faAdd } from '@fortawesome/free-solid-svg-icons';
+import { faAdd,faRemove } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import QuestionForm from "../questions/question.component";
-import ChapterForm from "../chapters/chapter.component";
 import { isDate } from "date-fns";
 import { ChapterFilter } from "../../../common/models/filters/chapter.filter";
 import { ChapterService } from "../../../common/http/api/chapterService";
@@ -15,73 +13,214 @@ import { ChapterModel } from "../../../common/models/chapter.model";
 import { QuestionFilter } from "../../../common/models/filters/question.filter";
 import { QuestionService } from "../../../common/http/api/questionService";
 import { QuestionModel } from "../../../common/models/question.model";
-import { format } from 'date-fns';
-import { pt } from 'date-fns/locale';
-
+import ChapterTable, { ChapterMode } from "../chapters/chapters.table";
+import QuestionTable, { QuestionMode } from "../questions/question.table";
+import SearchInput from "../../../components/forms/searchInput/searchInput";
+import CustomButton from "../../../components/forms/customButton/customButton";
+import { ChapterQuestions, PlanModel, PlanModelChapterQuestions } from "../../../common/models/plan.model";
+import { toast } from 'react-toastify';
+import { PlanService } from "../../../common/http/api/planService";
 interface PlanFormProps{
   handleModal(isOpen:boolean):void
 }
 
+interface PlanChapterQuestion{
+  ChapterId:number | undefined;
+  Questions:[QuestionModel]
+}
 
 const PlanForm =(props:PlanFormProps) =>{
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [chapters, setChapters] = useState<ChapterModel[]>([]);
+  const [chaptersSelected, setChaptersSelected] = useState<ChapterModel |null>(null);
+  const [chaptersPlan, setChaptersPlan] = useState<ChapterModel[]>([]);
+  const [perguntaTemaSearch,setSearchPerguntaTema] = useState('')
   const [isFormModalOpenPergunta, setIsFormModalOpenPergunta] = useState<boolean>(false);
   const _chapterService = new ChapterService();
   const[isFormModalOpenCapitulo,SetFormModalOpenCapitulo]  = useState<boolean>(false);
   const _questionService = new QuestionService();
   const [questions, setQuestions] = useState<QuestionModel[]>([]);
+  const [planChapterQuestion,setPlanChapterQuestion] = useState<PlanChapterQuestion[]>([]);
+  const _planService = new PlanService();
+  
+  const {
+    setValue,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  //* handlers **/
-  const handlerSelectAll=(e:any)=>{
-    const myNextList = [...questions];
-    const newQuestions = myNextList.map((question:QuestionModel)=>{
-      question.selected = e.target.checked;
-      return question;
-    })
-   
-    setQuestions(newQuestions);
-    
-    
-  }
+  //Abre/fecha modal de capitulo
   const handleCloseModalCapitulo =(isClose:boolean) =>{
     SetFormModalOpenCapitulo(isClose)
   }
+  
+  //abre fecha/modal de pergunta
   const handleCloseModalPergunta= (isClose:boolean) => {
     setIsFormModalOpenPergunta(isClose)
   };
+  
+  //salva form
+   //@ts-ignore
   const onSubmit = async (data: any) => {
-  }
-  const handlerClickCapitulo=(event:any, item:ChapterModel)=>{
-    
-    event.preventDefault();
-    setQuestions([])
-    getQuestions(
-      new QuestionFilter({
-        chapterId: item.id
+    let plan = new PlanModel({
+      ...data,
+    });
+    //@ts-ignore
+    const questionPlan: PlanModelChapterQuestions = {...plan }
+    //@ts-ignore
+    var arr: [ChapterQuestions] = [];
+    questionPlan.chapterPlanQuestion = arr
+    planChapterQuestion.map((r:PlanChapterQuestion,i:number)=>{
+      r.Questions.map((a:QuestionModel)=>{
+        const chapterQuestion:ChapterQuestions = {chapterId:r.ChapterId,questionId: a.id};
+        questionPlan.chapterPlanQuestion.push(chapterQuestion)
+      })
+    })
+
+    if (questionPlan.id === undefined) {
+      _planService
+        .post(questionPlan)
+        .then(() => {
+          toast.success('Plano criado com sucesso!', {
+            position: 'top-center',
+            style: { minWidth: 400 }
+          });
+         
+        })
+        .catch((e) => {
+          let message = 'Error ao salvar dados.';
+          if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+          if (e.response?.data?.detail) message = e.response?.data?.detail;
+          toast.error(message, {
+            position: 'top-center',
+            style: { minWidth: 400 }
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+          
+        });
+    } else {
+      _planService
+        .put(questionPlan)
+        .then(() => {
+          toast.success('Plano atualizado com sucesso!', {
+            position: 'top-center',
+            style: { minWidth: 400 }
+          });
         
-      }),
-    );
+        })
+        .catch((e) => {
+          let message = 'Error ao salvar dados.';
+          if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+          if (e.response?.data?.detail) message = e.response?.data?.detail;
+          toast.error(message, {
+            position: 'top-center',
+            style: { minWidth: 400 }
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+    setIsLoading(false)
+
+  
+  }
+  //adiciona perguntas ao capitulo
+  const handlerAddQuestions =(selected: [QuestionModel])=>{
+    //console.log(selected,'perguntas selecionadas no capitulo',chaptersSelected)
+    handleCloseModalPergunta(false)
+    let oldQuestions = [...planChapterQuestion]
+    let planChapterFound = oldQuestions?.find(r=>r.ChapterId == chaptersSelected?.id);
+
+    if(planChapterFound){
+     
+      selected.map((r:QuestionModel)=>{
+        if(planChapterFound?.Questions.find(a=>a.id==r.id)==null){
+          planChapterFound.Questions.push(r)
+        }
+      })
+     
+      setPlanChapterQuestion(oldQuestions)
+      return;
+    }
+
+    let chapterPlanQuestion: PlanChapterQuestion = {
+      ChapterId: chaptersSelected?.id,
+      Questions: selected,
+    };
+    setPlanChapterQuestion(prevState => ([...prevState, chapterPlanQuestion]))
+  }
+
+  //Adiciona os capitulos no accordion
+  const handlerCheckChapterCapitulo= (item:ChapterModel,checked:boolean) =>{
+   item.selected = checked;
+   if(checked)
+      setChaptersPlan(prevState => ([...prevState, item]))
+    else{
+      var array = [...chaptersPlan]; // make a separate copy of the array
+      var index = array.indexOf(item)
+      if (index !== -1) {
+        array.splice(index, 1);
+        setChaptersPlan(array);
+      }
+    }
+  }
+
+  //busca peguntas, filtrando por pergunta
+  const handleSearchPerguntaTemaClick=()=>{
+    //@ts-ignore
+    getQuestions({title:perguntaTemaSearch})
+  }
+
+  //Click no header do accordion
+  const handlerClickCapitulo=(event:any, item:ChapterModel)=>{
+    event.preventDefault();
+    setChaptersSelected(item);
+  }
+
+  //remover pergunta capitulo
+  const handlerRemoveItemQuestion=(pergunta:QuestionModel, chapter:ChapterModel)=>{
     
-    
+    let oldQuestions = [...planChapterQuestion]
+    let planChapterFound = oldQuestions?.find(r=>r.ChapterId == chapter?.ChapterId);
+    if(planChapterFound){
+      var index = planChapterFound.Questions.indexOf(pergunta)
+      if (index !== -1) {
+        planChapterFound.Questions.splice(index, 1);
+      }
+     
+     setPlanChapterQuestion(oldQuestions);
+    }
+     
   }
-  const confirmaSalvarCapitulo=()=>{
-    getChapters(); 
-  }
-  const confirmaSalvarPergunta=()=>{
-    //getQuestions(); 
-  }
-  const handlerCheckPergunta=(pergunta:QuestionModel,e:any)=>{
-    setQuestions(questions.map(question =>
-      question.id === pergunta.id ? { ...question, selected: e.target.checked } : question
-    ));
-  }
-  //* end handlers **/
+
+  //carrega capitulos
   useEffect(() => {
-    getChapters();
+    //@ts-ignore
+    getChapters({isActive:true});
   }, []);
 
+  const getChapters = (filter?: ChapterFilter) => {
+    setIsLoading(true);
+    _chapterService
+      .getAll(filter ?? new ChapterFilter())
+      .then((response: any) => {
+        setChapters(response?.length ? response : []);
+      })
+      .catch((e: any) => {
+        let message = "Error ao obter capitulos.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
  
   function getQuestions (filter?: QuestionFilter)  {
     //setIsLoading(true);
@@ -102,56 +241,44 @@ const PlanForm =(props:PlanFormProps) =>{
       });
   };
 
-  const getChapters = (filter?: ChapterFilter) => {
-    setIsLoading(true);
-    _chapterService
-      .getAll(filter ?? new ChapterFilter())
-      .then((response: any) => {
-        setChapters(response?.length ? response : []);
-      })
-      .catch((e: any) => {
-        let message = "Error ao obter capitulos.";
-        if (e.response?.data?.length > 0 && e.response.data[0].message)
-          message = e.response.data[0].message;
-        if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
 
-  interface ItemTableProps{
-      pergunta:QuestionModel;
+  interface ItemTableProps {
+    questions: [QuestionModel];
+    chapter:ChapterModel
   }
   const ItemTable: FunctionComponent<ItemTableProps> = (props) => {
     return (
       <>
-        <tr>
-          <td>{props.pergunta.id}</td>
-          <td>{props.pergunta.title}</td>
-          <td>{ format(new Date(props.pergunta.createdAt), "dd/MM/yyyy", { locale: pt })}</td>
-          <td>
-              <input className="form-check-input" onChange={(e)=> handlerCheckPergunta(props.pergunta,e)} 
-              type="checkbox" checked={props.pergunta.selected} id="flexCheckDefault" />
-          </td>
-        </tr>
+        {props?.questions?.sort((a,b)=> a.id - b.id).map((question: QuestionModel, i: number) => {
+          return (
+            <>
+              <tr>
+                <td>{question.id}</td>
+                <td>{question.title}</td>
+                <td>{question.subject}</td>
+                <td>
+                  <button
+                    className="btn btn-primary text-body-bg border f-12"
+                    type="button"
+                    onClick={() => handlerRemoveItemQuestion(question,props.chapter)}
+                  >
+                    <FontAwesomeIcon icon={faRemove} className="mx-2" />
+                  </button>
+                </td>
+              </tr>
+            </>
+          );
+        })}
       </>
     );
+  };
 
-  }
 
-  const {
-    setValue,
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
  
     return (
       <>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <hr />
+          <Divider className="mt-2 " />
           <div className="row pt-0 px-4">
             <CustomInput
               type="text"
@@ -211,8 +338,9 @@ const PlanForm =(props:PlanFormProps) =>{
             <CustomInput
               type="number"
               disabled={isLoading}
-              placeholder="Limite max envio IA"
+              placeholder=""
               register={register}
+              label="Limite de requisições a IA por pergunta"
               errors={errors.maxLimitSendDataIA}
               name="maxLimitSendDataIA"
               setValue={setValue}
@@ -261,11 +389,34 @@ const PlanForm =(props:PlanFormProps) =>{
                 "Data de vigência final deve ser maior que hoje"
               }
             />
+
+            <CustomInput
+              type="number"
+              disabled={isLoading}
+              placeholder=""
+              register={register}
+              label="Fator percentual de retorno de caracteres por pergunta "
+              errors={errors.caractersLimitFactor}
+              name="caractersLimitFactor"
+              setValue={setValue}
+              divClassName="col-4 mt-4"
+              validationSchema={{
+                required:
+                  "Fator percentual de retorno de caracteres por pergunta",
+              }}
+              customValidation={(value) =>
+                (!isNaN(Number(value)) &&
+                  Number(value) > 0 &&
+                  Number(value) < 100) ||
+                "Valor deve ser um número entre 1 e 1000000"
+              }
+            />
+
             <Divider className="mt-2 " />
-            <div className="col-11">
-              <h4>Capítulos</h4>
+            <div className="col-auto">
+              <h4>Capítulos do plano</h4>
             </div>
-            <div className="col-1">
+            <div className="col-auto">
               <Button
                 className="btn btn-primary rounded-5 mb-1 "
                 size="sm"
@@ -276,100 +427,119 @@ const PlanForm =(props:PlanFormProps) =>{
               </Button>
             </div>
 
-            {isLoading? 
-        <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
-          <img src={Spinners} style={{ width: '50px', height: '50px' }} alt="Loading spinner" />
-        </div>
-          :
-            <Accordion >
-              {chapters.filter(r=>r.isActive==true).sort((a,b)=>a.chapterNumber-b.chapterNumber).map((item: ChapterModel, i: number) => {
-                return (
-                  <>
-                    <Accordion.Item eventKey={i.toString()} key={i.toString()}  >
-                      <Accordion.Header onClick={(e)=> handlerClickCapitulo(e,item)} >{item.chapterNumber} - {item.title}</Accordion.Header>
-                      <Accordion.Body >
-                        <div className="col-12">
-                          <Table striped bordered hover size="sm" >
-                            <thead>
-                              <tr>
-                                <th>ID</th>
-
-                                <th>Pergunta</th>
-                                <th>Criada em</th>
-                                <th>
-                                  {" "}
-                                  <div className="form-check">
-                                    <input onClick={(e)=>handlerSelectAll(e)} className="form-check-input" type="checkbox" value="" 
-                                    id="flexCheckDefault"/>
-                                    </div>
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-
-                              {
-                                questions?.filter(r=>r.isActive==true).map((pergunta:QuestionModel,i:number)=>{
-                                  return(
-                                    <ItemTable pergunta={pergunta} key={i.toString()} />
-                                  )
-                                })
-                              }
-
-                              
-                            </tbody>
-                          </Table>
-                        </div>
-
-                        <div className="col-12 text-end">
-                          <Button
-                            className="btn btn-primary rounded-5 mb-1 "
-                            size="sm"
-                            disabled={isLoading}
-                            onClick={() => setIsFormModalOpenPergunta(true)}
+            {isLoading ? (
+              <div
+                className="d-flex justify-content-center align-items-center"
+                style={{ height: "200px" }}
+              >
+                <img
+                  src={Spinners}
+                  style={{ width: "50px", height: "50px" }}
+                  alt="Loading spinner"
+                />
+              </div>
+            ) : (
+              <Accordion>
+                {chaptersPlan
+                  .sort((a, b) => a.chapterNumber - b.chapterNumber)
+                  .map((item: ChapterModel, i: number) => {
+                    return (
+                      <>
+                        <Accordion.Item
+                          eventKey={i.toString()}
+                          key={i.toString()}
+                        >
+                          <Accordion.Header
+                            onClick={(e) => handlerClickCapitulo(e, item)}
                           >
-                            <FontAwesomeIcon icon={faAdd} className="mx-2" />
-                          </Button>
-                        </div>
-                      </Accordion.Body>
-                    </Accordion.Item>
-                  </>
-                );
-              })}
-            </Accordion>
-            }
+                            {item.chapterNumber} - {item.title}
+                          </Accordion.Header>
+                          <Accordion.Body>
+                            <div className="col-12">
+                              <Table striped bordered hover size="sm">
+                                <thead>
+                                  <tr>
+                                    <th>ID</th>
+                                    <th>Pergunta</th>
+                                    <th>Tema</th>
+                                    <th>
+                                      <div className="form-check">
+                                       
+                                      </div>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {planChapterQuestion
+                                    ?.filter((r) => r.ChapterId == item.id)
+                                    .map(
+                                      (item: PlanChapterQuestion, i: number) => {
+                                        return (
+                                          <ItemTable
+                                              //@ts-ignore
+                                            questions={item.Questions} chapter={item}
+                                            key={i.toString()}
+                                          />
+                                        );
+                                      },
+                                    )}
+                                </tbody>
+                              </Table>
+                            </div>
+
+                            <div className="col-12 text-end">
+                              <Button
+                                className="btn btn-primary rounded-5 mb-1 "
+                                size="sm"
+                                disabled={isLoading}
+                                onClick={() => setIsFormModalOpenPergunta(true)}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faAdd}
+                                  className="mx-2"
+                                />
+                              </Button>
+                            </div>
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      </>
+                    );
+                  })}
+              </Accordion>
+            )}
+            <Divider className="mt-2 " />
           </div>
 
-
-
-          <div className="d-flex justify-content-end mt-4">
-            <button
-              className="btn rounded-5 f-14 px-4 py-2 mx-2"
-              type="button"
-              style={{ border: "1px solid #dee2e6" }}
-              disabled={isLoading}
-              onClick={(e) => {
-                e.preventDefault();
-                props.handleModal(false);
-              }}
-            >
-              Cancelar
-            </button>
-            <button
-              className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
-              type="submit"
-              disabled={isLoading}
-             
-            >
-              Salvar Informações
-              {isLoading && (
-                <span
-                  className="spinner-border spinner-border-sm text-light ms-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-              )}
-            </button>
-          </div>
+          {chaptersPlan.length > 0 && (
+            <div className="d-flex justify-content-end mt-4">
+              <button
+                className="btn rounded-5 f-14 px-4 py-2 mx-2"
+                type="button"
+                style={{ border: "1px solid #dee2e6" }}
+                disabled={isLoading}
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.handleModal(false);
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
+                type="submit"
+                disabled={isLoading}
+              >
+                Salvar Informações
+                {isLoading && (
+                  <span
+                    className="spinner-border spinner-border-sm text-light ms-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                )}
+              </button>
+            </div>
+          )}
         </form>
         <Modal
           show={isFormModalOpenPergunta}
@@ -379,15 +549,34 @@ const PlanForm =(props:PlanFormProps) =>{
           backdrop="static"
         >
           <Modal.Header closeButton className="bg-white border-0 pb-0">
-            <Modal.Title>Criar nova pergunta</Modal.Title>
+            <Modal.Title>Perguntas do capitulo - {chaptersSelected?.title}</Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-white pt-0">
-            {
-              //@ts-ignore
-              <QuestionForm question={null} confirmaSalvar={confirmaSalvarPergunta}
-                handleClose={(c) => handleCloseModalPergunta(false)}
-              />
-            }
+
+
+            <section className="container border-top" id="filter">
+              <div className="row my-4">
+                <div
+                  className="col-6 col-md-6 col-sm-6"
+                  style={{ paddingLeft: "0" }}
+                >
+                  <SearchInput
+                    placeholder="Buscar pergunta ou tema"
+                    onChange={(e) => setSearchPerguntaTema(e)}
+                    onEnter={handleSearchPerguntaTemaClick}
+                  />
+                </div>
+                <div className="col-auto me-auto">
+                  <CustomButton
+                    onClick={handleSearchPerguntaTemaClick}
+                    disabled={isLoading}
+                  />
+                </div>
+              </div>
+            </section>
+            <QuestionTable data={questions} addItemsPlan={handlerAddQuestions} 
+            //@ts-ignore
+            handlerDelete={null} handlerEdit={null}   mode={QuestionMode.registerPlan} />
           </Modal.Body>
         </Modal>
 
@@ -399,14 +588,21 @@ const PlanForm =(props:PlanFormProps) =>{
           backdrop="static"
         >
           <Modal.Header closeButton className="bg-white border-0 pb-0">
-            <Modal.Title>Criar novo capítulo</Modal.Title>
+            <Modal.Title>Adicionar capítulos ao plano</Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-white pt-0">
-            <ChapterForm
-              chapter={undefined}
-              confirmaSalvar={confirmaSalvarCapitulo}
-              handleClose={(c) => handleCloseModalCapitulo(false)}
-            />
+            <Divider />
+            {
+              //@ts-ignore
+              <ChapterTable
+                isLoading={false}
+                data={chapters}
+                handlerDelete={null}
+                handlerEdit={null}
+                handlerOnChangeAddPlan={handlerCheckChapterCapitulo}
+                mode={ChapterMode.registerPlan}
+              />
+            }
           </Modal.Body>
         </Modal>
       </>
