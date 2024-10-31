@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import CustomButton from "../../../components/forms/customButton/customButton";
 import SearchInput from "../../../components/forms/searchInput/searchInput";
-import Nav from "../../../components/nav/nav.component";
 import { Modal } from "react-bootstrap";
 import PlanForm from "./plan.component";
 import PlansTable from "./plans.table";
