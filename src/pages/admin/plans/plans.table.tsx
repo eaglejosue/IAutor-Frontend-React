@@ -25,9 +25,7 @@ const PlansTable = (props: PlansTableProps) => {
   const handleEditClick = (plano: PlanModel) => {
     props.handlerEdit(plano)
   };
-  const handleDuplicateClick = (plano: PlanModel) => {
-    props.handleDuplicateClick(plano)
-  };
+
 
   const formatPrice = (amount: number): string => {
     return Intl.NumberFormat('pt-BR', {

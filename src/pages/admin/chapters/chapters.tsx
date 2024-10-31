@@ -160,12 +160,10 @@ const Chapters = () => {
         <section className="container mt-3 px-0" id="table-perfis">
           <ChapterTable
             data={chapters}
-            
             isLoading={isLoading}
             handlerEdit={handlerEdit}
             handlerDelete={handlerDelete}
-            mode={ChapterMode.registerChapter}
-          />
+            mode={ChapterMode.registerChapter} handlerOnChangeAddPlan={()=>{}}         />
         </section>
 
         <Modal show={isFormModalOpen} onHide={() => handleCloseModal(false)} centered size="lg" backdrop="static">
@@ -175,7 +173,9 @@ const Chapters = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-white pt-0">
-            <ChapterForm chapter={chapterEdit} handleClose={(c) => handleCloseModal(c)} confirmaSalvar={null}  />
+            <ChapterForm chapter={chapterEdit} handleClose={(c) => handleCloseModal(c)} confirmaSalvar={function (): void | null {
+              throw new Error("Function not implemented.");
+            } }   />
           </Modal.Body>
         </Modal>
 

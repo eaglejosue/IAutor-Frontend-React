@@ -11,7 +11,7 @@ export enum ChapterMode{
 
 interface ChapterTableProps {
   data: ChapterModel[],
-  handlerOnChangeAddPlan(capitulo:ChapterModel,checked:boolean): void | null,
+  handlerOnChangeAddPlan:(capitulo:ChapterModel,checked:boolean)=> void | null,
   isLoading: boolean,
   handlerEdit(chapter: ChapterModel): void | null
   handlerDelete(id: Number): void | null

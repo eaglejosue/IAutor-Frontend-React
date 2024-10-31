@@ -12,7 +12,7 @@ export interface Props {
   pageName?: string
 }
 
-const NavUserOptions = (p: Props) => {
+const NavUserOptions = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<AuthenticatedUserModel>();
 

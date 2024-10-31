@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 
-import NavEmptyWithColor from '../../components/nav/navEmptyWithColor.component';
+import NavEmptyWithColor from '../../components/nav/nav-user-options.component';
 import CustomInput from '../../components/forms/customInput/customInput';
 import { LoginService } from '../../common/http/api/loginService';
 import { ResetPasswordRequest } from "../../common/models/resetPassword.request";

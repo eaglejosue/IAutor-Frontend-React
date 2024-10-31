@@ -5,8 +5,7 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import { RouterProvider } from "react-router-dom";
 import { GoogleOAuthProvider } from '@react-oauth/google';
-
-import router from "./routes/router";
+import router from "./routes/Router";
 import store from "./store";
 
 import "./index.css";
