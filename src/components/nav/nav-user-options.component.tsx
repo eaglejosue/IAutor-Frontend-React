@@ -68,6 +68,8 @@ const NavUserOptions = (p: Props) => {
             <Dropdown.Item onClick={() => navigate(paths.USERS)}>Usuários</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.CHAPTERS)}>Capitulos</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.QUESTIONS)}>Perguntas</Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={() => navigate(paths.PLANS)}>Planos</Dropdown.Item>
           </>
         }
 

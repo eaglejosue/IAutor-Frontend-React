@@ -1,16 +1,13 @@
 import { BaseModel } from "../base.model";
 
-export class QuestionFilter extends BaseModel {
+export class PlanFilter extends BaseModel {
   title?: string;
-  chapterId?:number;
-  subject?:string;
   
   constructor(j?: any) {
     super(j);
     if (j) {
       this.title = j.title;
-      this.chapterId = j.chapterId;
-      this.subject = j.subject;
+      
     }
   }
 }

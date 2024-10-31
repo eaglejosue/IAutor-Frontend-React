@@ -10,6 +10,7 @@ import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 export interface ChapterFormProps {
   chapter: ChapterModel | undefined;
   handleClose: (c?: boolean) => void;
+  confirmaSalvar():void | null
 }
 
 const ChapterForm = (p: ChapterFormProps) => {
@@ -46,6 +47,9 @@ const ChapterForm = (p: ChapterFormProps) => {
             style: { minWidth: 400 }
           });
           p.handleClose(false);
+          if(p.confirmaSalvar!=null){
+            p.confirmaSalvar()
+          }
         })
         .catch((e) => {
           let message = 'Error ao salvar dados.';
@@ -93,7 +97,8 @@ const ChapterForm = (p: ChapterFormProps) => {
           type='text'
           disabled={isLoading}
           label='Título *'
-          placeholder='Título'
+          placeholder=''
+    
           register={register}
           errors={errors.title}
           name='title'
@@ -109,7 +114,8 @@ const ChapterForm = (p: ChapterFormProps) => {
           type='number'
           disabled={isLoading}
           label='Número do capítulo *'
-          placeholder='Número do capítulo'
+          placeholder=''
+           
           register={register}
           errors={errors.chapterNumber}
           name='chapterNumber'

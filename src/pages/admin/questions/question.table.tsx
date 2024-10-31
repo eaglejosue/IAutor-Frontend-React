@@ -4,16 +4,25 @@ import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
 import { QuestionModel } from '../../../common/models/question.model';
 
+
+export enum QuestionMode{
+  registerQuestion,
+  registerPlan
+}
+
 interface QuestionTableProps {
   data: QuestionModel[],
   isLoading: boolean,
   handlerEdit(question: QuestionModel): void
   handlerDelete(id: Number): void
+  mode: QuestionMode
+  addItemsPlan(items:QuestionModel[]):void | null;
 }
 
 const QuestionTable = (props: QuestionTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [questionsSelected, setQuestionsSelected] = useState<QuestionModel[]>([]);
 
   const handleDeleteClick = (id: number) => {
     props.handlerDelete(id);
@@ -23,11 +32,16 @@ const QuestionTable = (props: QuestionTableProps) => {
     props.handlerEdit(question)
   };
 
-  const columns = [
+  const columnsRegister = [
     {
       title: "Titulo",
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
+    },
+    {
+      title: "Tema",
+      dataIndex: "subject",
+      sorter: (a: any, b: any) => a.title.localeCompare(b.subject),
     },
     {
       title: "Data cadastro",
@@ -111,13 +125,52 @@ const QuestionTable = (props: QuestionTableProps) => {
       align: "center" as "center",
     },
   ];
-
+  const handlerCheckQeustion=(capitulo:QuestionModel,checked:boolean)=>{
+    
+    capitulo.selected = checked;
+    if(checked)
+       setQuestionsSelected(prevState => ([...prevState, capitulo]))
+     else{
+       var array = [...questionsSelected]; // make a separate copy of the array
+       var index = array.indexOf(capitulo)
+       if (index !== -1) {
+         array.splice(index, 1);
+         setQuestionsSelected(array);
+       }
+     }
+   
+  }
+  const columnsRegisterPlan = [
+    {
+      title: "Titulo",
+      dataIndex: "title",
+      sorter: (a: any, b: any) => a.title.localeCompare(b.title),
+    },
+    {
+      title: "Tema",
+      dataIndex: "subject",
+      sorter: (a: any, b: any) => a.title.localeCompare(b.subject),
+    },
+    {
+      title: "Ação",
+      key: "action",
+      render: (record: QuestionModel) => (
+        <div
+        >
+          <input type='checkbox'   onChange={(e)=> handlerCheckQeustion(record,e.target.checked)}  ></input>
+         
+        </div>
+      ),
+      align: "center" as "center",
+    },
+  ];
   return (
+    <>
     <Table
       className='custom-table'
-      columns={columns}
       rowKey="id"
       dataSource={props.data}
+      columns={props.mode == QuestionMode.registerQuestion? columnsRegister:columnsRegisterPlan}
       locale={{ emptyText: 'Nenhum dado disponível.' }}
       loading={props.isLoading}
       pagination={{
@@ -134,6 +187,22 @@ const QuestionTable = (props: QuestionTableProps) => {
         locale: { items_per_page: ' itens' }
       }}
     />
+    
+   {props.mode == QuestionMode.registerPlan && <div className="d-flex justify-content-end mt-4">
+              <button
+                className="btn btn-primary rounded-5 f-14 px-4 py-2 mx-2"
+                type="button"
+                style={{ border: "1px solid #dee2e6" }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  props.addItemsPlan(questionsSelected)
+                  //props.handleModal(false);
+                }}
+              >
+                Adicionar perguntas ao capítulo
+              </button>
+            </div>}
+    </>
   )
 }
 

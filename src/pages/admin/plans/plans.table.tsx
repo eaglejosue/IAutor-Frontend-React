@@ -2,52 +2,60 @@ import { Table, Tag } from 'antd';
 import { useState } from 'react';
 import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
-import { ChapterModel } from "../../../common/models/chapter.model"
+import { PlanModel } from '../../../common/models/plan.model';
 
-export enum ChapterMode{
-  registerChapter,
-  registerPlan
-}
 
-interface ChapterTableProps {
-  data: ChapterModel[],
-  handlerOnChangeAddPlan(capitulo:ChapterModel,checked:boolean): void | null,
+
+interface PlansTableProps {
+  data: PlanModel[],
   isLoading: boolean,
-  handlerEdit(chapter: ChapterModel): void | null
-  handlerDelete(id: Number): void | null
-  mode: ChapterMode
-
+  handlerEdit(chapter: PlanModel): void | null
+  handlerDelete(plano: PlanModel): void | null
+  handleDuplicateClick(plano: PlanModel): void | null
 }
 
-const ChapterTable = (props: ChapterTableProps) => {
+const PlansTable = (props: PlansTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const handleDeleteClick = (id: number) => {
-    props.handlerDelete(id);
+  const handleDeleteClick = (plano: PlanModel) => {
+    props.handlerDelete(plano);
   };
 
-  const handleEditClick = (chapter: ChapterModel) => {
-    props.handlerEdit(chapter)
+  const handleEditClick = (plano: PlanModel) => {
+    props.handlerEdit(plano)
+  };
+  const handleDuplicateClick = (plano: PlanModel) => {
+    props.handleDuplicateClick(plano)
   };
 
-  const handlerCheckCapitulo=(capitulo:ChapterModel,e:any)=>{
-
-    props.handlerOnChangeAddPlan(capitulo,e.target.checked)
-  }
-  const columnsRegister = [
+  const formatPrice = (amount: number): string => {
+    return Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    }).format(amount);
+}
+  const columns= [
     {
-      title: "Nr do capítulo",
-      dataIndex: "chapterNumber",
+      title: "Nr do plano",
+      dataIndex: "id",
       sorter: (a: any, b: any) =>
-        a.chapterNumber.localeCompare(b.chapterNumber),
+        a.chapterNumber.localeCompare(b.id),
     },
     {
-      title: "Titulo",
+      title: "Plano",
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
- 
+    {
+        title: "Preço",
+        dataIndex: "price",
+        sorter: (a: any, b: any) => a.title.localeCompare(b.price),
+        render: (price: number) =>
+          price
+            ? formatPrice(price)
+            : "N/A",
+      },
     {
       title: "Data cadastro",
       dataIndex: "createdAt",
@@ -88,7 +96,7 @@ const ChapterTable = (props: ChapterTableProps) => {
         { text: "Ativo", value: true },
         { text: "Inativo", value: false },
       ],
-      onFilter: (value: any, record: ChapterModel) =>
+      onFilter: (value: any, record: PlanModel) =>
         record.isActive === value,
       filterSearch: true,
     },
@@ -96,7 +104,7 @@ const ChapterTable = (props: ChapterTableProps) => {
     {
       title: "Ação",
       key: "action",
-      render: (record: ChapterModel) => (
+      render: (record: PlanModel) => (
         <div
           style={{
             display: "flex",
@@ -119,50 +127,26 @@ const ChapterTable = (props: ChapterTableProps) => {
           {record.isActive && (
             <span
               className="material-symbols-outlined"
-              onClick={() => handleDeleteClick(record.id)}
+              onClick={() => handleDeleteClick(record)}
               style={{ cursor: "pointer", fontSize: "20px" }}
               title="Deletar"
             >
               delete
             </span>
+            
           )}
+          
         </div>
       ),
       align: "center" as "center",
     },
   ];
 
-  const columnsRegisterPlan = [
-    {
-      title: "Nr do capítulo",
-      dataIndex: "chapterNumber",
-      sorter: (a: any, b: any) =>
-        a.chapterNumber.localeCompare(b.chapterNumber),
-    },
-    {
-      title: "Titulo",
-      dataIndex: "title",
-      sorter: (a: any, b: any) => a.title.localeCompare(b.title),
-    },
- 
-  
-    {
-      title: "Ação",
-      key: "action",
-      render: (record: ChapterModel) => (
-        <div
-        >
-          <input type='checkbox' checked={record.selected} onChange={(e)=> handlerCheckCapitulo(record,e)}  ></input>
-         
-        </div>
-      ),
-      align: "center" as "center",
-    },
-  ];
+
   return (
     <Table
       className='custom-table'
-      columns={props.mode == ChapterMode.registerChapter? columnsRegister:columnsRegisterPlan}
+      columns={columns}
       rowKey="id"
       dataSource={props.data}
       locale={{ emptyText: 'Nenhum dado disponível.' }}
@@ -184,4 +168,4 @@ const ChapterTable = (props: ChapterTableProps) => {
   )
 }
 
-export default ChapterTable
+export default PlansTable

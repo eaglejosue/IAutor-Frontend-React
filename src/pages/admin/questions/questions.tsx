@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { QuestionService } from "../../../common/http/api/questionService";
 import { QuestionModel } from "../../../common/models/question.model";
 import { QuestionFilter } from "../../../common/models/filters/question.filter";
-import QuestionTable from "./question.table";
+import QuestionTable, { QuestionMode } from "./question.table";
 import QuestionForm from "./question.component";
 import NavUserOptions from "../../../components/nav/nav-user-options.component";
 
@@ -163,6 +163,8 @@ const Questions = () => {
             isLoading={isLoading}
             handlerEdit={handlerEdit}
             handlerDelete={handlerDelete}
+            mode={QuestionMode.registerQuestion}
+            addItemsPlan={null}
           />
         </section>
 
@@ -173,7 +175,7 @@ const Questions = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-white pt-0">
-            <QuestionForm question={questionEdit} handleClose={(c) => handleCloseModal(c)} />
+            <QuestionForm  question={questionEdit} handleClose={(c) => handleCloseModal(c)} />
           </Modal.Body>
         </Modal>
 
@@ -192,7 +194,7 @@ const Questions = () => {
               Não
             </button>
             <button
-              className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
+               className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
               onClick={handlerDeleteCancelConfirm}>
               Sim
             </button>
