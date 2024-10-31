@@ -10,7 +10,7 @@ import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 export interface ChapterFormProps {
   chapter: ChapterModel | undefined;
   handleClose: (c?: boolean) => void;
-  confirmaSalvar():void | null
+  confirmaSalvar:()=> void | null;
 }
 
 const ChapterForm = (p: ChapterFormProps) => {

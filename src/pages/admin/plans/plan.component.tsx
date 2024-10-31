@@ -129,7 +129,7 @@ const PlanForm =(props:PlanFormProps) =>{
     //@ts-ignore
     var arr: [ChapterQuestions] = [];
     questionPlan.chapterPlanQuestion = arr
-    planChapterQuestion.map((r:PlanChapterQuestion,i:number)=>{
+    planChapterQuestion.map((r:PlanChapterQuestion)=>{
       r.Questions.map((a:QuestionModel)=>{
         const chapterQuestion:ChapterQuestions = {chapterId:r.ChapterId,questionId: a.id};
         questionPlan.chapterPlanQuestion.push(chapterQuestion)
@@ -311,7 +311,7 @@ const PlanForm =(props:PlanFormProps) =>{
   const ItemTable: FunctionComponent<ItemTableProps> = (props) => {
     return (
       <>
-        {props?.questions?.sort((a,b)=> a.id - b.id).map((question: QuestionModel, i: number) => {
+        {props?.questions?.sort((a,b)=> a.id - b.id).map((question: QuestionModel) => {
           return (
             <>
               <tr>
@@ -531,6 +531,7 @@ const PlanForm =(props:PlanFormProps) =>{
                                           <ItemTable
                                             //@ts-ignore
                                             questions={item.Questions}
+                                             //@ts-ignore
                                             chapter={item}
                                             key={i.toString()}
                                           />
@@ -654,11 +655,7 @@ const PlanForm =(props:PlanFormProps) =>{
             <QuestionTable
               data={questions}
               addItemsPlan={handlerAddQuestions}
-              //@ts-ignore
-              handlerDelete={null}
-              handlerEdit={null}
-              mode={QuestionMode.registerPlan}
-            />
+              mode={QuestionMode.registerPlan} isLoading={false} handlerDelete={()=>{}}  handlerEdit={()=>{}}     />
           </Modal.Body>
         </Modal>
 
@@ -678,11 +675,9 @@ const PlanForm =(props:PlanFormProps) =>{
               <ChapterTable
                 isLoading={false}
                 data={chapters}
-                handlerDelete={null}
-                handlerEdit={null}
+
                 handlerOnChangeAddPlan={handlerCheckChapterCapitulo}
-                mode={ChapterMode.registerPlan}
-              />
+                mode={ChapterMode.registerPlan} handlerDelete={()=>{}} handlerEdit={()=>{}}           />
             }
           </Modal.Body>
         </Modal>

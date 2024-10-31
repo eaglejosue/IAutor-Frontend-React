@@ -163,8 +163,7 @@ const Questions = () => {
             isLoading={isLoading}
             handlerEdit={handlerEdit}
             handlerDelete={handlerDelete}
-            mode={QuestionMode.registerQuestion}
-            addItemsPlan={null}
+            mode={QuestionMode.registerQuestion} addItemsPlan={()=>{}}            
           />
         </section>
 
@@ -175,7 +174,9 @@ const Questions = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-white pt-0">
-            <QuestionForm  question={questionEdit} handleClose={(c) => handleCloseModal(c)} />
+            <QuestionForm  question={questionEdit} handleClose={(c) => handleCloseModal(c)} confirmaSalvar={function (): void | null {
+              throw new Error("Function not implemented.");
+            } } />
           </Modal.Body>
         </Modal>
 

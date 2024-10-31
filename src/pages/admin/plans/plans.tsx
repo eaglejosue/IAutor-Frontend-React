@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import CustomButton from "../../../components/forms/customButton/customButton";
 import SearchInput from "../../../components/forms/searchInput/searchInput";
-import Nav from "../../../components/nav/nav.component";
 import { Modal } from "react-bootstrap";
 import PlanForm from "./plan.component";
 import PlansTable from "./plans.table";
@@ -10,6 +9,7 @@ import { PlanFilter } from "../../../common/models/filters/plan.filter";
 import { PlanService } from "../../../common/http/api/planService";
 import { PlanModel } from "../../../common/models/plan.model";
 import { toast } from 'react-toastify';
+import NavUserOptions from "../../../components/nav/nav-user-options.component";
 
 const Plans =() =>{
     const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -100,14 +100,11 @@ const Plans =() =>{
 
     const handleDuplicateClick=(plan:PlanModel)=>{
       console.log(plan)
-      setDuplicateModalOpen(true)
       setDuplicatedPlan(plan)
     }
-    const handlerConfirmDuplicate =()=>{
-      setDuplicateModalOpen(false)
-    }
+
     return (<>
-        <Nav />
+          <NavUserOptions />
       <main
         className="main bg-iautorpb-4"
         style={{ minHeight: "676px", flex: 1 }}

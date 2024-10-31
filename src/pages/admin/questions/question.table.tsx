@@ -16,7 +16,7 @@ interface QuestionTableProps {
   handlerEdit(question: QuestionModel): void
   handlerDelete(id: Number): void
   mode: QuestionMode
-  addItemsPlan(items:QuestionModel[]):void | null;
+  addItemsPlan(items:QuestionModel[]):void
 }
 
 const QuestionTable = (props: QuestionTableProps) => {

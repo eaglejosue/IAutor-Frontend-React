@@ -1,10 +1,6 @@
-import { useNavigate } from 'react-router-dom';
-
-import paths from '../../routes/paths';
 import Logo from '../../assets/img/favicon-32x32.png';
 
 const Sidebar = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="d-flex flex-column bg-white border-end p-0"
