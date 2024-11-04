@@ -9,18 +9,19 @@ import PageLoading from '../components/pageLoading/pageLoading.component';
 import Footer from '../components/footer/footer.component';
 
 const PageNotFound = lazy(() => import('../pages/page-not-found/page-not-found'));
-const Home = lazy(() => import('../pages/home/home'));
-const Login = lazy(() => import('../pages/login/login'));
-const SigIn = lazy(() => import('../pages/sigin/sigin'));
+const Home = lazy(() => import('../pages/home/Home'));
+const Login = lazy(() => import('../pages/login/Login'));
+const SigIn = lazy(() => import('../pages/sigin/SigIn'));
 const EsqueceuSenha = lazy(() => import('../pages/forgot-password/forgot-password'));
 const TrocarSenha = lazy(() => import('../pages/reset-password/reset-password'));
 const MyAccount = lazy(() => import("../pages/my-account/my-account"));
 const NewHistory = lazy(() => import("../pages/my-histories/new-history"));
 const MyHistories = lazy(() => import("../pages/my-histories/my-histories"));
-const Terms = lazy(() => import("../pages/admin/terms/terms"));
-const Users = lazy(() => import("../pages/admin/users/users"));
+const Terms = lazy(() => import("../pages/admin/terms/Terms"));
+const Users = lazy(() => import("../pages/admin/users/Users"));
 const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
 const Questions = lazy(() =>  import("../pages/admin/questions/questions"));
+const Plans = lazy(()=>import("../pages/admin/plans/plans"));
 
 interface Routes {
   path: string;
@@ -62,6 +63,7 @@ const routes: Routes[] = [
   { path: paths.USERS, element: getRouteElement(Users, true, true) },
   { path: paths.CHAPTERS, element: getRouteElement(Chapters, true, true) },
   { path: paths.QUESTIONS, element: getRouteElement(Questions, true, true) },
+  { path: paths.PLANS, element: getRouteElement(Plans, true, true) },
 ];
 
 export default createBrowserRouter(routes);

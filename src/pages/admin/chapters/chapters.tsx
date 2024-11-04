@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { ChapterFilter } from "../../../common/models/filters/chapter.filter";
 import { ChapterService } from "../../../common/http/api/chapterService";
 import { ChapterModel } from "../../../common/models/chapter.model";
-import ChapterTable from "./chapters.table";
+import ChapterTable, { ChapterMode } from "./chapters.table";
 import ChapterForm from "./chapter.component";
 import NavUserOptions from "../../../components/nav/nav-user-options.component";
 
@@ -163,7 +163,7 @@ const Chapters = () => {
             isLoading={isLoading}
             handlerEdit={handlerEdit}
             handlerDelete={handlerDelete}
-          />
+            mode={ChapterMode.registerChapter} handlerOnChangeAddPlan={()=>{}}         />
         </section>
 
         <Modal show={isFormModalOpen} onHide={() => handleCloseModal(false)} centered size="lg" backdrop="static">
@@ -173,7 +173,9 @@ const Chapters = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="bg-white pt-0">
-            <ChapterForm chapter={chapterEdit} handleClose={(c) => handleCloseModal(c)}  />
+            <ChapterForm chapter={chapterEdit} handleClose={(c) => handleCloseModal(c)} confirmaSalvar={function (): void | null {
+              throw new Error("Function not implemented.");
+            } }   />
           </Modal.Body>
         </Modal>
 
