@@ -8,9 +8,10 @@ import { UserModel } from '../../common/models/user.model';
 import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 import { CpfValidator } from '../../common/validation/cpfValidator';
 import { BirthDateValidator } from '../../common/validation/birthDateValidator';
-import Nav from '../../components/nav/nav.component';
 import CustomInput from '../../components/forms/customInput/customInput';
 import ChangePasswordForm from '../../components/changePasswordForm/changePasswordForm.component';
+import Sidebar from '../../components/nav/sidebar.component';
+import NavUserOptions from '../../components/nav/nav-user-options.component';
 
 const MyAccount = () => {
   const navigate = useNavigate();
@@ -99,41 +100,60 @@ const MyAccount = () => {
   };
 
   return (
-    <>
-      <Nav />
+    <div className='d-flex'
+      style={{ height: '100vh' }}
+    >
+      <Sidebar navItem='account' />
+      <section className='flex-grow-1'>
 
-      <main className='main bg-iautor px-4 pb-4'
-        style={{ minHeight: '676px' }}
-      >
+        <header className='bg-white border-bottom p-3'>
+          <div className='container-fluid'>
+            <div className='d-flex flex-wrap align-items-center justify-content-center'>
 
-        <section className='container' id='title'>
-          <div className='row'>
-            <p className='p-0 f-14'>
-              <span className='fw-bold'>Minha Conta</span>
-            </p>
-          </div>
-        </section>
+              {/* Nav título página */}
+              <div className='col-md-4 f-18'>
 
-        <section className='container my-3' id='videos'>
-          <div className='row'>
-
-            <div className='col-lg-4 d-none d-lg-block pe-4 ps-0' id='sub-menu'>
-              <div className='d-flex justify-content-between bg-white shadow rounded p-3'>
                 <div className='d-flex align-items-center'>
-                  <span className="material-symbols-outlined"
-                    style={{ borderWidth: '3px', borderStyle: 'solid', borderRadius: '5px' }}
-                  >
-                    page_info
-                  </span>
-                  <span className='mx-3'>
-                    Dados Pessoais
-                  </span>
+                  <div className='fw-bold'>
+                    Minha Conta
+                  </div>
                 </div>
-                <span className="material-symbols-outlined" style={{ fontSize: '35px' }}>
-                  chevron_right
-                </span>
+
               </div>
+
+              {/* Nav center */}
+              <div className='col-md ms-5'>
+                <div className='row align-items-center'>
+                </div>
+              </div>
+
+              {/* Nav user */}
+              <div className='col-md-5'>
+                <div className='row align-items-center justify-content-end'>
+                  <div className='col-auto'>
+                    <a href='#' className='btn btn-outline-secondary rounded-5 f-12 px-4 py-2'
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      Livro Degustação | Tradicional
+                    </a>
+                  </div>
+                  <div className='col-auto'>
+                    <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2'
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      Ver Planos
+                    </a>
+                  </div>
+                  <NavUserOptions />
+                </div>
+              </div>
+
             </div>
+          </div>
+        </header>
+
+        <main className='container my-3' id='videos'>
+          <div className='row'>
 
             <div className='col-12 col-md-12 col-lg-8 bg-white shadow rounded p-4' id='user-form'>
 
@@ -273,10 +293,10 @@ const MyAccount = () => {
             </div>
 
           </div>
-        </section>
+        </main>
 
-      </main>
-    </>
+      </section>
+    </div>
   );
 };
 

@@ -47,13 +47,13 @@ const ForgotPassword = () => {
 
   return (
     <main className='bg-iautor pb-4'
-      style={{ minHeight: '940px' }}
+      style={{ minHeight: '760px' }}
     >
 
       <section className='container'>
         <div className='row justify-content-center'>
 
-          <div className='col-3 bg-white p-5'
+          <div className='col-12 col-sm-6 col-xl-3 bg-white shadow p-5'
             style={{ borderRadius: '9px', position: 'absolute', zIndex: 1, top: '7%', textAlign: 'center' }}
           >
 

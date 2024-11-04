@@ -10,7 +10,7 @@ import NavUserOptions from '../../components/nav/nav-user-options.component';
 import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
 
 const NewHistory = () => {
-  const [imgRandomSrc, setImgRandomSrc] = useState('');
+  const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
   const {
     register,
@@ -27,8 +27,8 @@ const NewHistory = () => {
     <div className='d-flex'
       style={{ height: '100vh' }}
     >
-      <Sidebar />
-      <div className='flex-grow-1'>
+      <Sidebar navItem='book' />
+      <section className='flex-grow-1'>
 
         <header className='bg-white border-bottom p-3'>
           <div className='container-fluid'>
@@ -41,12 +41,12 @@ const NewHistory = () => {
                   <div className='fw-bold'>
                     Criar História /
                   </div>
-                  {/* Add input de título para editar */}
                   <div className='d-flex bg-primary align-items-center justify-content-center mx-2'
                     style={{ width: '16px', height: '16px', borderRadius: '100%' }}
                     >
                     <span className='material-symbols-outlined' style={{ fontSize: '10px', color: 'white' }}>edit</span>
                   </div>
+                  {/* Add input de título para editar */}
                   <div className=''>
                     Título História
                   </div>
@@ -120,7 +120,7 @@ const NewHistory = () => {
                     >
                       quiz
                     </span>
-                    01 Pergunta
+                    03 Pergunta
                   </div>
                 </div>
 
@@ -173,7 +173,7 @@ const NewHistory = () => {
                   <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1'
                     style={{ border: '1px solid #db3737' }}
                   >
-                    Pergunta 1/1
+                    Pergunta 1/3
                   </div>
                 </div>
 
@@ -243,7 +243,7 @@ const NewHistory = () => {
                     style={{ height: '48px', minWidth: '140px' }}
                     onClick={() => {}}
                   >
-                    <b className='f-16'>Finalizar</b>
+                    <b className='f-16'>Salvar</b>
                     <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>play_lesson</span>
                   </div>
                 </div>
@@ -278,7 +278,7 @@ const NewHistory = () => {
           </div>
         </main>
 
-      </div>
+      </section>
     </div>
   );
 };

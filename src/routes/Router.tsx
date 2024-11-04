@@ -51,7 +51,7 @@ const getRouteElement = (
 const routes: Routes[] = [
   { path: paths.LOGIN, element: getRouteElement(Login, false, true) },
   { path: paths.SIGIN, element: getRouteElement(SigIn, false, true) },
-  { path: paths.FORGOT_PASSWORD, element: getRouteElement(EsqueceuSenha) },
+  { path: paths.FORGOT_PASSWORD, element: getRouteElement(EsqueceuSenha, false, true) },
   { path: paths.RESET_PASSWORD, element: getRouteElement(TrocarSenha) },
   { path: paths.NOT_FOUND, element: getRouteElement(PageNotFound) },
   { path: paths.HOME, element: getRouteElement(Home) },

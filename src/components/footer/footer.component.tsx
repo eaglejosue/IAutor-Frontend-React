@@ -16,7 +16,7 @@ const Footer = (p: FooterProps) => {
       {p.showOnlyIcons
         ?
         <div className='container'>
-          <ul className="nav justify-content-center align-items-center pb-4"
+          <ul className="nav justify-content-center align-items-center"
             style={{ fontSize: 16, lineHeight: '18px' }}
           >
             <li>
