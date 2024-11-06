@@ -59,7 +59,7 @@ const PlanForm =(props:PlanFormProps) =>{
   const handleCloseModalCapitulo =(isClose:boolean) =>{
     SetFormModalOpenCapitulo(isClose)
   }
-  
+
   //carregar o plano
   useEffect(()=>{
      if(props.planEdit){
@@ -78,10 +78,10 @@ const PlanForm =(props:PlanFormProps) =>{
           if(response?.length){
             //setChaptersPlan()
             let planChapterList:PlanChapterQuestion[]=[]
-            
+
             var chapters = response.map((r:any)=>{
               let chapter = r.chapter;
-              chapter.selected = true;  
+              chapter.selected = true;
               var questions = r.planChapterQuestions?.map((question:any)=>{
                   return question.question
               })
@@ -91,7 +91,7 @@ const PlanForm =(props:PlanFormProps) =>{
              setPlanChapterQuestion(planChapterList)
              setChaptersPlan(chapters)
           }
-         
+
         })
         .catch((e: any) => {
           let message = "Error ao obter plano.";
@@ -103,14 +103,14 @@ const PlanForm =(props:PlanFormProps) =>{
         .finally(() => {
           setIsLoading(false);
         });
-      
+
      }
   },[])
   //abre fecha/modal de pergunta
   const handleCloseModalPergunta= (isClose:boolean) => {
     setIsFormModalOpenPergunta(isClose)
   };
-  
+
   const handlerConfirmDuplicate =()=>{
     setDuplicateModalOpen(false)
    // handleSubmit(onSubmit)
@@ -145,7 +145,7 @@ const PlanForm =(props:PlanFormProps) =>{
             position: 'top-center',
             style: { minWidth: 400 }
           });
-         
+
         })
         .catch((e) => {
           let message = 'Error ao salvar dados.';
@@ -168,7 +168,7 @@ const PlanForm =(props:PlanFormProps) =>{
             position: 'top-center',
             style: { minWidth: 400 }
           });
-        
+
         })
         .catch((e) => {
           let message = 'Error ao salvar dados.';
@@ -186,7 +186,7 @@ const PlanForm =(props:PlanFormProps) =>{
     }
     setIsLoading(false)
 
-  
+
   }
   //adiciona perguntas ao capitulo
   const handlerAddQuestions =(selected: [QuestionModel])=>{
@@ -196,13 +196,13 @@ const PlanForm =(props:PlanFormProps) =>{
     let planChapterFound = oldQuestions?.find(r=>r.ChapterId == chaptersSelected?.id);
 
     if(planChapterFound){
-     
+
       selected.map((r:QuestionModel)=>{
         if(planChapterFound?.Questions.find(a=>a.id==r.id)==null){
           planChapterFound.Questions.push(r)
         }
       })
-     
+
       setPlanChapterQuestion(oldQuestions)
       return;
     }
@@ -245,7 +245,7 @@ const PlanForm =(props:PlanFormProps) =>{
 
   //remover pergunta capitulo
   const handlerRemoveItemQuestion=(pergunta:QuestionModel, chapter:ChapterModel)=>{
-    
+
     let oldQuestions = [...planChapterQuestion]
     let planChapterFound = oldQuestions?.find(r=>r.ChapterId == chapter?.ChapterId);
     if(planChapterFound){
@@ -253,10 +253,10 @@ const PlanForm =(props:PlanFormProps) =>{
       if (index !== -1) {
         planChapterFound.Questions.splice(index, 1);
       }
-     
+
      setPlanChapterQuestion(oldQuestions);
     }
-     
+
   }
 
   //carrega capitulos
@@ -283,7 +283,7 @@ const PlanForm =(props:PlanFormProps) =>{
         setIsLoading(false);
       });
   };
- 
+
   function getQuestions (filter?: QuestionFilter)  {
     //setIsLoading(true);
     _questionService
@@ -336,7 +336,7 @@ const PlanForm =(props:PlanFormProps) =>{
   };
 
 
- 
+
     return (
       <>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -617,8 +617,9 @@ const PlanForm =(props:PlanFormProps) =>{
             </>
           )}
 
-       
+
         </form>
+
         <Modal
           show={isFormModalOpenPergunta}
           onHide={() => handleCloseModalPergunta(false)}
@@ -681,6 +682,7 @@ const PlanForm =(props:PlanFormProps) =>{
             }
           </Modal.Body>
         </Modal>
+        
         <Modal
           show={duplicateModalOpen}
           onHide={() => setDuplicateModalOpen(false)}
@@ -710,7 +712,7 @@ const PlanForm =(props:PlanFormProps) =>{
             </button>
           </Modal.Footer>
         </Modal>
-       
+
       </>
     );
 }

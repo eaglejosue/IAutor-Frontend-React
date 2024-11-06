@@ -120,14 +120,14 @@ const NewHistory = () => {
                     >
                       quiz
                     </span>
-                    03 Pergunta
+                    3 Perguntas
                   </div>
                 </div>
 
                 {/* Img baixo */}
                 <div id='img-baixo' style={{ marginTop: '30%' }}>
 
-                  <div className='d-flex justify-content-center mt-5'>
+                  <div className='d-flex justify-content-center'>
                     <img src={imgRandomSrc} style={{ maxWidth: '413px', maxHeight: '300px', objectFit: 'cover', borderRadius: '9px' }} />
                   </div>
                   <div className='d-flex justify-content-center mt-2 p-2'>
@@ -165,6 +165,7 @@ const NewHistory = () => {
                   </div>
                 </div>
 
+                {/* Contador de perguntas */}
                 <div className='d-flex align-items-center justify-content-between px-5 pt-5'>
                   <div>
                     <div className='f-14'>Capitulo 1</div>
@@ -183,6 +184,7 @@ const NewHistory = () => {
                   </div>
                 </div>
 
+                {/* Área resposta */}
                 <div className='d-flex px-5 pt-4'>
                   <TextareaAutosize
                     {...register('value')}
@@ -190,7 +192,7 @@ const NewHistory = () => {
                     placeholder='Digite sua resposta aqui...'
                     style={{
                       width: '100%',
-                      minHeight: '200px',
+                      minHeight: '300px',
                       padding: '10px',
                       borderRadius: '5px',
                       border: '1px solid #757575',
@@ -198,6 +200,7 @@ const NewHistory = () => {
                   />
                 </div>
 
+                {/* Limite caracter, temas e botão IA */}
                 <div className='d-flex align-items-center justify-content-between px-5 py-4'>
                   <span className='text-muted'>0 / 1000</span>
 
@@ -224,10 +227,11 @@ const NewHistory = () => {
                   </div>
                 </div>
 
+                {/* Botões navegação das perguntas */}
                 <div className='d-flex align-items-center justify-content-between px-5 pt-3'>
                   <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3'
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={() => { }}
+                    onClick={() => {}}
                   >
                     <span className='material-symbols-outlined pe-2' style={{ fontSize: '24px' }}>arrow_left_alt</span>
                     <b className='f-16'>Voltar</b>
@@ -261,10 +265,18 @@ const NewHistory = () => {
                   <div className='f-14'>Preview do Livro</div>
                 </div>
 
-                <div className='d-flex bg-white shadow rounded-3 mx-5 my-4 p-4'>
-                  <div className='f-14'>Ferramentas de Edição</div>
-                  <div className='d-flex '>
+                <div className='d-flex bg-white shadow rounded-3 align-items-center mx-5 my-4 p-4'>
+                  <div className='d-flex f-14 px-5'>Ferramentas de Edição</div>
+                  <div className='d-flex text-icon ps-4'>
                     {/* add icons */}
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px' }}>add_photo_alternate</span>
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px' }}>draw</span>
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', color: '#db3737' }}
+                    >
+                      auto_stories
+                    </span>
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px' }}>file_save</span>
+                    <span className='material-symbols-outlined px-2 pe-4' style={{ fontSize: '24px' }}>featured_seasonal_and_gifts</span>
                   </div>
                 </div>
 

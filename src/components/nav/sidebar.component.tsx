@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom';
+
+import paths from '../../routes/paths';
 import Logo from '../../assets/img/favicon-32x32.png';
 
 export interface Props {
-  navItem?: string
+  navItem: string
 }
 
 const Sidebar = (p: Props) => {
@@ -20,7 +23,7 @@ const Sidebar = (p: Props) => {
           />
         </li>
 
-        <li className={p.navItem && p.navItem == 'home' ? 'bg-iautor' : ''}>
+        <li className={p.navItem == 'home' ? 'bg-iautor nav-border-right' : ''}>
           <a href="#" className="nav-link">
             <span className="material-symbols-outlined"
               style={{ fontSize: '32px', color: 'black' }}
@@ -30,9 +33,7 @@ const Sidebar = (p: Props) => {
           </a>
         </li>
 
-        <li className={p?.navItem == 'book' ? 'bg-iautor' : ''}
-          style={{ borderRight: '3px solid #db3737' }}
-        >
+        <li className={p?.navItem == 'book' ? 'bg-iautor nav-border-right' : ''}>
           <a href="#" className="nav-link">
             <span className="material-symbols-outlined"
               style={{ fontSize: '32px', color: 'black' }}
@@ -42,7 +43,7 @@ const Sidebar = (p: Props) => {
           </a>
         </li>
 
-        <li>
+        <li className={p?.navItem == 'my-histories nav-border-right' ? 'bg-iautor' : ''}>
           <a href="#" className="nav-link">
             <span className="material-symbols-outlined"
               style={{ fontSize: '32px', color: 'black' }}
