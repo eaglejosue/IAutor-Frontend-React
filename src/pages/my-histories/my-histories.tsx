@@ -12,7 +12,7 @@ const NewHistory = () => {
     <div className='d-flex'
       style={{ height: '100vh' }}
     >
-      <Sidebar />
+      <Sidebar navItem='my-histories' />
       <div className='flex-grow-1'>
 
         <header className='bg-white border-bottom p-3'>
