@@ -1,6 +1,6 @@
 import { BaseModel } from "../base.model";
 
-export class VideoFilter extends BaseModel {
+export class BookFilter extends BaseModel {
   filter?: string;
   releaseDate?: string;
   cloudinaryPublicId? : string;

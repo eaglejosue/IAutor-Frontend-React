@@ -1,7 +1,7 @@
+import queryString from 'query-string';
 import { ChapterFilter } from "../../models/filters/chapter.filter";
 import { PlanModelChapterQuestions } from "../../models/plan.model";
 import { HttpClient } from "../httpClient";
-import queryString from 'query-string';
 
 export class PlanService {
   private endpoint = "/plans";
@@ -38,7 +38,7 @@ export class PlanService {
     );
     return response.data;
   }
-  
+
   public async getAll(filter: ChapterFilter) {
     const response = await this._httpClient.get<string>(
       `${this.endpoint}?${queryString.stringify(filter)}`,

@@ -1,5 +1,3 @@
-
-
 import { QuestionFilter } from "../../models/filters/question.filter";
 import { QuestionModel } from "../../models/question.model";
 import { HttpClient } from "../httpClient";
@@ -39,7 +37,7 @@ export class QuestionService {
     );
     return response.data;
   }
-  
+
   public async getAll(filter: QuestionFilter) {
     const response = await this._httpClient.get<string>(
       `${this.endpoint}?${queryString.stringify(filter)}`,

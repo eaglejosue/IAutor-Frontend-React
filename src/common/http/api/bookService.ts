@@ -1,10 +1,9 @@
 import queryString from 'query-string';
 import { HttpClient } from "../httpClient";
 import { BookModel } from "../../models/book.model";
-import { VideoFilter } from "../../models/filters/video.filter";
-import { VideoTrailerModel } from '../../models/videoTrailer.model';
+import { BookFilter } from "../../models/filters/book.filter";
 
-export class VideoService {
+export class BookService {
   private endpoint = "/videos";
   private _httpClient!: HttpClient;
 
@@ -19,7 +18,7 @@ export class VideoService {
     return response.data;
   }
 
-  public async getAll(filter: VideoFilter) {
+  public async getAll(filter: BookFilter) {
     const response = await this._httpClient.get<string>(
       `${this.endpoint}?${queryString.stringify(filter)}`
     );
@@ -53,20 +52,6 @@ export class VideoService {
     );
     return response.data;
   }
-
-  public async postVideoTrailer(data: VideoTrailerModel) {
-    const response = await this._httpClient.post<string>(
-      `${this.endpoint}/trailers`, { data }
-    );
-    return response.data;
-  }
-
-  public async deleteVideoTrailer(id: number) {
-    const response = await this._httpClient.delete<string>(
-      `${this.endpoint}/trailers/${id}`
-    );
-    return response.data;
-  }
 }
 
-export default new VideoService();
+export default new BookService();
