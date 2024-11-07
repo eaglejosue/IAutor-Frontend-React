@@ -12,9 +12,9 @@ const Nav = () => {
   const { isExtraSmallScreen, isSmallScreen } = useScreenSize();
 
   return (
-    <div className='container'>
-      <header className='d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3'>
-        <div className='col-md-auto mb-2 mb-md-0'>
+    <header className='container'>
+      <div className='row align-items-center'>
+        <div className='col-md-auto'>
           <img src={Logo} alt="Logo" className="p-4"
             height={isExtraSmallScreen || isSmallScreen ? "80" : "auto"}
             onClick={() => navigate(paths.HOME)}
@@ -48,8 +48,8 @@ const Nav = () => {
             </>
           }
         </div>
-      </header>
-    </div>
+      </div>
+    </header>
   );
 };
 

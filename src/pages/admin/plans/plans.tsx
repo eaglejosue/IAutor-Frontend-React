@@ -9,7 +9,7 @@ import { PlanFilter } from "../../../common/models/filters/plan.filter";
 import { PlanService } from "../../../common/http/api/planService";
 import { PlanModel } from "../../../common/models/plan.model";
 import { toast } from 'react-toastify';
-import NavUserOptions from "../../../components/nav/nav-user-options.component";
+import NavAdmin from '../../../components/nav/nav-admin.component';
 
 const Plans = () => {
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
@@ -110,19 +110,15 @@ const Plans = () => {
 
   return (
     <>
-      <NavUserOptions />
+      <NavAdmin />
 
-      <main
-        className="main bg-iautorpb-4"
-        style={{ minHeight: "676px", flex: 1 }}
+      <main className='main bg-iautor pb-4'
+        style={{ minHeight: '70vh' }}
       >
-        
-        <section className="container" id="title">
-          <div className="row">
-            <p className="mt-4 p-0 f-12">
-              <span className="fw-bold">Home/ </span>Planos
-            </p>
-            <h1 className="mt-0 p-0">Planos</h1>
+
+        <section className='container' id='title'>
+          <div className='row'>
+            <h4 className='mt-3 p-0'>Planos</h4>
           </div>
         </section>
 
@@ -157,13 +153,11 @@ const Plans = () => {
           }
         </section>
 
-        <Modal show={isFormModalOpen} onHide={() => handleModal(false)} centered size="lg" backdrop="static" fullscreen>
+        <Modal show={isFormModalOpen} onHide={() => handleModal(false)} centered size="xl" backdrop="static" keyboard={false}>
           <Modal.Header closeButton className="bg-white border-0 pb-0">
-            <Modal.Title>
-              {selectedPlanEdit == null ? "Criar novo plano" : "Editar plano"}
-            </Modal.Title>
+            <Modal.Title>{selectedPlanEdit == null ? "Criar plano" : "Editar plano"}</Modal.Title>
           </Modal.Header>
-          <Modal.Body className="bg-white pt-0">
+          <Modal.Body className="bg-white">
             <PlanForm handleModal={handleModal} planEdit={selectedPlanEdit} />
           </Modal.Body>
         </Modal>

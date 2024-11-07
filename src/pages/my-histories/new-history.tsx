@@ -3,14 +3,26 @@ import { useForm } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 
 import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
+import previewCapaLivro from '../../assets/img/preview-capa-livro.png';
+import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
+import { BookModel } from '../../common/models/book.model';
+import { Modal } from 'react-bootstrap';
 
 const NewHistory = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
+  const [book, setBook] = useState<BookModel>(new BookModel({title: 'Título História'}));
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [title, setTitle] = useState('Título História');
+  const [theme, setTheme] = useState('');
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [isIAModalOpen, setIsIAModalOpen] = useState(false);
+  const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
 
   const {
     register,
@@ -19,7 +31,7 @@ const NewHistory = () => {
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 21) + 1;// Gera um número entre 1 e 21
-    const imageUrl = `/src/assets/img/random/${randomIndex}.jpg`;
+    const imageUrl = `../src/assets/img/random/${randomIndex}.jpg`;
     setImgRandomSrc(imageUrl);
   }, []);
 
@@ -32,7 +44,7 @@ const NewHistory = () => {
 
         <header className='bg-white border-bottom p-3'>
           <div className='container-fluid'>
-            <div className='d-flex flex-wrap align-items-center justify-content-center'>
+            <div className='row align-items-center justify-content-center'>
 
               {/* Nav título página */}
               <div className='col-md-4 f-18'>
@@ -44,12 +56,28 @@ const NewHistory = () => {
                   <div className='d-flex bg-primary align-items-center justify-content-center mx-2'
                     style={{ width: '16px', height: '16px', borderRadius: '100%' }}
                     >
-                    <span className='material-symbols-outlined' style={{ fontSize: '10px', color: 'white' }}>edit</span>
+                    <span className='material-symbols-outlined'
+                      style={{ fontSize: '10px', color: 'white', cursor: 'pointer' }}
+                      onClick={() => {setIsEditingTitle(true);}}
+                    >
+                      edit
+                    </span>
                   </div>
-                  {/* Add input de título para editar */}
-                  <div className=''>
-                    Título História
-                  </div>
+                  {/* Input de título para editar */}
+                  {isEditingTitle ? (
+                    <input
+                      type='text'
+                      value={title}
+                      onChange={(e) => {setTitle(e.target.value);}}
+                      onBlur={() => {setIsEditingTitle(false);}}
+                      onKeyDown={(e) => {e.key === 'Enter' && setIsEditingTitle(false);}}
+                      autoFocus
+                      className='form-control'
+                      style={{ width: 'auto' }}
+                    />
+                  ) : (
+                    <div>{title}</div>
+                  )}
                 </div>
 
               </div>
@@ -77,7 +105,7 @@ const NewHistory = () => {
               <div className='col-md-5'>
                 <div className='row align-items-center justify-content-end'>
                   <div className='col-auto'>
-                    <a href='#' className='btn btn-outline-secondary rounded-5 f-12 px-4 py-2'
+                    <a href='#' className='btn btn-outline-secondary disabled rounded-5 f-12 px-4 py-2'
                       style={{ fontWeight: 'bold' }}
                     >
                       Livro Degustação | Tradicional
@@ -102,7 +130,7 @@ const NewHistory = () => {
           <div className='container-fluid'>
             <div className='row'>
 
-              {/* Capítulos */}
+              {/* 1 - Capítulos */}
               <div className='col-md-3 border-end px-4'>
 
                 <div className='d-flex align-items-center justify-content-between p-4'>
@@ -150,7 +178,7 @@ const NewHistory = () => {
 
               </div>
 
-              {/* Perguntas */}
+              {/* 2 - Perguntas */}
               <div className='col-md border-end p-0'>
 
                 <div className='d-flex align-items-center border-bottom p-4'>
@@ -205,22 +233,52 @@ const NewHistory = () => {
                   <span className='text-muted'>0 / 1000</span>
 
                   <div className='d-flex justify-content-center'>
+
                     <div className='d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5 me-4'
-                      style={{ width: '32px', height: '32px' }}
+                      style={{ width: '32px', height: '32px', cursor: 'pointer' }}
+                      onClick={() => {setIsHelpModalOpen(true)}}
                     >
                       <span className='material-symbols-outlined' style={{ fontSize: '16px' }}>help</span>
                     </div>
-                    <div className='d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5'
-                      style={{ width: '68px', height: '32px' }}
-                    >
-                      <span className='material-symbols-outlined' style={{ fontSize: '16px' }}>mood</span>
-                      <span className='material-symbols-outlined' style={{ fontSize: '16px' }}>keyboard_arrow_down</span>
-                    </div>
+
+                    <Dropdown drop='up'>
+                      <Dropdown.Toggle
+                        className="btn bg-pink text-primary d-flex align-items-center justify-content-center rounded-5"
+                        style={{ width: '68px', height: '32px' }}
+                        id="dropdown-basic"
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>mood</span>
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>
+                        <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Tradicional')}>
+                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>auto_stories</span>
+                          Tradicional
+                        </Dropdown.Item>
+                        <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Bibliográfico')}>
+                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>hail</span>
+                          Bibliográfico
+                        </Dropdown.Item>
+                        <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Cômico')}>
+                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>sentiment_very_satisfied</span>
+                          Cômico
+                        </Dropdown.Item>
+                        <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Dramático')}>
+                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>sentiment_worried</span>
+                          Dramático
+                        </Dropdown.Item>
+                        <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Romântico')}>
+                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>favorite</span>
+                          Romântico
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+
                   </div>
 
                   <div className='d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5'
                     style={{ height: '32px' }}
-                    onClick={() => {}}
+                    onClick={() => {setIsIAModalOpen(true)}}
                   >
                     <b className='f-12'>Texto sugerido pelo IAutor</b>
                     <img className='ps-1' src={artificialInteligence} />
@@ -251,12 +309,11 @@ const NewHistory = () => {
                     <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>play_lesson</span>
                   </div>
                 </div>
-
                 <div className='d-flex text-icon justify-content-center f-14 pt-2'>Pular Pergunta</div>
 
               </div>
 
-              {/* Preview */}
+              {/* 3 - Preview */}
               <div className='col-md bg-iautor p-0'>
 
                 <div className='d-flex bg-white justify-content-center p-4'
@@ -269,19 +326,21 @@ const NewHistory = () => {
                   <div className='d-flex f-14 px-5'>Ferramentas de Edição</div>
                   <div className='d-flex text-icon ps-4'>
                     {/* add icons */}
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px' }}>add_photo_alternate</span>
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px' }}>draw</span>
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', color: '#db3737' }}
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }}>add_photo_alternate</span>
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }}>draw</span>
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
+                      onClick={() => {setIsBookPreviewModalOpen(true)}}
                     >
                       auto_stories
                     </span>
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px' }}>file_save</span>
-                    <span className='material-symbols-outlined px-2 pe-4' style={{ fontSize: '24px' }}>featured_seasonal_and_gifts</span>
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }}>file_save</span>
+                    <span className='material-symbols-outlined px-2 pe-4' style={{ fontSize: '24px', cursor: 'pointer' }}>featured_seasonal_and_gifts</span>
                   </div>
                 </div>
 
                 <div className='d-flex justify-content-center pb-4'>
-                  <img src='/src/assets/img/preview-capa-livro.png' />
+                  <img src={previewCapaLivro} />
+                  {/* <img src={previewCapaLivroBranca} /> */}
                 </div>
 
               </div>
@@ -289,6 +348,30 @@ const NewHistory = () => {
             </div>
           </div>
         </main>
+
+        <Modal show={isHelpModalOpen} onHide={() => setIsHelpModalOpen(false)} backdrop="static" keyboard={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>Help</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p className='mb-1'>Help</p>
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={isIAModalOpen} onHide={() => setIsIAModalOpen(false)} backdrop="static" keyboard={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>IA</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p className='mb-1'>IA</p>
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={isBookPreviewModalOpen} onHide={() => setIsBookPreviewModalOpen(false)}>
+          <Modal.Body>
+            <p className='mb-1'>Book</p>
+          </Modal.Body>
+        </Modal>
 
       </section>
     </div>

@@ -8,7 +8,7 @@ import { ChapterService } from "../../../common/http/api/chapterService";
 import { ChapterModel } from "../../../common/models/chapter.model";
 import ChapterTable, { ChapterMode } from "./chapters.table";
 import ChapterForm from "./chapter.component";
-import NavUserOptions from "../../../components/nav/nav-user-options.component";
+import NavAdmin from '../../../components/nav/nav-admin.component';
 
 const Chapters = () => {
   const _chapterService = new ChapterService();
@@ -117,20 +117,18 @@ const Chapters = () => {
 
   return (
     <>
-      <NavUserOptions />
+      <NavAdmin />
 
-      <main
-        className="main bg-iautorpb-4"
-        style={{ minHeight: "676px", flex: 1 }}
+      <main className='main bg-iautor pb-4'
+        style={{ minHeight: '70vh' }}
       >
-        <section className="container" id="title">
-          <div className="row">
-            <p className="mt-4 p-0 f-12">
-              <span className="fw-bold">Home/ </span>Capítulos
-            </p>
-            <h1 className="mt-0 p-0">Capítulos</h1>
+
+        <section className='container' id='title'>
+          <div className='row'>
+            <h4 className='mt-3 p-0'>Capítulos</h4>
           </div>
         </section>
+
         <section className="container border-top" id="filter">
           <div className="row my-4">
             <div

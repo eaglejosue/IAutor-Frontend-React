@@ -47,7 +47,6 @@ const ChapterTable = (props: ChapterTableProps) => {
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
- 
     {
       title: "Data cadastro",
       dataIndex: "createdAt",
@@ -92,7 +91,7 @@ const ChapterTable = (props: ChapterTableProps) => {
         record.isActive === value,
       filterSearch: true,
     },
-   
+
     {
       title: "Ação",
       key: "action",
@@ -144,8 +143,8 @@ const ChapterTable = (props: ChapterTableProps) => {
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
- 
-  
+
+
     {
       title: "Ação",
       key: "action",
@@ -153,7 +152,7 @@ const ChapterTable = (props: ChapterTableProps) => {
         <div
         >
           <input type='checkbox' checked={record.selected} onChange={(e)=> handlerCheckCapitulo(record,e)}  ></input>
-         
+
         </div>
       ),
       align: "center" as "center",

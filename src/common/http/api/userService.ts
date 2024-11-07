@@ -2,7 +2,7 @@ import queryString from 'query-string';
 import { HttpClient } from "../httpClient";
 import { UserModel } from '../../models/user.model';
 import { UserFilter } from '../../models/filters/user.filter';
-import { UserVideoLogModel } from '../../models/userVideoLog.model';
+import { UserBookLogModel } from '../../models/user-book-log.model';
 
 export class UserService {
   private endpoint = "/users";
@@ -54,7 +54,7 @@ export class UserService {
     return response.data;
   }
 
-  public async postVideoLog(data: UserVideoLogModel) {
+  public async postVideoLog(data: UserBookLogModel) {
     const response = await this._httpClient.post<string>(
       `${this.endpoint}/video-log`, { data }
     );

@@ -98,7 +98,6 @@ const PlansTable = (props: PlansTableProps) => {
         record.isActive === value,
       filterSearch: true,
     },
-   
     {
       title: "Ação",
       key: "action",
@@ -110,8 +109,7 @@ const PlansTable = (props: PlansTableProps) => {
             justifyContent: "flex-start",
           }}
         >
-          <span
-            className="material-symbols-outlined"
+          <span className="material-symbols-outlined"
             onClick={() => handleEditClick(record)}
             style={{
               cursor: "pointer",
@@ -123,17 +121,15 @@ const PlansTable = (props: PlansTableProps) => {
             edit
           </span>
           {record.isActive && (
-            <span
-              className="material-symbols-outlined"
+            <span className="material-symbols-outlined"
               onClick={() => handleDeleteClick(record)}
               style={{ cursor: "pointer", fontSize: "20px" }}
               title="Deletar"
             >
               delete
             </span>
-            
           )}
-          
+
         </div>
       ),
       align: "center" as "center",

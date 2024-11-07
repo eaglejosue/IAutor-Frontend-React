@@ -8,7 +8,7 @@ import { QuestionModel } from "../../../common/models/question.model";
 import { QuestionFilter } from "../../../common/models/filters/question.filter";
 import QuestionTable, { QuestionMode } from "./question.table";
 import QuestionForm from "./question.component";
-import NavUserOptions from "../../../components/nav/nav-user-options.component";
+import NavAdmin from '../../../components/nav/nav-admin.component';
 
 const Questions = () => {
   const _questionService = new QuestionService();
@@ -117,20 +117,18 @@ const Questions = () => {
 
   return (
     <>
-      <NavUserOptions />
+      <NavAdmin />
 
-      <main
-        className="main bg-iautorpb-4"
-        style={{ minHeight: "676px", flex: 1 }}
+      <main className='main bg-iautor pb-4'
+        style={{ minHeight: '70vh' }}
       >
-        <section className="container" id="title">
-          <div className="row">
-            <p className="mt-4 p-0 f-12">
-              <span className="fw-bold">Home/ </span>Perguntas
-            </p>
-            <h1 className="mt-0 p-0">Perguntas</h1>
+
+        <section className='container' id='title'>
+          <div className='row'>
+            <h4 className='mt-3 p-0'>Perguntas</h4>
           </div>
         </section>
+
         <section className="container border-top" id="filter">
           <div className="row my-4">
             <div
@@ -163,7 +161,7 @@ const Questions = () => {
             isLoading={isLoading}
             handlerEdit={handlerEdit}
             handlerDelete={handlerDelete}
-            mode={QuestionMode.registerQuestion} addItemsPlan={()=>{}}            
+            mode={QuestionMode.registerQuestion} addItemsPlan={()=>{}}
           />
         </section>
 

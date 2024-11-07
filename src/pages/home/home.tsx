@@ -7,7 +7,7 @@ const Home = () => {
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 21) + 1;// Gera um número entre 1 e 21
-    const imageUrl = `/src/assets/img/random/${randomIndex}.jpg`;
+    const imageUrl = `../src/assets/img/random/${randomIndex}.jpg`;
     setImgRandomSrc(imageUrl);
   }, []);
 

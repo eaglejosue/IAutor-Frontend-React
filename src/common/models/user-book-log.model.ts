@@ -1,4 +1,4 @@
-export class UserVideoLogModel {
+export class UserBookLogModel {
   id!: number;
   createdAt?: string;
   userId?: number;

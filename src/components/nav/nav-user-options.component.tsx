@@ -41,7 +41,6 @@ const NavUserOptions = () => {
             <FontAwesomeIcon icon={faUser} />
           </a>
         }
-
       </Dropdown.Toggle>
 
       <Dropdown.Menu style={{ minWidth: '200px', overflow: 'hidden', padding: '10px' }}>
@@ -66,9 +65,8 @@ const NavUserOptions = () => {
             <Dropdown.Divider />
             <Dropdown.Item onClick={() => navigate(paths.TERMS)}>Termos</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.USERS)}>Usuários</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate(paths.CHAPTERS)}>Capitulos</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.QUESTIONS)}>Perguntas</Dropdown.Item>
-            <Dropdown.Divider />
+            <Dropdown.Item onClick={() => navigate(paths.CHAPTERS)}>Capitulos</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.PLANS)}>Planos</Dropdown.Item>
           </>
         }

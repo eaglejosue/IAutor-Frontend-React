@@ -56,7 +56,7 @@ const routes: Routes[] = [
   { path: paths.RESET_PASSWORD, element: getRouteElement(TrocarSenha) },
   { path: paths.NOT_FOUND, element: getRouteElement(PageNotFound) },
   { path: paths.HOME, element: getRouteElement(Home) },
-  { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true, true) },
+  { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true, true, false) },
   { path: paths.MY_HISTORIES, element: getRouteElement(MyHistories, true, true, false) },
   { path: paths.NEW_HISTORY, element: getRouteElement(NewHistory, true, true, false) },
   { path: paths.TERMS, element: getRouteElement(Terms, true, true) },

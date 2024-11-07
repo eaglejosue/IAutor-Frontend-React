@@ -1,6 +1,6 @@
 import queryString from 'query-string';
 import { HttpClient } from "../httpClient";
-import { VideoModel } from "../../models/video.model";
+import { BookModel } from "../../models/book.model";
 import { VideoFilter } from "../../models/filters/video.filter";
 import { VideoTrailerModel } from '../../models/videoTrailer.model';
 
@@ -26,21 +26,21 @@ export class VideoService {
     return response.data;
   }
 
-  public async post(data: VideoModel) {
+  public async post(data: BookModel) {
     const response = await this._httpClient.post<string>(
       this.endpoint, { data }
     );
     return response.data;
   }
 
-  public async put(data: VideoModel) {
+  public async put(data: BookModel) {
     const response = await this._httpClient.put<string>(
       this.endpoint, { data }
     );
     return response.data;
   }
 
-  public async patch(data: VideoModel) {
+  public async patch(data: BookModel) {
     const response = await this._httpClient.put<string>(
       this.endpoint, { data }
     );
