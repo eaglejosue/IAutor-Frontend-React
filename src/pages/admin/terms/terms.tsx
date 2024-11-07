@@ -7,8 +7,6 @@ import constParams from '../../../common/constants/constParams';
 import { ParamModel } from '../../../common/models/param.model';
 import { ParamService } from '../../../common/http/api/paramService';
 import NavAdmin from '../../../components/nav/nav-admin.component';
-import paths from '../../../routes/paths';
-import Logo from '../../../assets/img/Logo.png';
 
 const Terms = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);

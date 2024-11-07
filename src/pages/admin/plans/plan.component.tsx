@@ -4,7 +4,7 @@ import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 import { useForm } from "react-hook-form";
 import { Divider } from "antd";
 import { Accordion, Table, Button, Modal } from "react-bootstrap";
-import { faAdd, faRemove } from '@fortawesome/free-solid-svg-icons';
+import { faAdd } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isDate } from "date-fns";
 import { ChapterFilter } from "../../../common/models/filters/chapter.filter";
@@ -472,7 +472,6 @@ const PlanForm = (props: PlanFormProps) => {
               <FontAwesomeIcon icon={faAdd} className="mx-2" />
             </Button>
           </div>
-          <hr />
 
           {isLoading ? (
             <div

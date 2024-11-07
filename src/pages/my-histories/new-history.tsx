@@ -10,13 +10,13 @@ import NavUserOptions from '../../components/nav/nav-user-options.component';
 
 import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
 import previewCapaLivro from '../../assets/img/preview-capa-livro.png';
-import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
-import { BookModel } from '../../common/models/book.model';
+//import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
+//import { BookModel } from '../../common/models/book.model';
 import { Modal } from 'react-bootstrap';
 
 const NewHistory = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
-  const [book, setBook] = useState<BookModel>(new BookModel({title: 'Título História'}));
+  //const [book, setBook] = useState<BookModel>(new BookModel({title: 'Título História'}));
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
   const [theme, setTheme] = useState('');
@@ -363,7 +363,7 @@ const NewHistory = () => {
             <Modal.Title>IA</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p className='mb-1'>IA</p>
+            <p className='mb-1'>IA {theme}</p>
           </Modal.Body>
         </Modal>
 

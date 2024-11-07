@@ -12,7 +12,6 @@ export class UserModel extends BaseModel {
   oldPassword?: string;
   password?: string;
   fullname!: string;
-  updatedBy?: string;
 
   constructor(j?: any) {
     super(j);
