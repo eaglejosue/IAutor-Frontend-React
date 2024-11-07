@@ -28,8 +28,7 @@ const MyAccount = () => {
     if (redirect) setRedirect(redirect);
 
     const randomIndex = Math.floor(Math.random() * 21) + 1;// Gera um número entre 1 e 21
-    const imageUrl = `../src/assets/img/random/${randomIndex}.jpg`;
-    setImgRandomSrc(imageUrl);
+    setImgRandomSrc(`/src/assets/img/random/${randomIndex}.jpg`);
 
     getUser();
   }, []);
