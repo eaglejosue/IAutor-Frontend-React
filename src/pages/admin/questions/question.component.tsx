@@ -49,7 +49,7 @@ const QuestionForm = (p: QuestionFormProps) => {
             position: 'top-center',
             style: { minWidth: 400 }
           });
-         
+
           if(p.confirmaSalvar!=null){
             p.confirmaSalvar()
           }
@@ -100,7 +100,7 @@ const QuestionForm = (p: QuestionFormProps) => {
         <CustomInput
           type='text'
           disabled={isLoading}
-          label='Título *'
+          label='Título'
           placeholder='Título'
           register={register}
           errors={errors.title}
@@ -114,9 +114,26 @@ const QuestionForm = (p: QuestionFormProps) => {
           maxLength={500}
         />
         <CustomInput
+          type='text'
+          disabled={isLoading}
+          label='Sessão'
+          placeholder='Sessão'
+          register={register}
+          errors={errors.subject}
+          name='subject'
+          setValue={setValue}
+          divClassName='col-12 mt-4'
+          validationSchema={{
+            required: 'Sessão é obrigatório',
+            maxLength: { value: 100, message: "Sessão deve conter no máximo 100 caracteres" }
+          }}
+          maxLength={500}
+        />
+        <CustomInput
           type='number'
           disabled={isLoading}
-          placeholder='Mínimo de caracteres da pergunta'
+          label='Mínimo de caracteres'
+          placeholder='Mínimo de caracteres'
           register={register}
           errors={errors.minLimitCharacters}
           name='minLimitCharacters'
@@ -131,7 +148,8 @@ const QuestionForm = (p: QuestionFormProps) => {
         <CustomInput
           type='number'
           disabled={isLoading}
-            placeholder='Máximo de caracteres da pergunta'
+          label='Máximo de caracteres'
+          placeholder='Máximo de caracteres'
           register={register}
           errors={errors.maxLimitCharacters}
           name='maxLimitCharacters'
@@ -142,21 +160,6 @@ const QuestionForm = (p: QuestionFormProps) => {
           }}
           customValidation={(value) => (!isNaN(Number(value)) && Number(value) > 0 && Number(value) < 100000)
             || 'Número deve ser um número entre 1 e 100000'}
-        />
-        <CustomInput
-          type='text'
-          disabled={isLoading}
-          placeholder='Tema'
-          register={register}
-          errors={errors.subject}
-          name='subject'
-          setValue={setValue}
-          divClassName='col-6 mt-4'
-          validationSchema={{
-            required: 'Tema é obrigatório',
-            maxLength: { value: 100, message: "Tema deve conter no máximo 100 caracteres" }
-          }}
-          maxLength={500}
         />
       </div>
 

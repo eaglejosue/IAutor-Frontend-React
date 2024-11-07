@@ -39,7 +39,7 @@ const QuestionTable = (props: QuestionTableProps) => {
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
     {
-      title: "Tema",
+      title: "Sessão",
       dataIndex: "subject",
       sorter: (a: any, b: any) => a.title.localeCompare(b.subject),
     },
@@ -126,7 +126,7 @@ const QuestionTable = (props: QuestionTableProps) => {
     },
   ];
   const handlerCheckQeustion=(capitulo:QuestionModel,checked:boolean)=>{
-    
+
     capitulo.selected = checked;
     if(checked)
        setQuestionsSelected(prevState => ([...prevState, capitulo]))
@@ -138,7 +138,7 @@ const QuestionTable = (props: QuestionTableProps) => {
          setQuestionsSelected(array);
        }
      }
-   
+
   }
   const columnsRegisterPlan = [
     {
@@ -147,7 +147,7 @@ const QuestionTable = (props: QuestionTableProps) => {
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
     {
-      title: "Tema",
+      title: "Sessão",
       dataIndex: "subject",
       sorter: (a: any, b: any) => a.title.localeCompare(b.subject),
     },
@@ -158,7 +158,7 @@ const QuestionTable = (props: QuestionTableProps) => {
         <div
         >
           <input type='checkbox'   onChange={(e)=> handlerCheckQeustion(record,e.target.checked)}  ></input>
-         
+
         </div>
       ),
       align: "center" as "center",
@@ -187,7 +187,7 @@ const QuestionTable = (props: QuestionTableProps) => {
         locale: { items_per_page: ' itens' }
       }}
     />
-    
+
    {props.mode == QuestionMode.registerPlan && <div className="d-flex justify-content-end mt-4">
               <button
                 className="btn btn-primary rounded-5 f-14 px-4 py-2 mx-2"

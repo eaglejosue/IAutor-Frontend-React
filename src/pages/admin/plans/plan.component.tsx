@@ -38,7 +38,7 @@ const PlanForm = (props: PlanFormProps) => {
   const [chapters, setChapters] = useState<ChapterModel[]>([]);
   const [chaptersSelected, setChaptersSelected] = useState<ChapterModel | null>(null);
   const [chaptersPlan, setChaptersPlan] = useState<ChapterModel[]>([]);
-  const [perguntaTemaSearch, setSearchPerguntaTema] = useState('')
+  const [perguntaSessaoSearch, setSearchPerguntaSessao] = useState('')
   const [isFormModalOpenPergunta, setIsFormModalOpenPergunta] = useState<boolean>(false);
   const _chapterService = new ChapterService();
   const [isFormModalOpenCapitulo, SetFormModalOpenCapitulo] = useState<boolean>(false);
@@ -230,9 +230,9 @@ const PlanForm = (props: PlanFormProps) => {
   }
 
   //busca peguntas, filtrando por pergunta
-  const handleSearchPerguntaTemaClick = () => {
+  const handleSearchPerguntaSessaoClick = () => {
     //@ts-ignore
-    getQuestions({ title: perguntaTemaSearch })
+    getQuestions({ title: perguntaSessaoSearch })
   }
 
   //Click no header do accordion
@@ -507,7 +507,7 @@ const PlanForm = (props: PlanFormProps) => {
                                 <tr>
                                   <th>Id</th>
                                   <th>Pergunta</th>
-                                  <th>Tema</th>
+                                  <th>Sessao</th>
                                   <th>
                                     <div className="form-check"></div>
                                   </th>
@@ -629,14 +629,14 @@ const PlanForm = (props: PlanFormProps) => {
                 style={{ paddingLeft: "0" }}
               >
                 <SearchInput
-                  placeholder="Buscar pergunta ou tema"
-                  onChange={(e) => setSearchPerguntaTema(e)}
-                  onEnter={handleSearchPerguntaTemaClick}
+                  placeholder="Buscar pergunta ou Sessao"
+                  onChange={(e) => setSearchPerguntaSessao(e)}
+                  onEnter={handleSearchPerguntaSessaoClick}
                 />
               </div>
               <div className="col-auto me-auto">
                 <CustomButton
-                  onClick={handleSearchPerguntaTemaClick}
+                  onClick={handleSearchPerguntaSessaoClick}
                   disabled={isLoading}
                 />
               </div>

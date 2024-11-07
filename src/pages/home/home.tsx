@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 
 import Nav from '../../components/nav/nav.component';
 
+import verticalImgs from '../../assets/vertical-imgs';
+
 const Home = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 21) + 1;// Gera um número entre 1 e 21
-    setImgRandomSrc(`/src/assets/img/random/${randomIndex}.jpg`);
+    setImgRandomSrc(verticalImgs[randomIndex]);
   }, []);
 
   return (
@@ -24,7 +26,14 @@ const Home = () => {
             <div className='f-18 mt-3'>Relembre e escreva um lindo livro de memórias e momentos especiais!</div>
 
             <div className='d-flex justify-content-center mt-3'>
-              <img src={imgRandomSrc} style={{ maxWidth: '600px', maxHeight: '380px', objectFit: 'cover', borderRadius: '9px' }} />
+              <img src={imgRandomSrc}
+                style={{
+                  width: '260px',
+                  height: '380px',
+                  objectFit: 'cover',
+                  borderRadius: '9px'
+                }}
+              />
             </div>
 
           </div>

@@ -4,15 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { Modal } from 'react-bootstrap';
 
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 
+import horizontalImgs from '../../assets/horizontal-imgs';
 import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
 import previewCapaLivro from '../../assets/img/preview-capa-livro.png';
 //import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
 //import { BookModel } from '../../common/models/book.model';
-import { Modal } from 'react-bootstrap';
 
 const NewHistory = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
@@ -30,8 +31,8 @@ const NewHistory = () => {
   } = useForm();
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * 21) + 1;// Gera um número entre 1 e 21
-    setImgRandomSrc(`/src/assets/img/random/${randomIndex}.jpg`);
+    const randomIndex = Math.floor(Math.random() * 16) + 1;// Gera um número entre 1 e 16
+    setImgRandomSrc(horizontalImgs[randomIndex]);
   }, []);
 
   return (
@@ -150,10 +151,10 @@ const NewHistory = () => {
                 </div>
 
                 {/* Img baixo */}
-                <div id='img-baixo' style={{ marginTop: '30%' }}>
+                <div id='img-baixo' style={{ marginTop: '5vh' }}>
 
                   <div className='d-flex justify-content-center'>
-                    <img src={imgRandomSrc} style={{ maxWidth: '413px', maxHeight: '300px', objectFit: 'cover', borderRadius: '9px' }} />
+                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px'}}/>
                   </div>
                   <div className='d-flex justify-content-center mt-2 p-2'>
                     <b className='f-16'>Uma História mais Completa</b>

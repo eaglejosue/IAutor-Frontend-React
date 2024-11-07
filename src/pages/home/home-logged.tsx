@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 
+import horizontalImgs from '../../assets/horizontal-imgs';
+
 const HomeLogged = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * 21) + 1;// Gera um número entre 1 e 21
-    setImgRandomSrc(`/src/assets/img/random/${randomIndex}.jpg`);
+    const randomIndex = Math.floor(Math.random() * 16) + 1;// Gera um número entre 1 e 16
+    setImgRandomSrc(horizontalImgs[randomIndex]);
   }, []);
 
   return (
@@ -36,7 +38,35 @@ const HomeLogged = () => {
           <div className='container-fluid'>
             <div className='row'>
 
+              {/* Add */}
 
+              {/* Img baixo */}
+              <div className='col-12 col-xl-4'
+                style={{ minHeight: '845px' }}
+              >
+                <div id='img-baixo' style={{ marginTop: '40vh' }}>
+
+                  <div className='d-flex justify-content-center'>
+                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px'}}/>
+                  </div>
+                  <div className='d-flex justify-content-center mt-2 p-2'>
+                    <b className='f-16'>Uma História mais Completa</b>
+                  </div>
+
+                  <div className='d-flex text-center f-14 px-4'>
+                    Formate a escrita, edite a capa e crie histórias com mais detalhes e momentos.
+                  </div>
+
+                  <div className='d-flex justify-content-center p-4'>
+                    <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      Ver Planos
+                    </a>
+                  </div>
+
+                </div>
+              </div>
 
             </div>
           </div>
