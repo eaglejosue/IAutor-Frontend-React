@@ -25,7 +25,7 @@ const Sidebar = (p: Props) => {
 
         <li className={p.navItem == 'home' ? 'bg-iautor nav-border-right' : ''}>
           <a href="#" className="nav-link"
-            onClick={() => navigate(paths.HOME)}
+            onClick={() => navigate(paths.HOME_LOGGED)}
           >
             <span className="material-symbols-outlined"
               style={{ fontSize: '32px', color: 'black' }}
@@ -47,7 +47,7 @@ const Sidebar = (p: Props) => {
           </a>
         </li>
 
-        <li className={p?.navItem == 'my-histories nav-border-right' ? 'bg-iautor' : ''}>
+        <li className={p?.navItem == 'my-histories' ? 'bg-iautor nav-border-right' : ''}>
           <a href="#" className="nav-link"
             onClick={() => navigate(paths.MY_HISTORIES)}
           >

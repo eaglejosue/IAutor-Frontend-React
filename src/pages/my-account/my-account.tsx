@@ -111,9 +111,12 @@ const MyAccount = () => {
       <section className='flex-grow-1'>
 
         <header className='bg-white border-bottom py-3 px-4'>
-          <div className='d-flex flex-wrap align-items-center justify-content-beetwen'>
-            <div className='col fw-bold f-18'>
-              Minha conta
+          <div className='row align-items-center justify-content-beetwen'>
+          <div className='col-auto fw-bold f-18 pe-0'>
+              IAutor /
+            </div>
+            <div className='col-auto f-18 ps-1'>
+              Minha Conta
             </div>
             <div className='col'>
               <NavUserOptions />

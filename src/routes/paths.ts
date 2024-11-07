@@ -8,6 +8,7 @@ export default {
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
   HOME: "/",
+  HOME_LOGGED: "/home",
   NOT_FOUND: "*",
   MY_ACCOUNT: '/my-account',
   MY_HISTORIES: '/my-histories',

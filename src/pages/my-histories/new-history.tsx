@@ -42,86 +42,84 @@ const NewHistory = () => {
       <section className='flex-grow-1'>
 
         <header className='bg-white border-bottom p-3'>
-          <div className='container-fluid'>
-            <div className='row align-items-center justify-content-center'>
+          <div className='row align-items-center justify-content-center'>
 
-              {/* Nav título página */}
-              <div className='col-md-4 f-18'>
+            {/* Nav título página */}
+            <div className='col-md-4 f-18'>
 
-                <div className='d-flex align-items-center'>
-                  <div className='fw-bold'>
-                    Criar História /
-                  </div>
-                  <div className='d-flex bg-primary align-items-center justify-content-center mx-2'
-                    style={{ width: '16px', height: '16px', borderRadius: '100%' }}
-                    >
-                    <span className='material-symbols-outlined'
-                      style={{ fontSize: '10px', color: 'white', cursor: 'pointer' }}
-                      onClick={() => {setIsEditingTitle(true);}}
-                    >
-                      edit
-                    </span>
-                  </div>
-                  {/* Input de título para editar */}
-                  {isEditingTitle ? (
-                    <input
-                      type='text'
-                      value={title}
-                      onChange={(e) => {setTitle(e.target.value);}}
-                      onBlur={() => {setIsEditingTitle(false);}}
-                      onKeyDown={(e) => {e.key === 'Enter' && setIsEditingTitle(false);}}
-                      autoFocus
-                      className='form-control'
-                      style={{ width: 'auto' }}
-                    />
-                  ) : (
-                    <div>{title}</div>
-                  )}
+              <div className='d-flex align-items-center'>
+                <div className='fw-bold'>
+                  Criar História /
                 </div>
-
-              </div>
-
-              {/* Nav center */}
-              <div className='col-md ms-5'>
-                <div className='row align-items-center'>
-                  <div className='col-auto'>
-                    <b className='bg-pink text-primary rounded-5 f-12 px-4 py-1'>
-                      Criação
-                    </b>
-                  </div>
-                  <div className='col-auto f-12'>
-                    <FontAwesomeIcon icon={faChevronRight} style={{ color: '#7F7F8B' }} />
-                  </div>
-                  <div className='col-auto'>
-                    <b className='bg-disabled text-icon rounded-5 f-12 px-4 py-1'>
-                      Finalizar
-                    </b>
-                  </div>
+                <div className='d-flex bg-primary align-items-center justify-content-center mx-2'
+                  style={{ width: '16px', height: '16px', borderRadius: '100%' }}
+                >
+                  <span className='material-symbols-outlined'
+                    style={{ fontSize: '10px', color: 'white', cursor: 'pointer' }}
+                    onClick={() => { setIsEditingTitle(true); }}
+                  >
+                    edit
+                  </span>
                 </div>
-              </div>
-
-              {/* Nav user */}
-              <div className='col-md-5'>
-                <div className='row align-items-center justify-content-end'>
-                  <div className='col-auto'>
-                    <a href='#' className='btn btn-outline-secondary disabled rounded-5 f-12 px-4 py-2'
-                      style={{ fontWeight: 'bold' }}
-                    >
-                      Livro Degustação | Tradicional
-                    </a>
-                  </div>
-                  <div className='col-auto'>
-                    <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2'
-                      style={{ fontWeight: 'bold' }}
-                    >
-                      Ver Planos
-                    </a>
-                  </div>
-                  <NavUserOptions />
-                </div>
+                {/* Input de título para editar */}
+                {isEditingTitle ? (
+                  <input
+                    type='text'
+                    value={title}
+                    onChange={(e) => { setTitle(e.target.value); }}
+                    onBlur={() => { setIsEditingTitle(false); }}
+                    onKeyDown={(e) => { e.key === 'Enter' && setIsEditingTitle(false); }}
+                    autoFocus
+                    className='form-control'
+                    style={{ width: 'auto' }}
+                  />
+                ) : (
+                  <div>{title}</div>
+                )}
               </div>
 
             </div>
+
+            {/* Nav center */}
+            <div className='col-md ms-5'>
+              <div className='row align-items-center'>
+                <div className='col-auto'>
+                  <b className='bg-pink text-primary rounded-5 f-12 px-4 py-1'>
+                    Criação
+                  </b>
+                </div>
+                <div className='col-auto f-12'>
+                  <FontAwesomeIcon icon={faChevronRight} style={{ color: '#7F7F8B' }} />
+                </div>
+                <div className='col-auto'>
+                  <b className='bg-disabled text-icon rounded-5 f-12 px-4 py-1'>
+                    Finalizar
+                  </b>
+                </div>
+              </div>
+            </div>
+
+            {/* Nav user */}
+            <div className='col-md-5'>
+              <div className='row align-items-center justify-content-end'>
+                <div className='col-auto'>
+                  <a href='#' className='btn btn-outline-secondary disabled rounded-5 f-12 px-4 py-2'
+                    style={{ fontWeight: 'bold' }}
+                  >
+                    Livro Degustação | Tradicional
+                  </a>
+                </div>
+                <div className='col-auto'>
+                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2'
+                    style={{ fontWeight: 'bold' }}
+                  >
+                    Ver Planos
+                  </a>
+                </div>
+                <NavUserOptions />
+              </div>
+            </div>
+
           </div>
         </header>
 
