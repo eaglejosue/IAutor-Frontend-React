@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
+
 import horizontalImgs from '../../assets/horizontal-imgs';
 
-const NewHistory = () => {
+const HomeLogged = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
   useEffect(() => {
@@ -16,8 +17,8 @@ const NewHistory = () => {
     <div className='d-flex'
       style={{ height: '100vh' }}
     >
-      <Sidebar navItem='my-histories' />
-      <div className='flex-grow-1'>
+      <Sidebar navItem='home' />
+      <section className='flex-grow-1'>
 
         <header className='bg-white border-bottom p-3'>
           <div className='row align-items-center justify-content-beetwen'>
@@ -25,7 +26,7 @@ const NewHistory = () => {
               IAutor /
             </div>
             <div className='col-auto f-18 ps-1'>
-              Minhas Histórias
+              Home
             </div>
             <div className='col'>
               <NavUserOptions />
@@ -33,7 +34,7 @@ const NewHistory = () => {
           </div>
         </header>
 
-        <main className='main bg-white'>
+        <main className='main'>
           <div className='container-fluid'>
             <div className='row'>
 
@@ -46,7 +47,7 @@ const NewHistory = () => {
                 <div id='img-baixo' style={{ marginTop: '40vh' }}>
 
                   <div className='d-flex justify-content-center'>
-                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px' }} />
+                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px'}}/>
                   </div>
                   <div className='d-flex justify-content-center mt-2 p-2'>
                     <b className='f-16'>Uma História mais Completa</b>
@@ -71,9 +72,9 @@ const NewHistory = () => {
           </div>
         </main>
 
-      </div>
+      </section>
     </div>
   );
 };
 
-export default NewHistory;
+export default HomeLogged;

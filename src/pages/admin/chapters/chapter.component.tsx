@@ -42,7 +42,7 @@ const ChapterForm = (p: ChapterFormProps) => {
       _chapterService
         .post(chapter)
         .then(() => {
-          toast.success('Capitulo criado com sucesso!', {
+          toast.success('Capítulo criado com sucesso!', {
             position: 'top-center',
             style: { minWidth: 400 }
           });
@@ -67,7 +67,7 @@ const ChapterForm = (p: ChapterFormProps) => {
       _chapterService
         .put(chapter)
         .then(() => {
-          toast.success('Capitulo atualizado com sucesso!', {
+          toast.success('Capítulo atualizado com sucesso!', {
             position: 'top-center',
             style: { minWidth: 400 }
           });
@@ -96,9 +96,8 @@ const ChapterForm = (p: ChapterFormProps) => {
         <CustomInput
           type='text'
           disabled={isLoading}
-          label='Título *'
-          placeholder=''
-    
+          label='Título'
+          placeholder='Título'
           register={register}
           errors={errors.title}
           name='title'
@@ -113,16 +112,15 @@ const ChapterForm = (p: ChapterFormProps) => {
         <CustomInput
           type='number'
           disabled={isLoading}
-          label='Número do capítulo *'
-          placeholder=''
-           
+          label='Número'
+          placeholder='Número'
           register={register}
           errors={errors.chapterNumber}
           name='chapterNumber'
           setValue={setValue}
-          divClassName='col-4 mt-4'
+          divClassName='col-3 mt-4'
           validationSchema={{
-            required: 'Número do capítulo é obrigatório'
+            required: 'Número é obrigatório'
           }}
           customValidation={(value) => (!isNaN(Number(value)) && Number(value) > 0 && Number(value) < 100) ||
              'Porcentagem deve ser um número entre 1 e 99'}

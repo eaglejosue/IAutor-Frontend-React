@@ -3,7 +3,7 @@ import Logo from '../../assets/img/favicon-32x32.png';
 import paths from '../../routes/paths';
 
 export interface Props {
-  navItem?: string
+  navItem: string
 }
 
 const Sidebar = (p: Props) => {
@@ -22,8 +22,10 @@ const Sidebar = (p: Props) => {
           />
         </li>
 
-        <li className={p.navItem && p.navItem == 'home' ? 'bg-iautor' : ''}>
-          <a href="#" className="nav-link">
+        <li className={p.navItem == 'home' ? 'bg-iautor nav-border-right' : ''}>
+          <a href="#" className="nav-link"
+            onClick={() => navigate(paths.HOME_LOGGED)}
+          >
             <span className="material-symbols-outlined"
               style={{ fontSize: '32px', color: 'black' }}
             >
@@ -32,10 +34,10 @@ const Sidebar = (p: Props) => {
           </a>
         </li>
 
-        <li className={p?.navItem == 'book' ? 'bg-iautor' : ''}
-          style={{ borderRight: '3px solid #db3737' }}
-        >
-          <a href="#" className="nav-link">
+        <li className={p?.navItem == 'book' ? 'bg-iautor nav-border-right' : ''}>
+          <a href="#" className="nav-link"
+            onClick={() => navigate(paths.NEW_HISTORY)}
+          >
             <span className="material-symbols-outlined"
               style={{ fontSize: '32px', color: 'black' }}
             >
@@ -44,8 +46,10 @@ const Sidebar = (p: Props) => {
           </a>
         </li>
 
-        <li>
-          <a href="#" className="nav-link">
+        <li className={p?.navItem == 'my-histories' ? 'bg-iautor nav-border-right' : ''}>
+          <a href="#" className="nav-link"
+            onClick={() => navigate(paths.MY_HISTORIES)}
+          >
             <span className="material-symbols-outlined"
               style={{ fontSize: '32px', color: 'black' }}
             >

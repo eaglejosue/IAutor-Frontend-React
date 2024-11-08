@@ -6,7 +6,6 @@ export class AuthenticatedUserModel {
   lastname!: string;
   email!: string;
   profileImgUrl?: string;
-  ownerId?: number;
   isValid!: boolean;
   token!: string;
 
@@ -19,7 +18,6 @@ export class AuthenticatedUserModel {
       this.lastname = j.lastname;
       this.email = j.email;
       this.profileImgUrl = j.profileImgUrl;
-      this.ownerId = j.ownerId;
       this.isValid = j.isValid;
       this.token = j.token;
     }

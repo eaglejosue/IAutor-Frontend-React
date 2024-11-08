@@ -13,7 +13,10 @@ import ChangePasswordForm from '../../components/changePasswordForm/changePasswo
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 
+import horizontalImgs from '../../assets/horizontal-imgs';
+
 const MyAccount = () => {
+  const [imgRandomSrc, setImgRandomSrc] = useState('1');
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const [redirect, setRedirect] = useState('');
@@ -25,6 +28,9 @@ const MyAccount = () => {
   useEffect(() => {
     const redirect = params.get('redirect');
     if (redirect) setRedirect(redirect);
+
+    const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
+    setImgRandomSrc(horizontalImgs[randomIndex]);
 
     getUser();
   }, []);
@@ -106,192 +112,185 @@ const MyAccount = () => {
       <Sidebar navItem='account' />
       <section className='flex-grow-1'>
 
-        <header className='bg-white border-bottom p-3'>
+        <header className='bg-white border-bottom py-3 px-4'>
+          <div className='row align-items-center justify-content-beetwen'>
+          <div className='col-auto fw-bold f-18 pe-0'>
+              IAutor /
+            </div>
+            <div className='col-auto f-18 ps-1'>
+              Minha Conta
+            </div>
+            <div className='col'>
+              <NavUserOptions />
+            </div>
+          </div>
+        </header>
+
+        <main className='main bg-white'>
           <div className='container-fluid'>
-            <div className='d-flex flex-wrap align-items-center justify-content-center'>
+            <div className='row'>
 
-              {/* Nav título página */}
-              <div className='col-md-4 f-18'>
+              <div className='col-12 col-xl-8 border-end' id='user-form'>
 
-                <div className='d-flex align-items-center'>
-                  <div className='fw-bold'>
-                    Minha Conta
+                <div className='row border-bottom p-3'>
+                  <b className='f-18'>Dados Pessoais</b>
+                  <div className='f-16'>Visualize ou altere abaixo os seus dados pessoais.</div>
+                </div>
+
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className='row p-3 mt-5'>
+                    <div className='col-auto mt-2'>
+                      <div className="rounded-circle bg-light d-flex justify-content-center align-items-center"
+                        style={{ width: '100px', height: '100px', position: 'relative' }}
+                      >
+                        {urlImgPerfil ? (
+                          <img
+                            src={urlImgPerfil}
+                            alt="User"
+                            className="rounded-circle"
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                        ) : (
+                          <span className="material-symbols-outlined" style={{ fontSize: '45px', color: '#6c63ff' }}>
+                            person
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className='col'>
+                      <div className='row'>
+                        <div className='col-12 col-md-4'>
+                          <CustomInput
+                            type='text'
+                            disabled={false}
+                            label='Nome *'
+                            register={register}
+                            errors={errors.firstName}
+                            name='firstName'
+                            setValue={setValue}
+                            validationSchema={{
+                              required: 'Nome é obrigatório',
+                              maxLength: { value: 15, message: "Nome deve conter no máximo 15 caracteres" }
+                            }}
+                            maxLength={15}
+                            divClassName='col-12 mt-3'
+                          />
+                        </div>
+                        <div className='col-12 col-md-4'>
+                          <CustomInput
+                            type='text'
+                            disabled={false}
+                            label='Sobrenome *'
+                            register={register}
+                            errors={errors.lastName}
+                            name='lastName'
+                            setValue={setValue}
+                            validationSchema={{
+                              required: 'Sobrenome é obrigatório',
+                              maxLength: { value: 15, message: "Sobrenome deve conter no máximo 15 caracteres" }
+                            }}
+                            maxLength={15}
+                            divClassName='col-12 mt-3'
+                          />
+                        </div>
+                        <div className='col-12 col-md-4'>
+                          <CustomInput
+                            type='cpf'
+                            disabled={isLoading}
+                            label='CPF *'
+                            placeholder='CPF'
+                            register={register}
+                            errors={errors.cpf}
+                            name='cpf'
+                            setValue={setValue}
+                            validationSchema={{ required: 'CPF é obrigatório' }}
+                            customValidation={(value) => CpfValidator.isValidCPF(value)}
+                            divClassName='col-12 mt-3'
+                          />
+                        </div>
+                      </div>
+
+                      <div className='row'>
+                        <div className='col-12 col-md-8'>
+                          <CustomInput
+                            type='email'
+                            disabled={true}
+                            label='E-mail *'
+                            register={register}
+                            errors={errors.email}
+                            name='email'
+                            setValue={setValue}
+                            validationSchema={{
+                              required: 'E-mail é obrigatório',
+                              maxLength: { value: 50, message: "E-mail deve conter no máximo 50 caracteres" }
+                            }}
+                            maxLength={50}
+                            divClassName='col-12 mt-3'
+                          />
+                        </div>
+                        <div className='col-12 col-md-4'>
+                          <CustomInput
+                            type='date'
+                            disabled={false}
+                            label='Data de Nascimento *'
+                            register={register}
+                            errors={errors.birthDate}
+                            name='birthDate'
+                            setValue={setValue}
+                            validationSchema={{ required: 'Data é obrigatório' }}
+                            customValidation={(value) => BirthDateValidator.isAdult(value)}
+                            divClassName='col-12 mt-3'
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
-                </div>
-
-              </div>
-
-              {/* Nav center */}
-              <div className='col-md ms-5'>
-                <div className='row align-items-center'>
-                </div>
-              </div>
-
-              {/* Nav user */}
-              <div className='col-md-5'>
-                <div className='row align-items-center justify-content-end'>
-                  <div className='col-auto'>
-                    <a href='#' className='btn btn-outline-secondary rounded-5 f-12 px-4 py-2'
-                      style={{ fontWeight: 'bold' }}
+                  <div className='d-flex justify-content-end mt-4 p-3'>
+                    <button className='btn btn-primary text-white rounded-5 f-14 px-4 p-2'
+                      type="submit"
+                      disabled={isLoading}
                     >
-                      Livro Degustação | Tradicional
-                    </a>
+                      Salvar Informações
+                      {isLoading && <span className="spinner-border spinner-border-sm text-light ms-2" role="status" aria-hidden="true"></span>}
+                    </button>
                   </div>
-                  <div className='col-auto'>
-                    <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2'
+                </form>
+
+                <ChangePasswordForm userId={user.id} isLoading={isLoading} />
+
+              </div>
+
+              {/* Img baixo */}
+              <div className='col-12 col-xl-4'
+                style={{ minHeight: '845px' }}
+              >
+                <div id='img-baixo' style={{ marginTop: '40vh' }}>
+
+                  <div className='d-flex justify-content-center'>
+                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px'}}/>
+                  </div>
+                  <div className='d-flex justify-content-center mt-2 p-2'>
+                    <b className='f-16'>Uma História mais Completa</b>
+                  </div>
+
+                  <div className='d-flex text-center f-14 px-4'>
+                    Formate a escrita, edite a capa e crie histórias com mais detalhes e momentos.
+                  </div>
+
+                  <div className='d-flex justify-content-center p-4'>
+                    <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
                       style={{ fontWeight: 'bold' }}
                     >
                       Ver Planos
                     </a>
                   </div>
-                  <NavUserOptions />
+
                 </div>
               </div>
 
             </div>
-          </div>
-        </header>
-
-        <main className='container my-3' id='videos'>
-          <div className='row'>
-
-            <div className='col-12 col-md-12 col-lg-8 bg-white shadow rounded p-4' id='user-form'>
-
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className='row'>
-                  <div className='col-auto'>
-                    <p className="m-0 p-0 fw-bold f-20">Dados Pessoais</p>
-                    <p className='f-16'>Visualize ou altere abaixo os seus dados pessoais.</p>
-                  </div>
-                </div>
-                <hr className='py-2' />
-
-                <div className='row'>
-
-                  <div className='col-auto mt-2'>
-                    <div className="rounded-circle bg-light d-flex justify-content-center align-items-center"
-                      style={{ width: '100px', height: '100px', position: 'relative' }}
-                    >
-                      {urlImgPerfil ? (
-                        <img
-                          src={urlImgPerfil}
-                          alt="User"
-                          className="rounded-circle"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
-                      ) : (
-                        <span className="material-symbols-outlined" style={{ fontSize: '45px', color: '#6c63ff' }}>
-                          person
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className='col'>
-                    <div className='row'>
-                      <div className='col-12 col-md-4'>
-                        <CustomInput
-                          type='text'
-                          disabled={false}
-                          label='Nome *'
-                          register={register}
-                          errors={errors.firstName}
-                          name='firstName'
-                          setValue={setValue}
-                          validationSchema={{
-                            required: 'Nome é obrigatório',
-                            maxLength: { value: 15, message: "Nome deve conter no máximo 15 caracteres" }
-                          }}
-                          maxLength={15}
-                          divClassName='col-12 mt-3'
-                        />
-                      </div>
-                      <div className='col-12 col-md-4'>
-                        <CustomInput
-                          type='text'
-                          disabled={false}
-                          label='Sobrenome *'
-                          register={register}
-                          errors={errors.lastName}
-                          name='lastName'
-                          setValue={setValue}
-                          validationSchema={{
-                            required: 'Sobrenome é obrigatório',
-                            maxLength: { value: 15, message: "Sobrenome deve conter no máximo 15 caracteres" }
-                          }}
-                          maxLength={15}
-                          divClassName='col-12 mt-3'
-                        />
-                      </div>
-                      <div className='col-12 col-md-4'>
-                        <CustomInput
-                          type='cpf'
-                          disabled={isLoading}
-                          label='CPF *'
-                          placeholder='CPF'
-                          register={register}
-                          errors={errors.cpf}
-                          name='cpf'
-                          setValue={setValue}
-                          validationSchema={{ required: 'CPF é obrigatório' }}
-                          customValidation={(value) => CpfValidator.isValidCPF(value)}
-                          divClassName='col-12 mt-3'
-                        />
-                      </div>
-                    </div>
-
-                    <div className='row'>
-                      <div className='col-12 col-md-8'>
-                        <CustomInput
-                          type='email'
-                          disabled={true}
-                          label='E-mail *'
-                          register={register}
-                          errors={errors.email}
-                          name='email'
-                          setValue={setValue}
-                          validationSchema={{
-                            required: 'E-mail é obrigatório',
-                            maxLength: { value: 50, message: "E-mail deve conter no máximo 50 caracteres" }
-                          }}
-                          maxLength={50}
-                          divClassName='col-12 mt-3'
-                        />
-                      </div>
-                      <div className='col-12 col-md-4'>
-                        <CustomInput
-                          type='date'
-                          disabled={false}
-                          label='Data de Nascimento *'
-                          register={register}
-                          errors={errors.birthDate}
-                          name='birthDate'
-                          setValue={setValue}
-                          validationSchema={{ required: 'Data é obrigatório' }}
-                          customValidation={(value) => BirthDateValidator.isAdult(value)}
-                          divClassName='col-12 mt-3'
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className='d-flex justify-content-end mt-4'>
-                  <button className='btn btn-primary text-white rounded-5 f-14 px-4 p-2'
-                    type="submit"
-                    disabled={isLoading}
-                  >
-                    Salvar Informações
-                    {isLoading && <span className="spinner-border spinner-border-sm text-light ms-2" role="status" aria-hidden="true"></span>}
-                  </button>
-                </div>
-              </form>
-
-              <ChangePasswordForm userId={user.id} isLoading={isLoading} />
-
-            </div>
-
           </div>
         </main>
 

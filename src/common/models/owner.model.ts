@@ -31,7 +31,6 @@ export class OwnerModel extends BaseModel {
   bankAccountNumber?: string;
   bankAccountType?: string;
   iuguAccountVerified!: boolean;
-  updatedBy?: string;
 
   email!: string;
   password?: string;

@@ -6,9 +6,9 @@ import { UserModel } from '../../../common/models/user.model';
 import { UserFilter } from '../../../common/models/filters/user.filter';
 import SearchInput from '../../../components/forms/searchInput/searchInput';
 import CustomButton from '../../../components/forms/customButton/customButton';
+import NavAdmin from '../../../components/nav/nav-admin.component';
 import UserForm from './user.component';
 import UserTable from './user.table';
-import NavUserOptions from '../../../components/nav/nav-user-options.component';
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -108,18 +108,15 @@ const Users = () => {
 
   return (
     <>
-      <NavUserOptions />
+      <NavAdmin />
 
       <main className='main bg-iautor pb-4'
-        style={{ height: '70vh' }}
+        style={{ minHeight: '70vh' }}
       >
 
         <section className='container' id='title'>
           <div className='row'>
-            <p className='mt-4 p-0 f-12'>
-              <span className='fw-bold'>Home/ </span>Usuários
-            </p>
-            <h1 className='mt-0 p-0'>Usuários</h1>
+            <h4 className='mt-3 p-0'>Usuários</h4>
           </div>
         </section>
 

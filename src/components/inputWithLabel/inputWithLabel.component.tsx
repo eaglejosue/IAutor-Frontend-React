@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import styles from './inputWithLabel.module.scss';
 import useScreenSize from '../../hooks/useScreenSize';
 import SearchSvg from '../../assets/svg/search.svg';
-import Spinners from '../../assets/svg/SvgSpinners180Ring.svg';
 
 export interface InputWithLabelProps {
   type: string;
@@ -61,8 +60,10 @@ const InputWithLabel = (p: InputWithLabelProps) => {
             disabled={p.btnDisabled}
           >
             {p.isLoading ? (
-              <div className="spinner">
-                <img src={Spinners} style={{ width: '20px', height: '20px' }} alt="Loading spinner" />
+              <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
+                <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+                  <span className="sr-only">Carregando...</span>
+                </div>
               </div>
             ) : (
               <img src={SearchSvg} />

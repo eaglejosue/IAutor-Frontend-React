@@ -64,12 +64,12 @@ const ChangePasswordForm = (p: ChangePasswordFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmitPasswordChange)}>
-      <div className='mt-5'>
+      <div className='p-3'>
         <p className="mb-0 p-0 fw-bold f-18">Altere sua Senha</p>
         <p className='f-14'>Sua senha deve ter no mínimo 8 dígitos com números,  letras, <br></br> maiúscula e caracteries especiais (Exemplo: ./#*)</p>
       </div>
 
-      <div className='row'>
+      <div className='row p-3'>
         <div className='col-12 col-md-4'>
           <CustomInput
             type='password'
@@ -140,7 +140,7 @@ const ChangePasswordForm = (p: ChangePasswordFormProps) => {
         </div>
       </div>
 
-      <div className='d-flex justify-content-end mt-4'>
+      <div className='d-flex justify-content-end mt-4 p-3'>
         <button className='btn btn-primary text-white rounded-5 f-14 px-4 p-2'
           type="submit"
           disabled={isLoading || p.isLoading}

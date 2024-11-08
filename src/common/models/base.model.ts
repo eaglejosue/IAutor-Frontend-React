@@ -3,6 +3,7 @@ export class BaseModel {
   isActive!: boolean;
   createdAt!: string;
   updatedAt?: string;
+  updatedBy?: string;
   deletedAt?: string;
 
   orderBy?: string;
@@ -13,6 +14,7 @@ export class BaseModel {
       this.isActive = j.isActive;
       this.createdAt = j.createdAt;
       this.updatedAt = j.updatedAt;
+      this.updatedBy = j.updatedBy;
       this.deletedAt = j.deletedAt;
 
       this.orderBy = j.orderBy;
