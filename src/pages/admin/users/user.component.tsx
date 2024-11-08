@@ -8,7 +8,6 @@ import { CpfValidator } from '../../../common/validation/cpfValidator';
 import { BirthDateValidator } from '../../../common/validation/birthDateValidator';
 import CustomInput from '../../../components/forms/customInput/customInput';
 import CustomSelect from '../../../components/forms/customSelect/customSelect';
-import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 
 export interface UserFormProps {
   user: UserModel;
@@ -252,8 +251,10 @@ const UserForm = (p: UserFormProps) => {
       </div>
 
       {isLoading &&
-        <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
-          <img src={Spinners} style={{ width: '50px', height: '50px' }} alt="Loading spinner" />
+        <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
+          <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+            <span className="sr-only">Carregando...</span>
+          </div>
         </div>
       }
 
