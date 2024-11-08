@@ -17,7 +17,13 @@ $ultralight-weight: $hairline-weight;
 $heavy-weight: $xbold-weight;
 
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
-
+@font-face {
+  font-family: 'Gothan'; /* Give your font a unique name */
+  src: url('fonts/gotham/Gotham-Medium.otf') format('otf'),
+       url('fonts/gotham/Gotham-Medium.otf') format('otf'); /* Path to font files */
+  font-weight: $normal-weight;  /* Specify the font's weight */
+  font-style: normal;  /* Specify the font's style */
+}
 // Use 'em
 
 body {
