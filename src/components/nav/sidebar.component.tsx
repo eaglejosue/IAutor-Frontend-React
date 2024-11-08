@@ -1,4 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/img/favicon-32x32.png';
+import paths from '../../routes/paths';
 
 export interface Props {
   navItem?: string

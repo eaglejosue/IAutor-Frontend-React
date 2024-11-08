@@ -12,6 +12,7 @@ import "./index.css";
 import "./custom.scss";
 import "./fonts.scss";
 
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   //<React.StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
