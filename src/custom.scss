@@ -40,7 +40,7 @@ $custom-colors: (
 );
 
 .bg-iautor {
-  background: var(--Gradiente-IAutor, rgba(246, 245, 244, 1));
+  background: linear-gradient(180deg, #FFFFFF 47.65%, #F6F5F4 87.66%);
 }
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
@@ -128,6 +128,19 @@ $breakpoints: (
   }
 }
 
+// Source mixin
+@mixin make-container($padding-x: $container-padding-x) {
+  width: 100%;
+  padding-right: $padding-x;
+  padding-left: $padding-x;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+// Usage
+.custom-container {
+  @include make-container();
+}
 .mouse-click {
   cursor: pointer;
 }
