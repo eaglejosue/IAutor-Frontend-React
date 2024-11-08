@@ -16,7 +16,7 @@ import ChapterTable, { ChapterMode } from "../chapters/chapters.table";
 import QuestionTable, { QuestionMode } from "../questions/question.table";
 import SearchInput from "../../../components/forms/searchInput/searchInput";
 import CustomButton from "../../../components/forms/customButton/customButton";
-import { ChapterQuestions, PlanModel, PlanModelChapterQuestions } from "../../../common/models/plan.model";
+import { PlanModel, ChapterQuestions } from "../../../common/models/plan.model";
 import { toast } from 'react-toastify';
 import { PlanService } from "../../../common/http/api/planService";
 import { PlanChapterService } from "../../../common/http/api/planChapterService";
@@ -113,6 +113,7 @@ const PlanForm = (props: PlanFormProps) => {
     setDuplicateModalOpen(false)
     // handleSubmit(onSubmit)
   }
+
   //salva form
   //@ts-ignore
   const onSubmit = async (data: any) => {
@@ -123,20 +124,19 @@ const PlanForm = (props: PlanFormProps) => {
     });
 
     //@ts-ignore
-    const questionPlan: PlanModelChapterQuestions = { ...plan }
-    //@ts-ignore
     var arr: [ChapterQuestions] = [];
-    questionPlan.chapterPlanQuestion = arr
+    plan.chapterPlanQuestion = arr;
     planChapterQuestion.map((r: PlanChapterQuestion) => {
       r.Questions.map((a: QuestionModel) => {
         const chapterQuestion: ChapterQuestions = { chapterId: r.ChapterId, questionId: a.id };
-        questionPlan.chapterPlanQuestion.push(chapterQuestion)
+        //@ts-ignore
+        plan.chapterPlanQuestion.push(chapterQuestion)
       })
     })
 
-    if (questionPlan.id === undefined) {
+    if (plan.id === undefined) {
       _planService
-        .post(questionPlan)
+        .post(plan)
         .then(() => {
           toast.success('Plano criado com sucesso!', {
             position: 'top-center',
@@ -159,7 +159,7 @@ const PlanForm = (props: PlanFormProps) => {
         });
     } else {
       _planService
-        .put(questionPlan)
+        .put(plan)
         .then(() => {
           toast.success('Plano atualizado com sucesso!', {
             position: 'top-center',

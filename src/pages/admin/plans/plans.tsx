@@ -54,7 +54,7 @@ const Plans = () => {
         setPlans(response?.length ? response : []);
       })
       .catch((e: any) => {
-        let message = "Error ao obter capítulos.";
+        let message = "Error ao obter planos.";
         if (e.response?.data?.length > 0 && e.response.data[0].message)
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;

@@ -6,22 +6,30 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
+import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 import { IAService } from '../../common/http/api/iaService';
+import { PlanService } from '../../common/http/api/planService';
 //import { BookModel } from '../../common/models/book.model';
-import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
+import { PlanModel } from '../../common/models/plan.model';
 
 import horizontalImgs from '../../assets/horizontal-imgs';
 import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
 import previewCapaLivro from '../../assets/img/preview-capa-livro.png';
 import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
+import { PlanFilter } from '../../common/models/filters/plan.filter';
 
 const NewHistory = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
   //const [book, setBook] = useState<BookModel>(new BookModel({title: 'Título História'}));
   const _iaService = new IAService();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const _planService = new PlanService();
+  const [userPlan, setUserPlan] = useState<PlanModel>(new PlanModel())
+  const [isLoading1, setIsLoading1] = useState<boolean>(false);
+  const [isLoading2, setIsLoading2] = useState<boolean>(false);
+  const [isLoading3, setIsLoading3] = useState<boolean>(false);
+  const isLoading = isLoading1 || isLoading2 || isLoading3;
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
   const [theme, setTheme] = useState('Tradicional');
@@ -49,7 +57,7 @@ const NewHistory = () => {
   }, []);
 
   const postIASugestion = () => {
-    setIsLoading(true);
+    setIsLoading1(true);
     const user = AuthenticatedUserModel.fromLocalStorage();
     _iaService
       .post({
@@ -69,9 +77,28 @@ const NewHistory = () => {
         console.log('Erro: ', message, e);
       })
       .finally(() => {
-        setIsLoading(false);
+        setIsLoading1(false);
       });
   }
+
+  const getPlans = (filter?: PlanFilter) => {
+    setIsLoading1(true);
+    _planService
+      .getAll(filter ?? new PlanFilter())
+      .then((response: any) => {
+        setUserPlan(response?.length ? response[0] : new PlanModel());
+      })
+      .catch((e: any) => {
+        let message = "Error ao obter plano.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+        setIsLoading1(false);
+      });
+  };
 
   const handleIAAccept = () => {
     setIsIAModalOpen(false);
