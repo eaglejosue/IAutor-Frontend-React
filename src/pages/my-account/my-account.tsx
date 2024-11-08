@@ -29,7 +29,7 @@ const MyAccount = () => {
     const redirect = params.get('redirect');
     if (redirect) setRedirect(redirect);
 
-    const randomIndex = Math.floor(Math.random() * 16) + 1;// Gera um número entre 1 e 16
+    const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
 
     getUser();

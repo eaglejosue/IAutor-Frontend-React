@@ -9,7 +9,7 @@ const HomeLogged = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * 16) + 1;// Gera um número entre 1 e 16
+    const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
   }, []);
 
@@ -34,14 +34,14 @@ const HomeLogged = () => {
           </div>
         </header>
 
-        <main className='main bg-white'>
+        <main className='main'>
           <div className='container-fluid'>
             <div className='row'>
 
               {/* Add */}
 
               {/* Img baixo */}
-              <div className='col-12 col-xl-4'
+              <div className='col-12 col-xl-4 offset-xl-8'
                 style={{ minHeight: '845px' }}
               >
                 <div id='img-baixo' style={{ marginTop: '40vh' }}>

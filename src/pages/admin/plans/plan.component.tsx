@@ -1,6 +1,5 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import CustomInput from "../../../components/forms/customInput/customInput";
-import Spinners from '../../../assets/svg/SvgSpinners180Ring.svg';
 import { useForm } from "react-hook-form";
 import { Divider } from "antd";
 import { Accordion, Table, Button, Modal } from "react-bootstrap";
@@ -212,7 +211,7 @@ const PlanForm = (props: PlanFormProps) => {
     setPlanChapterQuestion(prevState => ([...prevState, chapterPlanQuestion]))
   }
 
-  //Adiciona os capitulos no accordion
+  //Adiciona os capítulos no accordion
   const handlerCheckChapterCapitulo = (item: ChapterModel, checked: boolean) => {
     item.selected = checked;
     if (checked)
@@ -268,7 +267,7 @@ const PlanForm = (props: PlanFormProps) => {
         setChapters(response?.length ? response : []);
       })
       .catch((e: any) => {
-        let message = "Error ao obter capitulos.";
+        let message = "Error ao obter capítulos.";
         if (e.response?.data?.length > 0 && e.response.data[0].message)
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
@@ -287,7 +286,7 @@ const PlanForm = (props: PlanFormProps) => {
         setQuestions(response?.length ? response : []);
       })
       .catch((e: any) => {
-        let message = "Error ao obter capitulos.";
+        let message = "Error ao obter capítulos.";
         if (e.response?.data?.length > 0 && e.response.data[0].message)
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
@@ -474,15 +473,10 @@ const PlanForm = (props: PlanFormProps) => {
           </div>
 
           {isLoading ? (
-            <div
-              className="d-flex justify-content-center align-items-center"
-              style={{ height: "200px" }}
-            >
-              <img
-                src={Spinners}
-                style={{ width: "50px", height: "50px" }}
-                alt="Loading spinner"
-              />
+            <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
+              <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+                <span className="sr-only">Carregando...</span>
+              </div>
             </div>
           ) : (
             <Accordion>
@@ -507,7 +501,7 @@ const PlanForm = (props: PlanFormProps) => {
                                 <tr>
                                   <th>Id</th>
                                   <th>Pergunta</th>
-                                  <th>Sessao</th>
+                                  <th>Sessão</th>
                                   <th>
                                     <div className="form-check"></div>
                                   </th>
@@ -629,7 +623,7 @@ const PlanForm = (props: PlanFormProps) => {
                 style={{ paddingLeft: "0" }}
               >
                 <SearchInput
-                  placeholder="Buscar pergunta ou Sessao"
+                  placeholder="Buscar pergunta ou sessão"
                   onChange={(e) => setSearchPerguntaSessao(e)}
                   onEnter={handleSearchPerguntaSessaoClick}
                 />

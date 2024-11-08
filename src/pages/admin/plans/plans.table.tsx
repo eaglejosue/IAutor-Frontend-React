@@ -35,12 +35,6 @@ const PlansTable = (props: PlansTableProps) => {
 }
   const columns= [
     {
-      title: "Nr do plano",
-      dataIndex: "id",
-      sorter: (a: any, b: any) =>
-        a.chapterNumber.localeCompare(b.id),
-    },
-    {
       title: "Plano",
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),

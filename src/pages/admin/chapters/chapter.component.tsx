@@ -42,7 +42,7 @@ const ChapterForm = (p: ChapterFormProps) => {
       _chapterService
         .post(chapter)
         .then(() => {
-          toast.success('Capitulo criado com sucesso!', {
+          toast.success('Capítulo criado com sucesso!', {
             position: 'top-center',
             style: { minWidth: 400 }
           });
@@ -67,7 +67,7 @@ const ChapterForm = (p: ChapterFormProps) => {
       _chapterService
         .put(chapter)
         .then(() => {
-          toast.success('Capitulo atualizado com sucesso!', {
+          toast.success('Capítulo atualizado com sucesso!', {
             position: 'top-center',
             style: { minWidth: 400 }
           });

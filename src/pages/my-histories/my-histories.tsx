@@ -1,11 +1,15 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
+import horizontalImgs from '../../assets/horizontal-imgs';
 
 const NewHistory = () => {
+  const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
   useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
+    setImgRandomSrc(horizontalImgs[randomIndex]);
   }, []);
 
   return (
@@ -16,34 +20,16 @@ const NewHistory = () => {
       <div className='flex-grow-1'>
 
         <header className='bg-white border-bottom p-3'>
-          <div className='d-flex flex-wrap align-items-center justify-content-center'>
-
-            {/* Nav título página */}
-            <div className='col fw-bold f-18'>
+          <div className='row align-items-center justify-content-beetwen'>
+            <div className='col-auto fw-bold f-18 pe-0'>
+              IAutor /
+            </div>
+            <div className='col-auto f-18 ps-1'>
               Minhas Histórias
             </div>
-
-            {/* Nav user */}
-            <div className='col-md-6'>
-              <div className='row align-items-center justify-content-end'>
-                <div className='col-auto'>
-                  <a href='#' className='btn btn-outline-secondary rounded-5 f-12 px-4 py-2'
-                    style={{ fontWeight: 'bold' }}
-                  >
-                    Livro Degustação | Tradicional
-                  </a>
-                </div>
-                <div className='col-auto'>
-                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2'
-                    style={{ fontWeight: 'bold' }}
-                  >
-                    Ver Planos
-                  </a>
-                </div>
-                <NavUserOptions />
-              </div>
+            <div className='col'>
+              <NavUserOptions />
             </div>
-
           </div>
         </header>
 
@@ -51,7 +37,35 @@ const NewHistory = () => {
           <div className='container-fluid'>
             <div className='row'>
 
-              {/*  */}
+              {/* Add */}
+
+              {/* Img baixo */}
+              <div className='col-12 col-xl-4 offset-xl-8'
+                style={{ minHeight: '845px' }}
+              >
+                <div id='img-baixo' style={{ marginTop: '40vh' }}>
+
+                  <div className='d-flex justify-content-center'>
+                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px' }} />
+                  </div>
+                  <div className='d-flex justify-content-center mt-2 p-2'>
+                    <b className='f-16'>Uma História mais Completa</b>
+                  </div>
+
+                  <div className='d-flex text-center f-14 px-4'>
+                    Formate a escrita, edite a capa e crie histórias com mais detalhes e momentos.
+                  </div>
+
+                  <div className='d-flex justify-content-center p-4'>
+                    <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
+                      style={{ fontWeight: 'bold' }}
+                    >
+                      Ver Planos
+                    </a>
+                  </div>
+
+                </div>
+              </div>
 
             </div>
           </div>

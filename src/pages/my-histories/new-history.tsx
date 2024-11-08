@@ -1,39 +1,92 @@
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Modal } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
+import { IAService } from '../../common/http/api/iaService';
+//import { BookModel } from '../../common/models/book.model';
+import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 
 import horizontalImgs from '../../assets/horizontal-imgs';
 import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
 import previewCapaLivro from '../../assets/img/preview-capa-livro.png';
-//import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
-//import { BookModel } from '../../common/models/book.model';
+import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
 
 const NewHistory = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
   //const [book, setBook] = useState<BookModel>(new BookModel({title: 'Título História'}));
+  const _iaService = new IAService();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
-  const [theme, setTheme] = useState('');
+  const [theme, setTheme] = useState('Tradicional');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isIAModalOpen, setIsIAModalOpen] = useState(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
-
-  const {
-    register,
-    setValue
-  } = useForm();
+  const [question, setQuestion] = useState('Conte aqui as suas memórias.');
+  const [questionAnswer, setQuestionAnswer] = useState('');
+  const [IAText, setIAText] = useState('');
+  const [bookText, setBookText] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
+  ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
+  ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
+  ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.');
+  const [suggestionsQtd, setSuggestionsQtd] = useState(5);
+  const [maxCaracters, setMaxCaracters] = useState(1000);
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * 16) + 1;// Gera um número entre 1 e 16
+    const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
   }, []);
+
+  const postIASugestion = () => {
+    setIsLoading(true);
+    const user = AuthenticatedUserModel.fromLocalStorage();
+    _iaService
+      .post({ question, questionAnswer, theme, maxCaracters, bookId: user?.id })
+      .then((response: any) => {
+        setIAText(response.text);
+      })
+      .catch((e) => {
+        let message = 'Error ao obter dados de participante.';
+        if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log('Erro: ', message, e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  const handleIAAccept = () => {
+    setIsIAModalOpen(false);
+    setSuggestionsQtd(suggestionsQtd - 1);
+    setBookText(IAText);
+  };
+
+  const handleSuggestionClick = () => {
+    if (questionAnswer.length === 0) {
+      toast.error('Digite sua resposta para consultar sugestão!', {
+        position: 'top-center',
+        style: { width: 450 }
+      });
+      return;
+    }
+    if (suggestionsQtd > 0) {
+      setIsIAModalOpen(true);
+      postIASugestion();
+    }
+    else {
+      toast.error('Você não possui mais sugestões de texto!', {
+        position: 'top-center',
+        style: { width: 450 }
+      });
+    }
+  };
 
   return (
     <div className='d-flex'
@@ -133,7 +186,7 @@ const NewHistory = () => {
 
                 <div className='d-flex align-items-center justify-content-between p-4'>
                   <b className='f-16'>Capítulos</b>
-                  <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1' style={{ border: '1px solid #db3737' }}>Capitulo 1</div>
+                  <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1' style={{ border: '1px solid #db3737' }}>Capítulo 1</div>
                 </div>
 
                 {/* Capítulo 1 */}
@@ -151,19 +204,16 @@ const NewHistory = () => {
                 </div>
 
                 {/* Img baixo */}
-                <div id='img-baixo' style={{ marginTop: '5vh' }}>
-
+                <div id='img-baixo' style={{ marginTop: '20vh' }}>
                   <div className='d-flex justify-content-center'>
-                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px'}}/>
+                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px' }} />
                   </div>
                   <div className='d-flex justify-content-center mt-2 p-2'>
                     <b className='f-16'>Uma História mais Completa</b>
                   </div>
-
                   <div className='d-flex text-center f-14 px-4'>
                     Formate a escrita, edite a capa e crie histórias com mais detalhes e momentos.
                   </div>
-
                   <div className='d-flex justify-content-center p-4'>
                     <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
                       style={{ fontWeight: 'bold' }}
@@ -171,7 +221,6 @@ const NewHistory = () => {
                       Ver Planos
                     </a>
                   </div>
-
                 </div>
 
               </div>
@@ -194,7 +243,7 @@ const NewHistory = () => {
                 {/* Contador de perguntas */}
                 <div className='d-flex align-items-center justify-content-between px-5 pt-5'>
                   <div>
-                    <div className='f-14'>Capitulo 1</div>
+                    <div className='f-14'>Capítulo 1</div>
                     <b className='f-16'>Escreva seu Livro</b>
                   </div>
                   <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1'
@@ -206,15 +255,15 @@ const NewHistory = () => {
 
                 <div className='d-flex align-items-center justify-content-between px-5 pt-4'>
                   <div>
-                    <span className='text-primary'>1 - </span>Conte aqui as suas memórias.
+                    <span className='text-primary'>1 - </span>{question}
                   </div>
                 </div>
 
                 {/* Área resposta */}
                 <div className='d-flex px-5 pt-4'>
                   <TextareaAutosize
-                    {...register('value')}
-                    onChange={(e) => { setValue('value', e.target.value) }}
+                    onChange={(e) => { setQuestionAnswer(e.target.value) }}
+                    value={questionAnswer}
                     placeholder='Digite sua resposta aqui...'
                     style={{
                       width: '100%',
@@ -228,13 +277,13 @@ const NewHistory = () => {
 
                 {/* Limite caracter, temas e botão IA */}
                 <div className='d-flex align-items-center justify-content-between px-5 py-4'>
-                  <span className='text-muted'>0 / 1000</span>
+                  <span className='text-muted'>0 / {maxCaracters}</span>
 
                   <div className='d-flex justify-content-center'>
 
                     <div className='d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5 me-4'
                       style={{ width: '32px', height: '32px', cursor: 'pointer' }}
-                      onClick={() => {setIsHelpModalOpen(true)}}
+                      onClick={() => { setIsHelpModalOpen(true) }}
                     >
                       <span className='material-symbols-outlined' style={{ fontSize: '16px' }}>help</span>
                     </div>
@@ -250,23 +299,23 @@ const NewHistory = () => {
 
                       <Dropdown.Menu>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Tradicional')}>
-                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>auto_stories</span>
+                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>auto_stories</span>
                           Tradicional
                         </Dropdown.Item>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Bibliográfico')}>
-                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>hail</span>
+                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>hail</span>
                           Bibliográfico
                         </Dropdown.Item>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Cômico')}>
-                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>sentiment_very_satisfied</span>
+                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>sentiment_very_satisfied</span>
                           Cômico
                         </Dropdown.Item>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Dramático')}>
-                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>sentiment_worried</span>
+                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>sentiment_worried</span>
                           Dramático
                         </Dropdown.Item>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Romântico')}>
-                          <span className='material-symbols-outlined me-2' style={{color:'#db3737'}}>favorite</span>
+                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>favorite</span>
                           Romântico
                         </Dropdown.Item>
                       </Dropdown.Menu>
@@ -274,9 +323,9 @@ const NewHistory = () => {
 
                   </div>
 
-                  <div className='d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5'
+                  <div className={`d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5 ${suggestionsQtd == 0 ? 'disabled' : ''}`}
                     style={{ height: '32px' }}
-                    onClick={() => {setIsIAModalOpen(true)}}
+                    onClick={handleSuggestionClick}
                   >
                     <b className='f-12'>Texto sugerido pelo IAutor</b>
                     <img className='ps-1' src={artificialInteligence} />
@@ -287,21 +336,21 @@ const NewHistory = () => {
                 <div className='d-flex align-items-center justify-content-between px-5 pt-3'>
                   <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3'
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={() => {}}
+                    onClick={() => { }}
                   >
                     <span className='material-symbols-outlined pe-2' style={{ fontSize: '24px' }}>arrow_left_alt</span>
                     <b className='f-16'>Voltar</b>
                   </div>
 
                   <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3'
-                    onClick={() => {}}
+                    onClick={() => { }}
                   >
                     <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>swipe_right</span>
                   </div>
 
                   <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3'
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={() => {}}
+                    onClick={() => { }}
                   >
                     <b className='f-16'>Salvar</b>
                     <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>play_lesson</span>
@@ -327,7 +376,8 @@ const NewHistory = () => {
                     <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }}>add_photo_alternate</span>
                     <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }}>draw</span>
                     <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
-                      onClick={() => {setIsBookPreviewModalOpen(true)}}
+                      onClick={() => { setIsBookPreviewModalOpen(true) }}
+                      title='preview'
                     >
                       auto_stories
                     </span>
@@ -337,8 +387,21 @@ const NewHistory = () => {
                 </div>
 
                 <div className='d-flex justify-content-center pb-4'>
-                  <img src={previewCapaLivro} />
-                  {/* <img src={previewCapaLivroBranca} /> */}
+                  {bookText.length === 0
+                    ? <img src={previewCapaLivro} />
+                    : <img src={previewCapaLivroBranca} />
+                  }
+                  {bookText.length > 0 &&
+                    <div className='d-flex position-absolute f-10'
+                      style={{
+                        paddingTop:'2%',
+                        paddingLeft:'10%',
+                        paddingRight:'10%'
+                      }}
+                    >
+                      {bookText}
+                    </div>
+                  }
                 </div>
 
               </div>
@@ -347,27 +410,113 @@ const NewHistory = () => {
           </div>
         </main>
 
-        <Modal show={isHelpModalOpen} onHide={() => setIsHelpModalOpen(false)} backdrop="static" keyboard={false}>
-          <Modal.Header closeButton>
-            <Modal.Title>Help</Modal.Title>
-          </Modal.Header>
+        <Modal show={isHelpModalOpen} onHide={() => setIsHelpModalOpen(false)} centered={true}>
           <Modal.Body>
-            <p className='mb-1'>Help</p>
+            ?
           </Modal.Body>
         </Modal>
 
-        <Modal show={isIAModalOpen} onHide={() => setIsIAModalOpen(false)} backdrop="static" keyboard={false}>
-          <Modal.Header closeButton>
-            <Modal.Title>IA</Modal.Title>
-          </Modal.Header>
+        <Modal show={isIAModalOpen} onHide={() => setIsIAModalOpen(false)} size='lg' backdrop="static" keyboard={false}>
           <Modal.Body>
-            <p className='mb-1'>IA {theme}</p>
+            <div className='d-flex justify-content-center'>
+              <b className='f-28'>Texto Sugerido Pelo IAutor</b>
+            </div>
+
+            <div className='d-flex justify-content-center f-16'>
+              Visualize abaixo o texto sugerido pela IA e o substitua pelo seu.
+            </div>
+
+            <div className='d-flex align-items-center justify-content-center mt-3'>
+              <div className='d-flex btn bg-pink text-primary rounded-5 px-4'>
+                <b className='f-12'>Você ainda possui {suggestionsQtd} sugestões de texto</b>
+                <img className='ps-1' src={artificialInteligence} />
+              </div>
+            </div>
+
+            <div className='px-4 pt-1'>
+              <div className='d-flex text-icon'>
+                <b className='f-12 ms-2'>Texto Escrito pelo Autor</b>
+              </div>
+
+              <div className='d-flex'>
+                <TextareaAutosize
+                  onChange={(e) => { setQuestionAnswer(e.target.value) }}
+                  name='questionAnswer'
+                  value={questionAnswer}
+                  disabled={isLoading}
+                  style={{
+                    width: '100%',
+                    minHeight: '230px',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    border: '1px solid #757575',
+                  }}
+                />
+              </div>
+
+              <div className='d-flex text-primary mt-2'>
+                <b className='f-12 ms-2 me-1'>Texto Sugerido pelo IAutor</b>
+                <img src={artificialInteligence} />
+              </div>
+
+              {isLoading ? (
+                <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
+                  <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+                    <span className="sr-only">Carregando...</span>
+                  </div>
+                </div>
+              ) : (
+                <div className='d-flex'>
+                  <TextareaAutosize
+                    onChange={(e) => { setIAText(e.target.value) }}
+                    name='IAText'
+                    value={IAText}
+                    style={{
+                      width: '100%',
+                      minHeight: '280px',
+                      padding: '10px',
+                      borderRadius: '5px',
+                      border: '1px solid #757575',
+                    }}
+                  />
+                </div>
+              )
+              }
+            </div>
           </Modal.Body>
+          <Modal.Footer className='justify-content-center border-0'>
+            <button className="btn btn-primary text-white rounded-5 f-14 px-5 py-2 me-2"
+              onClick={() => setIsIAModalOpen(false)}
+              disabled={isLoading}
+            >
+              Recusar
+            </button>
+            <button className="btn btn-secondary text-white rounded-5 f-14 px-5 py-2"
+              onClick={handleIAAccept}
+              disabled={isLoading}
+            >
+              Aceitar
+            </button>
+          </Modal.Footer>
         </Modal>
 
-        <Modal show={isBookPreviewModalOpen} onHide={() => setIsBookPreviewModalOpen(false)}>
-          <Modal.Body>
-            <p className='mb-1'>Book</p>
+        <Modal show={isBookPreviewModalOpen} onHide={() => setIsBookPreviewModalOpen(false)} size='xl'>
+          <Modal.Body className='justify-content-center f-20'
+            style={{
+              paddingTop: '3%',
+              paddingLeft:'10%',
+              paddingRight:'10%'
+            }}
+          >
+            <div className='d-flex justify-content-center'>
+              Capítulo 1
+            </div>
+            <div className='d-flex justify-content-center'>
+              <b className='f-28'>Escreva seu Livro</b>
+            </div>
+            <div className='pt-3'>
+              {bookText}
+            </div>
           </Modal.Body>
         </Modal>
 

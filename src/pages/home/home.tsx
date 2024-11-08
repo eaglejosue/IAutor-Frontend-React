@@ -8,7 +8,7 @@ const Home = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * 21) + 1;// Gera um número entre 1 e 21
+    const randomIndex = Math.floor(Math.random() * 21);// Gera um número entre 0 e 20
     setImgRandomSrc(verticalImgs[randomIndex]);
   }, []);
 
