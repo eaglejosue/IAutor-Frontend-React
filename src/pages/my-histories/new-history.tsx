@@ -38,17 +38,27 @@ const NewHistory = () => {
   ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.');
   const [suggestionsQtd, setSuggestionsQtd] = useState(5);
   const [maxCaracters, setMaxCaracters] = useState(1000);
+  const [minCaracters, setMinCaracters] = useState(30);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
+    setQuestion('Conte aqui as suas memórias.');
+    setMaxCaracters(1000);
+    setMinCaracters(30);
   }, []);
 
   const postIASugestion = () => {
     setIsLoading(true);
     const user = AuthenticatedUserModel.fromLocalStorage();
     _iaService
-      .post({ question, questionAnswer, theme, maxCaracters, bookId: user?.id })
+      .post({
+        question,
+        questionAnswer,
+        theme,
+        maxCaracters,
+        bookId: user?.id
+      })
       .then((response: any) => {
         setIAText(response.text);
       })
@@ -77,6 +87,15 @@ const NewHistory = () => {
       });
       return;
     }
+
+    if (questionAnswer.length < minCaracters) {
+      toast.error(`Resposta deve conter no mínimo ${minCaracters} caracteres!`, {
+        position: 'top-center',
+        style: { width: 450 }
+      });
+      return;
+    }
+
     if (suggestionsQtd > 0) {
       setIsIAModalOpen(true);
       postIASugestion();
