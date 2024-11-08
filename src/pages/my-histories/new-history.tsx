@@ -31,6 +31,7 @@ const NewHistory = () => {
   const [question, setQuestion] = useState('Conte aqui as suas memórias.');
   const [questionAnswer, setQuestionAnswer] = useState('');
   const [IAText, setIAText] = useState('');
+  //const [bookText, setBookText] = useState('');
   const [bookText, setBookText] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
   ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
   ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
@@ -395,8 +396,11 @@ const NewHistory = () => {
                     <div className='d-flex position-absolute f-10'
                       style={{
                         paddingTop:'2%',
-                        paddingLeft:'10%',
-                        paddingRight:'10%'
+                        paddingLeft:'9%',
+                        paddingRight:'9%',
+                        fontFamily:'Times New Roman',
+                        fontSize:'13px',
+                        lineHeight:'16px'
                       }}
                     >
                       {bookText}
