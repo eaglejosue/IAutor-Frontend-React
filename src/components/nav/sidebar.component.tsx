@@ -17,8 +17,7 @@ const Sidebar = (p: Props) => {
 
         <li className="nav-item mt-2 mb-4">
           <img src={Logo} alt="Logo" className="nav-link"
-            onClick={() => navigate(paths.HOME)}
-            style={{ cursor: 'pointer' }}
+            onClick={() => navigate(paths.HOME_LOGGED)}
           />
         </li>
 

@@ -1,5 +1,5 @@
 import { Nav, Tab } from "react-bootstrap";
-import { testemonial_ball } from "../../assets/svg/index";
+import { testemonial_ball } from "../../../assets/svg/index";
 
 const SectionTestemonials =() =>{
 

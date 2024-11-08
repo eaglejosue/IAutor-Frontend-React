@@ -8,7 +8,8 @@ export class PlanModel extends BaseModel {
   initialValidityPeriod!: Date;
   finalValidityPeriod!: Date;
   caractersLimitFactor!: number;
-  chapterPlanQuestion?: [ChapterQuestions]
+
+  chapterPlanQuestion?: [PlanChapterQuestions]
 
   constructor(j?: any) {
     super(j);
@@ -25,7 +26,7 @@ export class PlanModel extends BaseModel {
   }
 }
 
-export interface ChapterQuestions {
+export interface PlanChapterQuestions {
   chapterId: number | undefined;
   questionId: number;
 }

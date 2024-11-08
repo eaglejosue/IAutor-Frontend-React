@@ -1,7 +1,7 @@
 import queryString from 'query-string';
-import { ChapterFilter } from "../../models/filters/chapter.filter";
-import { PlanModelChapterQuestions } from "../../models/plan.model";
 import { HttpClient } from "../httpClient";
+import { PlanModel } from '../../models/plan.model';
+import { PlanFilter } from '../../models/filters/plan.filter';
 
 export class PlanService {
   private endpoint = "/plans";
@@ -18,14 +18,21 @@ export class PlanService {
     return response.data;
   }
 
-  public async post(data: PlanModelChapterQuestions) {
+  public async getAll(filter: PlanFilter) {
+    const response = await this._httpClient.get<string>(
+      `${this.endpoint}?${queryString.stringify(filter)}`
+    );
+    return response.data;
+  }
+
+  public async post(data: PlanModel) {
     const response = await this._httpClient.post<string>(this.endpoint, {
       data,
     });
     return response.data;
   }
 
-  public async put(data: PlanModelChapterQuestions) {
+  public async put(data: PlanModel) {
     const response = await this._httpClient.put<string>(
       this.endpoint, { data }
     );
@@ -39,9 +46,9 @@ export class PlanService {
     return response.data;
   }
 
-  public async getAll(filter: ChapterFilter) {
+  public async getPlanChaptersByPlanId(id: number) {
     const response = await this._httpClient.get<string>(
-      `${this.endpoint}?${queryString.stringify(filter)}`,
+      `/planchapter/${id}`,
     );
     return response.data;
   }

@@ -4,8 +4,6 @@ import { format } from 'date-fns';
 import { pt } from 'date-fns/locale';
 import { PlanModel } from '../../../common/models/plan.model';
 
-
-
 interface PlansTableProps {
   data: PlanModel[],
   isLoading: boolean,

@@ -24,13 +24,13 @@ const Footer = (p: FooterProps) => {
             </li>
             <li className='bg-primary d-flex justify-content-center align-items-center'
               style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px', marginLeft: '15px' }}>
-              <a href='#' target='_blank'>
+              <a href='#'>
                 <FontAwesomeIcon icon={faFacebookF} style={{ color: 'white' }} />
               </a>
             </li>
             <li className='bg-primary d-flex justify-content-center align-items-center'
               style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
-              <a href='#' target='_blank'>
+              <a href='#'>
                 <FontAwesomeIcon icon={faInstagram} style={{ color: 'white' }} />
               </a>
             </li>
@@ -49,32 +49,32 @@ const Footer = (p: FooterProps) => {
                 />
               </li>
               <li className="nav-item" style={{ fontWeight: 700 }}>
-                <a href="#" target='_blank' className="nav-link px-4 text-body-primary">Home</a>
+                <a href="#history" className="nav-link px-4 text-body-primary">Home</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#" target='_blank' className="nav-link px-4 text-black">Sobre nós</a>
+                <a href="#who" className="nav-link px-4 text-black">Sobre nós</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#" target='_blank' className="nav-link px-4 text-black">FAQs</a>
+                <a href="#faq" className="nav-link px-4 text-black">FAQs</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#" target='_blank' className="nav-link px-4 text-black">Depoimentos</a>
+                <a href="#testemonials" className="nav-link px-4 text-black">Depoimentos</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#" target='_blank' className="nav-link px-4 text-black">Ver Planos</a>
+                <a href="#plans" className="nav-link px-4 text-black">Ver Planos</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#" target='_blank' className="nav-link px-4 text-black">Fale Conosco</a>
+                <a href="#contact" className="nav-link px-4 text-black">Fale Conosco</a>
               </li>
               <li className='bg-primary d-flex justify-content-center align-items-center'
                 style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px', marginLeft: '5rem' }}>
-                <a href='#' target='_blank'>
+                <a href='#'>
                   <FontAwesomeIcon icon={faFacebookF} style={{ color: 'white' }} />
                 </a>
               </li>
               <li className='bg-primary d-flex justify-content-center align-items-center'
                 style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
-                <a href='#' target='_blank'>
+                <a href='#'>
                   <FontAwesomeIcon icon={faInstagram} style={{ color: 'white' }} />
                 </a>
               </li>

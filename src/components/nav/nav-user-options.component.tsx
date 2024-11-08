@@ -59,6 +59,7 @@ const NavUserOptions = () => {
             </div>
           }
         </Dropdown.Item>
+        <Dropdown.Item onClick={() => navigate(paths.MY_HISTORIES)}>Minhas Histórias</Dropdown.Item>
 
         {user?.type === EnumUserTypes.Admin &&
           <>

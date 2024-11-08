@@ -1,4 +1,4 @@
-import { image_who } from "../../assets/img"
+import { image_who } from "../../../assets/img"
 
 const SectionWho =() =>{
 
@@ -25,7 +25,7 @@ const SectionWho =() =>{
               <div className="col-2"></div>
             </div>
             <div className="row">
-              
+
               <div className="col-md-10 offset-md-2"><button
               className="btn btn-primary rounded-5 f-14 px-5 py-3  btn-lg"
               type="button"
@@ -33,14 +33,14 @@ const SectionWho =() =>{
               <strong>Experimente Criar uma História</strong>
             </button></div>
             </div>
-            
+
           </div>
 
           <div className="col-6 text-end">
             <img
               alt="Pai e filho"
               className="img-fluid"
-              
+
               src={image_who}
             />
           </div>

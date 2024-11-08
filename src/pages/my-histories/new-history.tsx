@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
@@ -13,19 +14,22 @@ import { IAService } from '../../common/http/api/iaService';
 import { PlanService } from '../../common/http/api/planService';
 //import { BookModel } from '../../common/models/book.model';
 import { PlanModel } from '../../common/models/plan.model';
+import { ChapterModel } from '../../common/models/chapter.model';
 
+import paths from '../../routes/paths';
 import horizontalImgs from '../../assets/horizontal-imgs';
 import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
 import previewCapaLivro from '../../assets/img/preview-capa-livro.png';
 import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
-import { PlanFilter } from '../../common/models/filters/plan.filter';
 
 const NewHistory = () => {
+  const navigate = useNavigate();
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
   //const [book, setBook] = useState<BookModel>(new BookModel({title: 'Título História'}));
   const _iaService = new IAService();
   const _planService = new PlanService();
-  const [userPlan, setUserPlan] = useState<PlanModel>(new PlanModel())
+  const [plan, setUserPlan] = useState<PlanModel>(new PlanModel())
+  const [chapters, setChapters] = useState<ChapterModel[]>([]);
   const [isLoading1, setIsLoading1] = useState<boolean>(false);
   const [isLoading2, setIsLoading2] = useState<boolean>(false);
   const [isLoading3, setIsLoading3] = useState<boolean>(false);
@@ -39,11 +43,11 @@ const NewHistory = () => {
   const [question, setQuestion] = useState('Conte aqui as suas memórias.');
   const [questionAnswer, setQuestionAnswer] = useState('');
   const [IAText, setIAText] = useState('');
-  //const [bookText, setBookText] = useState('');
-  const [bookText, setBookText] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
-  ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
-  ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
-  ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.');
+  const [bookText, setBookText] = useState('');
+  // const [bookText, setBookText] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
+  // ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
+  // ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
+  // ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.');
   const [suggestionsQtd, setSuggestionsQtd] = useState(5);
   const [maxCaracters, setMaxCaracters] = useState(1000);
   const [minCaracters, setMinCaracters] = useState(30);
@@ -54,18 +58,18 @@ const NewHistory = () => {
     setQuestion('Conte aqui as suas memórias.');
     setMaxCaracters(1000);
     setMinCaracters(30);
+    getPlan();
+    getPlanChaptersAndQuestions();
   }, []);
 
   const postIASugestion = () => {
     setIsLoading1(true);
-    const user = AuthenticatedUserModel.fromLocalStorage();
     _iaService
       .post({
         question,
         questionAnswer,
         theme,
-        maxCaracters,
-        bookId: user?.id
+        maxCaracters
       })
       .then((response: any) => {
         setIAText(response.text);
@@ -81,12 +85,16 @@ const NewHistory = () => {
       });
   }
 
-  const getPlans = (filter?: PlanFilter) => {
-    setIsLoading1(true);
+  const getPlan = () => {
+    setIsLoading2(true);
+    const user = AuthenticatedUserModel.fromLocalStorage();
     _planService
-      .getAll(filter ?? new PlanFilter())
+      .getById(user?.planId ?? 4)
       .then((response: any) => {
-        setUserPlan(response?.length ? response[0] : new PlanModel());
+        if (response?.length) {
+          setUserPlan(response);
+          setSuggestionsQtd(plan.maxLimitSendDataIA);
+        }
       })
       .catch((e: any) => {
         let message = "Error ao obter plano.";
@@ -96,7 +104,35 @@ const NewHistory = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading1(false);
+        setIsLoading2(false);
+      });
+  };
+
+  const getPlanChaptersAndQuestions = () => {
+    setIsLoading3(true);
+    const user = AuthenticatedUserModel.fromLocalStorage();
+    _planService
+      .getPlanChaptersByPlanId(user?.planId ?? 4)
+      .then((response: any) => {
+        if (response?.length) {
+          let chapters = response.map((r: any) => {
+            var questions = r.planChapterQuestions?.map((q: any) => q.question) || [];
+            let chapter = new ChapterModel(r.chapter);
+            chapter.questions?.push(questions);
+            return chapter;
+          })
+          setChapters(chapters)
+        }
+      })
+      .catch((e: any) => {
+        let message = "Error ao obter plano.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+        setIsLoading3(false);
       });
   };
 
@@ -211,8 +247,9 @@ const NewHistory = () => {
                   </a>
                 </div>
                 <div className='col-auto'>
-                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2'
+                  <a className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2'
                     style={{ fontWeight: 'bold' }}
+                    onClick={() => navigate(paths.HOME_LOGGED)}
                   >
                     Ver Planos
                   </a>
@@ -231,27 +268,32 @@ const NewHistory = () => {
               {/* 1 - Capítulos */}
               <div className='col-md-3 border-end px-4'>
 
-                <div className='d-flex align-items-center justify-content-between p-4'>
+                <div className='d-flex align-items-center justify-content-between border-bottom p-4'>
                   <b className='f-16'>Capítulos</b>
                   <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1' style={{ border: '1px solid #db3737' }}>Capítulo 1</div>
                 </div>
 
-                {/* Capítulo 1 */}
-                <div className='bg-iautor border-top border-bottom p-3'>
-                  <div className='f-10'>Capítulo 1</div>
-                  <b className='f-13'>Escreva seu Livro</b>
-                  <div className='d-flex align-items-center text-icon f-10'>
-                    <span className='material-symbols-outlined'
-                      style={{ fontSize: '12px', color: '#db3737', marginRight: '3px' }}
-                    >
-                      quiz
-                    </span>
-                    3 Perguntas
-                  </div>
-                </div>
+                {/* Capítulos */}
+
+                {chapters.map((c, index) => {
+                  return (
+                    <div key={index} className='border-bottom p-3' style={{cursor:'pointer'}}>
+                      <div className='f-10'>Capítulo {c.chapterNumber}</div>
+                      <b className='f-13'>{c.title}</b>
+                      <div className='d-flex align-items-center text-icon f-10'>
+                        <span className='material-symbols-outlined'
+                          style={{ fontSize: '12px', color: '#db3737', marginRight: '3px' }}
+                        >
+                          quiz
+                        </span>
+                        {c.questions?.length} Perguntas
+                      </div>
+                    </div>
+                  )
+                })}
 
                 {/* Img baixo */}
-                <div id='img-baixo' style={{ marginTop: '20vh' }}>
+                <div id='img-baixo' className='mt-5'>
                   <div className='d-flex justify-content-center'>
                     <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px' }} />
                   </div>

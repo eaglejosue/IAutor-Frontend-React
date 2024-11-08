@@ -1,4 +1,4 @@
-import { image_tribute_left_down, image_tribute_left_up, image_tribute_right } from "../../assets/img";
+import { image_tribute_left_down, image_tribute_left_up, image_tribute_right } from "../../../assets/img";
 
 const SectionTribute=() =>{
 

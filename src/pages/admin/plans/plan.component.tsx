@@ -16,19 +16,14 @@ import ChapterTable, { ChapterMode } from "../chapters/chapters.table";
 import QuestionTable, { QuestionMode } from "../questions/question.table";
 import SearchInput from "../../../components/forms/searchInput/searchInput";
 import CustomButton from "../../../components/forms/customButton/customButton";
-import { PlanModel, ChapterQuestions } from "../../../common/models/plan.model";
+import { PlanModel, PlanChapterQuestions } from "../../../common/models/plan.model";
 import { toast } from 'react-toastify';
 import { PlanService } from "../../../common/http/api/planService";
-import { PlanChapterService } from "../../../common/http/api/planChapterService";
+import { ChapterQuestionsInterface } from "../../../common/models/interfaces/chapter-questions.interface";
 
 interface PlanFormProps {
   handleModal(isOpen: boolean): void
   planEdit: PlanModel
-}
-
-interface PlanChapterQuestion {
-  ChapterId: number | undefined;
-  Questions: [QuestionModel]
 }
 
 const PlanForm = (props: PlanFormProps) => {
@@ -43,9 +38,8 @@ const PlanForm = (props: PlanFormProps) => {
   const [isFormModalOpenCapitulo, SetFormModalOpenCapitulo] = useState<boolean>(false);
   const _questionService = new QuestionService();
   const [questions, setQuestions] = useState<QuestionModel[]>([]);
-  const [planChapterQuestion, setPlanChapterQuestion] = useState<PlanChapterQuestion[]>([]);
+  const [chapterQuestions, setChapterQuestions] = useState<ChapterQuestionsInterface[]>([]);
   const _planService = new PlanService();
-  const _planChapterService = new PlanChapterService();
 
   const {
     setValue,
@@ -71,28 +65,27 @@ const PlanForm = (props: PlanFormProps) => {
       setValue('caractersLimitFactor', props.planEdit?.caractersLimitFactor);
 
       setIsLoading(true);
-      _planChapterService
-        .getById(props.planEdit.id)
+      _planService
+        .getPlanChaptersByPlanId(props.planEdit.id)
         .then((response: any) => {
           //console.log(response)
           if (response?.length) {
-            //setChaptersPlan()
-            let planChapterList: PlanChapterQuestion[] = []
+            let chapterQuestionsList: ChapterQuestionsInterface[] = []
             var chapters = response.map((r: any) => {
               let chapter = r.chapter;
               chapter.selected = true;
               var questions = r.planChapterQuestions?.map((question: any) => {
                 return question.question
               })
-              planChapterList.push({ ChapterId: chapter.id, Questions: questions })
+              chapterQuestionsList.push({ ChapterId: chapter.id, Questions: questions })
               return chapter
             })
-            setPlanChapterQuestion(planChapterList)
+            setChapterQuestions(chapterQuestionsList)
             setChaptersPlan(chapters)
           }
         })
         .catch((e: any) => {
-          let message = "Error ao obter plano.";
+          let message = "Error ao obter capítulos e perguntas.";
           if (e.response?.data?.length > 0 && e.response.data[0].message)
             message = e.response.data[0].message;
           if (e.response?.data?.detail) message = e.response?.data?.detail;
@@ -124,11 +117,11 @@ const PlanForm = (props: PlanFormProps) => {
     });
 
     //@ts-ignore
-    var arr: [ChapterQuestions] = [];
+    var arr: [PlanChapterQuestions] = [];
     plan.chapterPlanQuestion = arr;
-    planChapterQuestion.map((r: PlanChapterQuestion) => {
+    chapterQuestions.map((r: ChapterQuestionsInterface) => {
       r.Questions.map((a: QuestionModel) => {
-        const chapterQuestion: ChapterQuestions = { chapterId: r.ChapterId, questionId: a.id };
+        const chapterQuestion: PlanChapterQuestions = { chapterId: r.ChapterId, questionId: a.id };
         //@ts-ignore
         plan.chapterPlanQuestion.push(chapterQuestion)
       })
@@ -189,7 +182,7 @@ const PlanForm = (props: PlanFormProps) => {
   const handlerAddQuestions = (selected: [QuestionModel]) => {
     //console.log(selected,'perguntas selecionadas no capitulo',chaptersSelected)
     handleCloseModalPergunta(false)
-    let oldQuestions = [...planChapterQuestion]
+    let oldQuestions = [...chapterQuestions]
     let planChapterFound = oldQuestions?.find(r => r.ChapterId == chaptersSelected?.id);
 
     if (planChapterFound) {
@@ -200,15 +193,15 @@ const PlanForm = (props: PlanFormProps) => {
         }
       })
 
-      setPlanChapterQuestion(oldQuestions)
+      setChapterQuestions(oldQuestions)
       return;
     }
 
-    let chapterPlanQuestion: PlanChapterQuestion = {
+    let chapterPlanQuestion: ChapterQuestionsInterface = {
       ChapterId: chaptersSelected?.id,
       Questions: selected,
     };
-    setPlanChapterQuestion(prevState => ([...prevState, chapterPlanQuestion]))
+    setChapterQuestions(prevState => ([...prevState, chapterPlanQuestion]))
   }
 
   //Adiciona os capítulos no accordion
@@ -242,14 +235,14 @@ const PlanForm = (props: PlanFormProps) => {
 
   //remover pergunta capitulo
   const handlerRemoveItemQuestion = (pergunta: QuestionModel, chapter: ChapterModel) => {
-    let oldQuestions = [...planChapterQuestion]
-    let planChapterFound = oldQuestions?.find(r => r.ChapterId == chapter?.ChapterId);
+    let oldQuestions = [...chapterQuestions]
+    let planChapterFound = oldQuestions?.find(r => r.ChapterId == chapter.id);
     if (planChapterFound) {
       var index = planChapterFound.Questions.indexOf(pergunta)
       if (index !== -1) {
         planChapterFound.Questions.splice(index, 1);
       }
-      setPlanChapterQuestion(oldQuestions);
+      setChapterQuestions(oldQuestions);
     }
   }
 
@@ -508,11 +501,11 @@ const PlanForm = (props: PlanFormProps) => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {planChapterQuestion
+                                {chapterQuestions
                                   ?.filter((r) => r.ChapterId == item.id)
                                   .map(
                                     (
-                                      item: PlanChapterQuestion,
+                                      item: ChapterQuestionsInterface,
                                       i: number,
                                     ) => {
                                       return (
