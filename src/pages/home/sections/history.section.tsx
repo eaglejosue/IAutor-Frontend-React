@@ -18,7 +18,8 @@ const SectionHistory = () => {
       <>
         <div className="div-home-card text-start p-4 z-4 position-relative"
           style={{ marginLeft: props.marginLeft, marginRight: props.marginRight, marginTop: props.marginTop }}>
-          <img className="mb-3" alt="icon-home" src={props.icon} /><br></br>
+          <img className="mb-3" alt="icon-home" src={props.icon} />
+          <br/>
           <strong>{props.title}</strong>
           <p className="">{props.text}</p>
         </div>
@@ -46,21 +47,20 @@ const SectionHistory = () => {
 
       <div className="history-backgroud">
         <div className="row  mb-5 section-history-main  ">
-          <div className="col-3 "><CardHome icon={home1} title="Recorde-se"
-            text="Relembre momentos importantes com as perguntas." marginLeft="-48px" marginRight="0px" marginTop="-349px" /> </div>
+          <div className="col-3 ">
+            <CardHome icon={home1} marginLeft="-48px" marginRight="0px" marginTop="-349px" title="Recorde-se"
+              text="Relembre momentos importantes com as perguntas."/>
+          </div>
           <div className="col-6 ">
             <div className="row text-center">
               <div className="d-flex justify-content-center z-0 ">
-                <img
-                  src={imgRandomSrc}
-                  className="history-ipad img-fluid z-0"
+                <img src={imgRandomSrc} className="history-ipad img-fluid z-0"
                   style={{
                     width: "400px",
                     marginTop: "-20px",
-                    height: "571px",
+                    height: "570px",
                     objectFit: "cover",
                     borderRadius: "15px",
-
                   }}
                 />
               </div>
@@ -68,12 +68,16 @@ const SectionHistory = () => {
             </div>
           </div>
           <div className="col-3"><CardHome icon={home2} marginLeft="-442px" marginRight="0px" marginTop="-349px" title="Preserve momentos"
-            text="Mantenha viva suas histórias escrevendo para outras gerações." /></div>
+            text="Mantenha viva suas histórias escrevendo para outras gerações." />
+          </div>
           <div className="col-3"><CardHome icon={home3} marginLeft="-85px" marginRight="0px" marginTop="-709px" title="Escreva histórias"
-            text="O IAutor possuí mais de 100 perguntas que vai te ajudar a contar as histórias." /></div>
-          <div className="col-6"></div>
+            text="IAutor possuí mais de 100 perguntas que vai te ajudar a contar as histórias." />
+          </div>
+          <div className="col-6">
+          </div>
           <div className="col-3"><CardHome icon={home4} marginLeft="-385px" marginRight="0px" marginTop="-709px" title="Pratique sua escrita"
-            text="Melhore seu desempenho com a escrita e faça dele um hobby diário." /></div>
+            text="Melhore seu desempenho com a escrita e faça dele um hobby diário." />
+          </div>
         </div>
       </div>
     </>

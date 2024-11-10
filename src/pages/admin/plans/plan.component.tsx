@@ -16,7 +16,7 @@ import ChapterTable, { ChapterMode } from "../chapters/chapters.table";
 import QuestionTable, { QuestionMode } from "../questions/question.table";
 import SearchInput from "../../../components/forms/searchInput/searchInput";
 import CustomButton from "../../../components/forms/customButton/customButton";
-import { PlanModel, PlanChapterQuestions } from "../../../common/models/plan.model";
+import { PlanModel, ChapterIdQuestionId } from "../../../common/models/plan.model";
 import { toast } from 'react-toastify';
 import { PlanService } from "../../../common/http/api/planService";
 import { ChapterQuestionsInterface } from "../../../common/models/interfaces/chapter-questions.interface";
@@ -117,13 +117,13 @@ const PlanForm = (props: PlanFormProps) => {
     });
 
     //@ts-ignore
-    var arr: [PlanChapterQuestions] = [];
-    plan.chapterPlanQuestion = arr;
+    var arr: [ChapterIdQuestionId] = [];
+    plan.chapterQuestions = arr;
     chapterQuestions.map((r: ChapterQuestionsInterface) => {
       r.Questions.map((a: QuestionModel) => {
-        const chapterQuestion: PlanChapterQuestions = { chapterId: r.ChapterId, questionId: a.id };
+        const chapterQuestion: ChapterIdQuestionId = { chapterId: r.ChapterId, questionId: a.id };
         //@ts-ignore
-        plan.chapterPlanQuestion.push(chapterQuestion)
+        plan.chapterQuestions.push(chapterQuestion)
       })
     })
 

@@ -1,4 +1,5 @@
 import { BaseModel } from "./base.model";
+import { ChapterModel } from "./chapter.model";
 
 export class PlanModel extends BaseModel {
   title!: string;
@@ -9,7 +10,11 @@ export class PlanModel extends BaseModel {
   finalValidityPeriod!: Date;
   caractersLimitFactor!: number;
 
-  chapterPlanQuestion?: [PlanChapterQuestions]
+  //used on Plan Crud
+  chapterQuestions?: [ChapterIdQuestionId]
+
+  //used on front
+  chapters?: [ChapterModel];
 
   constructor(j?: any) {
     super(j);
@@ -21,12 +26,12 @@ export class PlanModel extends BaseModel {
       this.initialValidityPeriod = j.initialValidityPeriod;
       this.finalValidityPeriod = j.finalValidityPeriod;
       this.caractersLimitFactor = j.caractersLimitFactor;
-      this.chapterPlanQuestion = j.chapterPlanQuestion;
+      this.chapterQuestions = j.chapterPlanQuestion;
     }
   }
 }
 
-export interface PlanChapterQuestions {
+export interface ChapterIdQuestionId {
   chapterId: number | undefined;
   questionId: number;
 }

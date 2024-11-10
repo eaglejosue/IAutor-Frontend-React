@@ -15,6 +15,7 @@ import { PlanService } from '../../common/http/api/planService';
 //import { BookModel } from '../../common/models/book.model';
 import { PlanModel } from '../../common/models/plan.model';
 import { ChapterModel } from '../../common/models/chapter.model';
+import { QuestionModel } from '../../common/models/question.model';
 
 import paths from '../../routes/paths';
 import horizontalImgs from '../../assets/horizontal-imgs';
@@ -29,18 +30,18 @@ const NewHistory = () => {
   const _iaService = new IAService();
   const _planService = new PlanService();
   const [plan, setUserPlan] = useState<PlanModel>(new PlanModel())
-  const [chapters, setChapters] = useState<ChapterModel[]>([]);
   const [isLoading1, setIsLoading1] = useState<boolean>(false);
   const [isLoading2, setIsLoading2] = useState<boolean>(false);
-  const [isLoading3, setIsLoading3] = useState<boolean>(false);
-  const isLoading = isLoading1 || isLoading2 || isLoading3;
+  const isLoading = isLoading1 || isLoading2;
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
   const [theme, setTheme] = useState('Tradicional');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isIAModalOpen, setIsIAModalOpen] = useState(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
-  const [question, setQuestion] = useState('Conte aqui as suas memórias.');
+  const [chapter, setChapter] = useState(new ChapterModel());
+  const [question, setQuestion] = useState(new QuestionModel());
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [questionAnswer, setQuestionAnswer] = useState('');
   const [IAText, setIAText] = useState('');
   const [bookText, setBookText] = useState('');
@@ -55,18 +56,14 @@ const NewHistory = () => {
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
-    setQuestion('Conte aqui as suas memórias.');
-    setMaxCaracters(1000);
-    setMinCaracters(30);
     getPlan();
-    getPlanChaptersAndQuestions();
   }, []);
 
   const postIASugestion = () => {
     setIsLoading1(true);
     _iaService
       .post({
-        question,
+        question: question.title,
         questionAnswer,
         theme,
         maxCaracters
@@ -86,15 +83,16 @@ const NewHistory = () => {
   }
 
   const getPlan = () => {
-    setIsLoading2(true);
+    setIsLoading1(true);
     const user = AuthenticatedUserModel.fromLocalStorage();
     _planService
-      .getById(user?.planId ?? 4)
+      .getChaptersAndQuestionsByPlanId(user?.planId ?? 4)
       .then((response: any) => {
-        if (response?.length) {
-          setUserPlan(response);
-          setSuggestionsQtd(plan.maxLimitSendDataIA);
-        }
+        setUserPlan(response);
+        setChapter(response.chapters[0]);
+        setQuestion(response.chapters[0].questions[0]);
+        setQuestionIndex(0);
+        setSuggestionsQtd(plan.maxLimitSendDataIA);
       })
       .catch((e: any) => {
         let message = "Error ao obter plano.";
@@ -104,36 +102,31 @@ const NewHistory = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading2(false);
+        setIsLoading1(false);
       });
   };
 
-  const getPlanChaptersAndQuestions = () => {
-    setIsLoading3(true);
-    const user = AuthenticatedUserModel.fromLocalStorage();
-    _planService
-      .getPlanChaptersByPlanId(user?.planId ?? 4)
-      .then((response: any) => {
-        if (response?.length) {
-          let chapters = response.map((r: any) => {
-            var questions = r.planChapterQuestions?.map((q: any) => q.question) || [];
-            let chapter = new ChapterModel(r.chapter);
-            chapter.questions?.push(questions);
-            return chapter;
-          })
-          setChapters(chapters)
-        }
-      })
-      .catch((e: any) => {
-        let message = "Error ao obter plano.";
-        if (e.response?.data?.length > 0 && e.response.data[0].message)
-          message = e.response.data[0].message;
-        if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
-      })
-      .finally(() => {
-        setIsLoading3(false);
-      });
+  const handleChapterClick = (c: ChapterModel) => {
+    setChapter(c);
+    setQuestion(c.questions ? c?.questions[0] : new QuestionModel());
+    setQuestionIndex(0);
+  };
+
+  const handleLastQuestionClick = () => {
+    if (questionIndex === 0) return;
+    setQuestion(chapter.questions![questionIndex-1])
+    setQuestionIndex(questionIndex-1);
+    setMinCaracters(question.minLimitCharacters);
+    setMaxCaracters(question.maxLimitCharacters);
+  };
+
+  const handleNextQuestionClick = () => {
+    if (questionIndex+1 === chapter.questions!.length) return;
+    //add salvar resposta
+    setQuestion(chapter.questions![questionIndex+1])
+    setQuestionIndex(questionIndex+1);
+    setMinCaracters(question.minLimitCharacters);
+    setMaxCaracters(question.maxLimitCharacters);
   };
 
   const handleIAAccept = () => {
@@ -266,18 +259,23 @@ const NewHistory = () => {
             <div className='row'>
 
               {/* 1 - Capítulos */}
-              <div className='col-md-3 border-end px-4'>
+              <div className='col-md-3 border-end p-4'>
 
-                <div className='d-flex align-items-center justify-content-between border-bottom p-4'>
+                <div className='d-flex align-items-center justify-content-between border-bottom px-4 pb-4'>
                   <b className='f-16'>Capítulos</b>
-                  <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1' style={{ border: '1px solid #db3737' }}>Capítulo 1</div>
+                  <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1' style={{ border: '1px solid #db3737' }}>
+                    {plan.chapters?.length} Capítulo{(plan.chapters?.length ?? 1) > 1 ? 's' : ''}
+                    </div>
                 </div>
 
                 {/* Capítulos */}
-
-                {chapters.map((c, index) => {
+                {plan.chapters?.map((c, index) => {
                   return (
-                    <div key={index} className='border-bottom p-3' style={{cursor:'pointer'}}>
+                    <div key={index}
+                      className={`border-bottom p-3 ${chapter.id === c.id ? 'bg-iautor' : ''}`}
+                      style={{cursor:'pointer'}}
+                      onClick={() => {handleChapterClick(c)}}
+                    >
                       <div className='f-10'>Capítulo {c.chapterNumber}</div>
                       <b className='f-13'>{c.title}</b>
                       <div className='d-flex align-items-center text-icon f-10'>
@@ -286,14 +284,14 @@ const NewHistory = () => {
                         >
                           quiz
                         </span>
-                        {c.questions?.length} Perguntas
+                        {c.questions?.length} Pergunta{(c.questions?.length ?? 1) > 1 ? 's' : ''}
                       </div>
                     </div>
                   )
                 })}
 
                 {/* Img baixo */}
-                <div id='img-baixo' className='mt-5'>
+                <div id='img-baixo' className='pb-2 mt-5'>
                   <div className='d-flex justify-content-center'>
                     <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px' }} />
                   </div>
@@ -317,7 +315,7 @@ const NewHistory = () => {
               {/* 2 - Perguntas */}
               <div className='col-md border-end p-0'>
 
-                <div className='d-flex align-items-center border-bottom p-4'>
+                <div className='d-flex align-items-center border-bottom px-4 py-3'>
                   <div className='d-flex bg-primary align-items-center justify-content-center'
                     style={{ width: '32px', height: '32px', borderRadius: '100%', marginRight: '15px' }}
                   >
@@ -332,19 +330,19 @@ const NewHistory = () => {
                 {/* Contador de perguntas */}
                 <div className='d-flex align-items-center justify-content-between px-5 pt-5'>
                   <div>
-                    <div className='f-14'>Capítulo 1</div>
-                    <b className='f-16'>Escreva seu Livro</b>
+                    <div className='f-14'>Capítulo {chapter.chapterNumber}</div>
+                    <b className='f-16'>{chapter.title}</b>
                   </div>
                   <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1'
                     style={{ border: '1px solid #db3737' }}
                   >
-                    Pergunta 1/3
+                    Pergunta {questionIndex+1}/{chapter.questions?.length}
                   </div>
                 </div>
 
-                <div className='d-flex align-items-center justify-content-between px-5 pt-4'>
+                <div className='d-flex align-items-center justify-content-between px-5 pt-3'>
                   <div>
-                    <span className='text-primary'>1 - </span>{question}
+                    <span className='text-primary'>{questionIndex+1} - </span>{question.title}
                   </div>
                 </div>
 
@@ -365,8 +363,8 @@ const NewHistory = () => {
                 </div>
 
                 {/* Limite caracter, temas e botão IA */}
-                <div className='d-flex align-items-center justify-content-between px-5 py-4'>
-                  <span className='text-muted'>0 / {maxCaracters}</span>
+                <div className='d-flex align-items-center justify-content-between px-5 py-3'>
+                  <span className='text-muted f-14'>{questionAnswer.length} / {maxCaracters}</span>
 
                   <div className='d-flex justify-content-center'>
 
@@ -412,7 +410,8 @@ const NewHistory = () => {
 
                   </div>
 
-                  <div className={`d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5 ${suggestionsQtd == 0 ? 'disabled' : ''}`}
+                  <div className={`d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5
+                    ${suggestionsQtd == 0 ? ' disabled' : ''}`}
                     style={{ height: '32px' }}
                     onClick={handleSuggestionClick}
                   >
@@ -423,23 +422,26 @@ const NewHistory = () => {
 
                 {/* Botões navegação das perguntas */}
                 <div className='d-flex align-items-center justify-content-between px-5 pt-3'>
-                  <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3'
+                  <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
+                    ${(questionIndex === 0) ? ' disabled' : ''}`}
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={() => { }}
+                    onClick={handleLastQuestionClick}
                   >
                     <span className='material-symbols-outlined pe-2' style={{ fontSize: '24px' }}>arrow_left_alt</span>
                     <b className='f-16'>Voltar</b>
                   </div>
 
-                  <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3'
-                    onClick={() => { }}
+                  <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
+                    ${(questionIndex+1 === (chapter.questions?.length ?? 0)) ? ' disabled' : ''}`}
+                    onClick={handleNextQuestionClick}
                   >
                     <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>swipe_right</span>
                   </div>
 
-                  <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3'
+                  <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
+                    ${(questionIndex+1 === (chapter.questions?.length ?? 0)) ? ' disabled' : ''}`}
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={() => { }}
+                    onClick={handleNextQuestionClick}
                   >
                     <b className='f-16'>Salvar</b>
                     <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>play_lesson</span>
@@ -452,7 +454,7 @@ const NewHistory = () => {
               {/* 3 - Preview */}
               <div className='col-md bg-iautor p-0'>
 
-                <div className='d-flex bg-white justify-content-center p-4'
+                <div className='d-flex bg-white justify-content-center px-4 py-3'
                   style={{ borderBottom: '3px solid #db3737' }}
                 >
                   <div className='f-14'>Preview do Livro</div>
@@ -601,10 +603,10 @@ const NewHistory = () => {
             }}
           >
             <div className='d-flex justify-content-center'>
-              Capítulo 1
+              Capítulo {chapter.chapterNumber}
             </div>
             <div className='d-flex justify-content-center'>
-              <b className='f-28'>Escreva seu Livro</b>
+              <b className='f-28'>{chapter.title}</b>
             </div>
             <div className='pt-3'>
               {bookText}
