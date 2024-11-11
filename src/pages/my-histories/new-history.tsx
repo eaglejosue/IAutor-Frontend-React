@@ -31,7 +31,7 @@ const NewHistory = () => {
   const _planService = new PlanService();
   const [plan, setUserPlan] = useState<PlanModel>(new PlanModel())
   const [isLoading1, setIsLoading1] = useState<boolean>(false);
-  const [isLoading2, setIsLoading2] = useState<boolean>(false);
+  const [isLoading2] = useState<boolean>(false);
   const isLoading = isLoading1 || isLoading2;
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
