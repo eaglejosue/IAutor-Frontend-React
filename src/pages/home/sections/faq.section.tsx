@@ -26,7 +26,7 @@ const SectionFaq =() =>{
             type="button" className="btn btn-primary rounded-circle btn-sm"
             onClick={decoratedOnClick}
           >
-           { !isCurrentEventKey ?  <FontAwesomeIcon icon={faAdd}  /> : <FontAwesomeIcon icon={faClose} /> }
+           { !isCurrentEventKey ?  <FontAwesomeIcon icon={faAdd} width={12}  /> : <FontAwesomeIcon width={12} icon={faClose} /> }
           </button>
           </div></>
         );
@@ -41,7 +41,7 @@ const SectionFaq =() =>{
         </p>
         <Accordion defaultActiveKey="0" className='accordion-faq'>
       <Card className='mb-3 w-75'>
-        <Card.Header className='card-header-faq'>
+        <Card.Header className='card-header-faq mt-2'>
           <ContextAwareToggle eventKey="0">Posso cancelar o serviço?</ContextAwareToggle>
         </Card.Header>
         <Accordion.Collapse eventKey="0">
@@ -49,7 +49,7 @@ const SectionFaq =() =>{
         </Accordion.Collapse>
       </Card>
       <Card className='mb-3 w-75'>
-      <Card.Header className='card-header-faq'>
+      <Card.Header className='card-header-faq mt-2'>
           <ContextAwareToggle eventKey="1">Posso não imprimir o livro?</ContextAwareToggle>
         </Card.Header>
         <Accordion.Collapse eventKey="1">
@@ -57,7 +57,7 @@ const SectionFaq =() =>{
         </Accordion.Collapse>
       </Card>
       <Card className='mb-3 w-75'>
-      <Card.Header className='card-header-faq'>
+      <Card.Header className='card-header-faq mt-2'>
           <ContextAwareToggle eventKey="2">Consigo dividir minha assinatura com alguém?</ContextAwareToggle>
         </Card.Header>
         <Accordion.Collapse eventKey="2">
@@ -65,7 +65,7 @@ const SectionFaq =() =>{
         </Accordion.Collapse>
       </Card>
       <Card className='mb-3 w-75'>
-      <Card.Header className='card-header-faq'>
+      <Card.Header className='card-header-faq mt-2'>
           <ContextAwareToggle eventKey="3">Posso solicitar mais cópias do livro?</ContextAwareToggle>
         </Card.Header>
         <Accordion.Collapse eventKey="3">
