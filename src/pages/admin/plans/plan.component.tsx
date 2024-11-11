@@ -59,7 +59,7 @@ const PlanForm = (props: PlanFormProps) => {
       setValue('title', props.planEdit?.title);
       setValue('price', props.planEdit?.price);
       setValue('currency', props.planEdit?.currency);
-      setValue('maxLimitSendDataIA', props.planEdit?.maxLimitSendDataIA);
+      setValue('qtdMaxCallIASugestions', props.planEdit?.maxQtdCallIASugestions);
       setValue('initialValidityPeriod', props.planEdit?.initialValidityPeriod.toString().split('T')[0]);
       setValue('finalValidityPeriod', props.planEdit?.finalValidityPeriod.toString().split('T')[0]);
       setValue('caractersLimitFactor', props.planEdit?.caractersLimitFactor);
@@ -415,8 +415,8 @@ const PlanForm = (props: PlanFormProps) => {
             placeholder=""
             register={register}
             label="Limite de requisições a IA por pergunta"
-            errors={errors.maxLimitSendDataIA}
-            name="maxLimitSendDataIA"
+            errors={errors.qtdMaxCallIASugestions}
+            name="qtdMaxCallIASugestions"
             setValue={setValue}
             divClassName="col-4 mt-4 ps-0"
             validationSchema={{

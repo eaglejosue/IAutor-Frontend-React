@@ -5,7 +5,7 @@ export class PlanModel extends BaseModel {
   title!: string;
   price!: number;
   currency!: string;
-  maxLimitSendDataIA!: number;
+  maxQtdCallIASugestions!: number;
   initialValidityPeriod!: Date;
   finalValidityPeriod!: Date;
   caractersLimitFactor!: number;
@@ -22,7 +22,7 @@ export class PlanModel extends BaseModel {
       this.title = j.title;
       this.price = j.price;
       this.currency = j.currency;
-      this.maxLimitSendDataIA = j.maxLimitSendDataIA;
+      this.maxQtdCallIASugestions = j.maxQtdCallIASugestions;
       this.initialValidityPeriod = j.initialValidityPeriod;
       this.finalValidityPeriod = j.finalValidityPeriod;
       this.caractersLimitFactor = j.caractersLimitFactor;

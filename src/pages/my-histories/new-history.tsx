@@ -12,16 +12,23 @@ import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 import { IAService } from '../../common/http/api/iaService';
 import { PlanService } from '../../common/http/api/planService';
+import { QuestionService } from '../../common/http/api/questionService';
 //import { BookModel } from '../../common/models/book.model';
 import { PlanModel } from '../../common/models/plan.model';
 import { ChapterModel } from '../../common/models/chapter.model';
 import { QuestionModel } from '../../common/models/question.model';
+import { QuestionUserAnswerModel } from '../../common/models/question-user-answer.model';
 
 import paths from '../../routes/paths';
 import horizontalImgs from '../../assets/horizontal-imgs';
-import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
 import previewCapaLivro from '../../assets/img/preview-capa-livro.png';
 import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
+import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
+import openBook from '../../assets/svg/open-book.svg';
+import life from '../../assets/svg/life.svg';
+import clownWithHat from '../../assets/svg/face-of-clown-with-hat.svg';
+import theater from '../../assets/svg/theater.svg';
+import hearts from '../../assets/svg/hearts.svg';
 
 const NewHistory = () => {
   const navigate = useNavigate();
@@ -29,19 +36,19 @@ const NewHistory = () => {
   //const [book, setBook] = useState<BookModel>(new BookModel({title: 'Título História'}));
   const _iaService = new IAService();
   const _planService = new PlanService();
+  const _questionService = new QuestionService();
   const [plan, setUserPlan] = useState<PlanModel>(new PlanModel())
-  const [isLoading1, setIsLoading1] = useState<boolean>(false);
-  const [isLoading2, setIsLoading2] = useState<boolean>(false);
-  const isLoading = isLoading1 || isLoading2;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
-  const [theme, setTheme] = useState('Tradicional');
+  const [theme, setTheme] = useState('');
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isIAModalOpen, setIsIAModalOpen] = useState(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
   const [chapter, setChapter] = useState(new ChapterModel());
   const [question, setQuestion] = useState(new QuestionModel());
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
   const [questionAnswer, setQuestionAnswer] = useState('');
   const [IAText, setIAText] = useState('');
   const [bookText, setBookText] = useState('');
@@ -49,9 +56,6 @@ const NewHistory = () => {
   // ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
   // ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
   // ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.');
-  const [suggestionsQtd, setSuggestionsQtd] = useState(5);
-  const [maxCaracters, setMaxCaracters] = useState(1000);
-  const [minCaracters, setMinCaracters] = useState(30);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
@@ -59,40 +63,19 @@ const NewHistory = () => {
     getPlan();
   }, []);
 
-  const postIASugestion = () => {
-    setIsLoading1(true);
-    _iaService
-      .post({
-        question: question.title,
-        questionAnswer,
-        theme,
-        maxCaracters
-      })
-      .then((response: any) => {
-        setIAText(response.text);
-      })
-      .catch((e) => {
-        let message = 'Error ao obter dados de participante.';
-        if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
-        if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log('Erro: ', message, e);
-      })
-      .finally(() => {
-        setIsLoading1(false);
-      });
-  }
-
   const getPlan = () => {
-    setIsLoading1(true);
+    setIsLoading(true);
     const user = AuthenticatedUserModel.fromLocalStorage();
     _planService
       .getChaptersAndQuestionsByPlanId(user?.planId ?? 4)
       .then((response: any) => {
         setUserPlan(response);
         setChapter(response.chapters[0]);
-        setQuestion(response.chapters[0].questions[0]);
+        const questionRes = response.chapters[0].questions[0];
+        setQuestion(questionRes);
         setQuestionIndex(0);
-        setSuggestionsQtd(plan.maxLimitSendDataIA);
+        setQuestionAnswer(questionRes.questionUserAnswer?.answer ?? '');
+        setQtdCallIASugestionsUsed(questionRes.questionUserAnswer.qtdCallIASugestionsUsed);
       })
       .catch((e: any) => {
         let message = "Error ao obter plano.";
@@ -102,7 +85,7 @@ const NewHistory = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading1(false);
+        setIsLoading(false);
       });
   };
 
@@ -110,59 +93,113 @@ const NewHistory = () => {
     setChapter(c);
     setQuestion(c.questions ? c?.questions[0] : new QuestionModel());
     setQuestionIndex(0);
-  };
-
-  const handleLastQuestionClick = () => {
-    if (questionIndex === 0) return;
-    setQuestion(chapter.questions![questionIndex-1])
-    setQuestionIndex(questionIndex-1);
-    setMinCaracters(question.minLimitCharacters);
-    setMaxCaracters(question.maxLimitCharacters);
-  };
-
-  const handleNextQuestionClick = () => {
-    if (questionIndex+1 === chapter.questions!.length) return;
-    //add salvar resposta
-    setQuestion(chapter.questions![questionIndex+1])
-    setQuestionIndex(questionIndex+1);
-    setMinCaracters(question.minLimitCharacters);
-    setMaxCaracters(question.maxLimitCharacters);
-  };
-
-  const handleIAAccept = () => {
-    setIsIAModalOpen(false);
-    setSuggestionsQtd(suggestionsQtd - 1);
-    setBookText(IAText);
+    setQtdCallIASugestionsUsed(question.questionUserAnswer.qtdCallIASugestionsUsed);
   };
 
   const handleSuggestionClick = () => {
     if (questionAnswer.length === 0) {
-      toast.error('Digite sua resposta para consultar sugestão!', {
+      toast.error('Digite sua resposta para consultar!', {
         position: 'top-center',
         style: { width: 450 }
       });
       return;
     }
 
-    if (questionAnswer.length < minCaracters) {
-      toast.error(`Resposta deve conter no mínimo ${minCaracters} caracteres!`, {
+    if (questionAnswer.length < question.minLimitCharacters) {
+      toast.error(`Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`, {
         position: 'top-center',
         style: { width: 450 }
       });
       return;
     }
 
-    if (suggestionsQtd > 0) {
-      setIsIAModalOpen(true);
-      postIASugestion();
-    }
-    else {
-      toast.error('Você não possui mais sugestões de texto!', {
+    if (qtdCallIASugestionsUsed === plan.maxQtdCallIASugestions) {
+      toast.error('Você não possui mais sugestões de texto do IAutor!', {
         position: 'top-center',
         style: { width: 450 }
       });
+      return;
     }
+
+    setIsIAModalOpen(true);
+    postIASugestion();
   };
+
+  const postIASugestion = () => {
+    setIsLoading(true);
+    _iaService
+      .post({
+        question: question.title,
+        questionAnswer,
+        theme,
+        maxCaracters: question.maxLimitCharacters
+      })
+      .then((response: any) => {
+        setIAText(response.text);
+        setQtdCallIASugestionsUsed(qtdCallIASugestionsUsed+1);
+        saveQuestionAnswer();
+      })
+      .catch((e) => {
+        let message = 'Error ao obter dados de participante.';
+        if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log('Erro: ', message, e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  const handleIAAccept = () => {
+    setIsIAModalOpen(false);
+    setBookText(IAText);
+    setQuestionAnswer(IAText);
+    saveQuestionAnswer();
+  };
+
+  const handleBeforeQuestionClick = () => {
+    if (questionIndex === 0) return;
+    const questionB = chapter.questions![questionIndex - 1];
+    setQuestion(questionB)
+    setQuestionIndex(questionIndex - 1);
+    setQuestionAnswer(questionB.questionUserAnswer?.answer ?? '');
+    setQtdCallIASugestionsUsed(questionB.questionUserAnswer.qtdCallIASugestionsUsed);
+  };
+
+  const handleNextQuestionClick = (save: boolean = false) => {
+    if (questionIndex + 1 === chapter.questions!.length) return;
+    if (save && questionAnswer.length > 0) saveQuestionAnswer();
+    const questionN = chapter.questions![questionIndex + 1];
+    setQuestion(questionN)
+    setQuestionIndex(questionIndex + 1);
+    setQuestionAnswer(questionN.questionUserAnswer?.answer ?? '');
+    setQtdCallIASugestionsUsed(questionN.questionUserAnswer.qtdCallIASugestionsUsed);
+  };
+
+  const saveQuestionAnswer = () => {
+    setIsLoading(true);
+    const user = AuthenticatedUserModel.fromLocalStorage();
+    _questionService
+      .upsertQuestionUserAnswer(new QuestionUserAnswerModel({
+        id: question.questionUserAnswer.id,
+        questionId: question.id,
+        userId: user!.id,
+        answer: questionAnswer,
+        qtdCallIASugestionsUsed
+      }))
+      .then(() => {
+        //
+      })
+      .catch((e) => {
+        let message = 'Error ao obter dados de participante.';
+        if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log('Erro: ', message, e);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
 
   return (
     <div className='d-flex'
@@ -265,7 +302,7 @@ const NewHistory = () => {
                   <b className='f-16'>Capítulos</b>
                   <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1' style={{ border: '1px solid #db3737' }}>
                     {plan.chapters?.length} Capítulo{(plan.chapters?.length ?? 1) > 1 ? 's' : ''}
-                    </div>
+                  </div>
                 </div>
 
                 {/* Capítulos */}
@@ -273,8 +310,8 @@ const NewHistory = () => {
                   return (
                     <div key={index}
                       className={`border-bottom p-3 ${chapter.id === c.id ? 'bg-iautor' : ''}`}
-                      style={{cursor:'pointer'}}
-                      onClick={() => {handleChapterClick(c)}}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => { handleChapterClick(c) }}
                     >
                       <div className='f-10'>Capítulo {c.chapterNumber}</div>
                       <b className='f-13'>{c.title}</b>
@@ -336,13 +373,13 @@ const NewHistory = () => {
                   <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1'
                     style={{ border: '1px solid #db3737' }}
                   >
-                    Pergunta {questionIndex+1}/{chapter.questions?.length}
+                    Pergunta {questionIndex + 1}/{chapter.questions?.length}
                   </div>
                 </div>
 
                 <div className='d-flex align-items-center justify-content-between px-5 pt-3'>
                   <div>
-                    <span className='text-primary'>{questionIndex+1} - </span>{question.title}
+                    <span className='text-primary'>{questionIndex + 1} - </span>{question.title}
                   </div>
                 </div>
 
@@ -364,7 +401,7 @@ const NewHistory = () => {
 
                 {/* Limite caracter, temas e botão IA */}
                 <div className='d-flex align-items-center justify-content-between px-5 py-3'>
-                  <span className='text-muted f-14'>{questionAnswer.length} / {maxCaracters}</span>
+                  <span className='text-muted f-14'>{questionAnswer.length} / {question.maxLimitCharacters}</span>
 
                   <div className='d-flex justify-content-center'>
 
@@ -381,28 +418,38 @@ const NewHistory = () => {
                         style={{ width: '68px', height: '32px' }}
                         id="dropdown-basic"
                       >
-                        <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>mood</span>
+                        {theme === 'Tradicional' ?
+                          <img className='me-2' src={openBook} style={{ height: '18px', width: '18px' }} />
+                          : theme === 'Bibliográfico' ?
+                            <img className='me-2' src={life} style={{ height: '18px', width: '18px' }} />
+                            : theme === 'Cômico' ?
+                              <img className='me-2' src={clownWithHat} style={{ height: '18px', width: '18px' }} />
+                              : theme === 'Dramático' ?
+                              <img className='me-2' src={theater} style={{ height: '18px', width: '18px' }} />
+                              : theme === 'Romântico' ?
+                                <img className='me-2' src={hearts} style={{ height: '18px', width: '18px' }} />
+                              : <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>mood</span>}
                       </Dropdown.Toggle>
 
-                      <Dropdown.Menu>
+                      <Dropdown.Menu className='f-14'>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Tradicional')}>
-                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>auto_stories</span>
+                          <img className='me-2' src={openBook} style={{ height: '20px', width: '20px' }} />
                           Tradicional
                         </Dropdown.Item>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Bibliográfico')}>
-                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>hail</span>
+                          <img className='me-2' src={life} style={{ height: '20px', width: '20px' }} />
                           Bibliográfico
                         </Dropdown.Item>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Cômico')}>
-                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>sentiment_very_satisfied</span>
+                          <img className='me-2' src={clownWithHat} style={{ height: '20px', width: '20px' }} />
                           Cômico
                         </Dropdown.Item>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Dramático')}>
-                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>sentiment_worried</span>
+                          <img className='me-2' src={theater} style={{ height: '20px', width: '20px' }} />
                           Dramático
                         </Dropdown.Item>
                         <Dropdown.Item className='d-flex align-items-center' onClick={() => setTheme('Romântico')}>
-                          <span className='material-symbols-outlined me-2' style={{ color: '#db3737' }}>favorite</span>
+                          <img className='me-2' src={hearts} style={{ height: '20px', width: '20px' }} />
                           Romântico
                         </Dropdown.Item>
                       </Dropdown.Menu>
@@ -411,7 +458,7 @@ const NewHistory = () => {
                   </div>
 
                   <div className={`d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5
-                    ${suggestionsQtd == 0 ? ' disabled' : ''}`}
+                    ${(plan.maxQtdCallIASugestions - qtdCallIASugestionsUsed) == 0 ? ' disabled' : ''}`}
                     style={{ height: '32px' }}
                     onClick={handleSuggestionClick}
                   >
@@ -425,23 +472,23 @@ const NewHistory = () => {
                   <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
                     ${(questionIndex === 0) ? ' disabled' : ''}`}
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={handleLastQuestionClick}
+                    onClick={handleBeforeQuestionClick}
                   >
                     <span className='material-symbols-outlined pe-2' style={{ fontSize: '24px' }}>arrow_left_alt</span>
                     <b className='f-16'>Voltar</b>
                   </div>
 
                   <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
-                    ${(questionIndex+1 === (chapter.questions?.length ?? 0)) ? ' disabled' : ''}`}
-                    onClick={handleNextQuestionClick}
+                    ${(questionIndex + 1 === (chapter.questions?.length ?? 0)) ? ' disabled' : ''}`}
+                    onClick={() => { handleNextQuestionClick(false) }}
                   >
                     <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>swipe_right</span>
                   </div>
 
                   <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
-                    ${(questionIndex+1 === (chapter.questions?.length ?? 0)) ? ' disabled' : ''}`}
+                    ${(questionIndex + 1 === (chapter.questions?.length ?? 0)) ? ' disabled' : ''}`}
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={handleNextQuestionClick}
+                    onClick={() => { handleNextQuestionClick(true) }}
                   >
                     <b className='f-16'>Salvar</b>
                     <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>play_lesson</span>
@@ -464,16 +511,16 @@ const NewHistory = () => {
                   <div className='d-flex f-14 px-5'>Ferramentas de Edição</div>
                   <div className='d-flex text-icon ps-4'>
                     {/* add icons */}
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }}>add_photo_alternate</span>
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }}>draw</span>
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }} title='Inserir foto'>add_photo_alternate</span>
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }} title='Editar fonte'>draw</span>
                     <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
                       onClick={() => { setIsBookPreviewModalOpen(true) }}
-                      title='preview'
+                      title='Visualizar livro'
                     >
                       auto_stories
                     </span>
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }}>file_save</span>
-                    <span className='material-symbols-outlined px-2 pe-4' style={{ fontSize: '24px', cursor: 'pointer' }}>featured_seasonal_and_gifts</span>
+                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }} title='Download'>file_save</span>
+                    <span className='material-symbols-outlined px-2 pe-4' style={{ fontSize: '24px', cursor: 'pointer' }} title='Presentear'>featured_seasonal_and_gifts</span>
                   </div>
                 </div>
 
@@ -485,12 +532,12 @@ const NewHistory = () => {
                   {bookText.length > 0 &&
                     <div className='d-flex position-absolute f-10'
                       style={{
-                        paddingTop:'2%',
-                        paddingLeft:'9%',
-                        paddingRight:'9%',
-                        fontFamily:'Times New Roman',
-                        fontSize:'13px',
-                        lineHeight:'16px'
+                        paddingTop: '2%',
+                        paddingLeft: '9%',
+                        paddingRight: '9%',
+                        fontFamily: 'Times New Roman',
+                        fontSize: '13px',
+                        lineHeight: '16px'
                       }}
                     >
                       {bookText}
@@ -521,8 +568,8 @@ const NewHistory = () => {
             </div>
 
             <div className='d-flex align-items-center justify-content-center mt-3'>
-              <div className='d-flex btn bg-pink text-primary rounded-5 px-4'>
-                <b className='f-12'>Você ainda possui {suggestionsQtd} sugestões de texto</b>
+              <div className='d-flex bg-pink text-primary rounded-5 px-4 py-2'>
+                <b className='f-12'>Você ainda possui {plan.maxQtdCallIASugestions - qtdCallIASugestionsUsed} sugestões de texto</b>
                 <img className='ps-1' src={artificialInteligence} />
               </div>
             </div>
@@ -598,8 +645,8 @@ const NewHistory = () => {
           <Modal.Body className='justify-content-center f-20'
             style={{
               paddingTop: '3%',
-              paddingLeft:'10%',
-              paddingRight:'10%'
+              paddingLeft: '10%',
+              paddingRight: '10%'
             }}
           >
             <div className='d-flex justify-content-center'>

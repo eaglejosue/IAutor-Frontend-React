@@ -1,4 +1,5 @@
 import { QuestionFilter } from "../../models/filters/question.filter";
+import { QuestionUserAnswerModel } from "../../models/question-user-answer.model";
 import { QuestionModel } from "../../models/question.model";
 import { HttpClient } from "../httpClient";
 import queryString from 'query-string';
@@ -17,6 +18,7 @@ export class QuestionService {
     );
     return response.data;
   }
+
   public async post(data: QuestionModel) {
     const response = await this._httpClient.post<string>(this.endpoint, {
       data,
@@ -42,6 +44,13 @@ export class QuestionService {
     const response = await this._httpClient.get<string>(
       `${this.endpoint}?${queryString.stringify(filter)}`,
     );
+    return response.data;
+  }
+
+  public async upsertQuestionUserAnswer(data: QuestionUserAnswerModel) {
+    const response = await this._httpClient.post<string>(`${this.endpoint}/user-answer`, {
+      data,
+    });
     return response.data;
   }
 }
