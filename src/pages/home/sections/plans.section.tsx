@@ -111,7 +111,7 @@ const SectionPlan =() =>{
             <div className="card">
               <div className="card-body text-start  m-3">
               <h5>
-                  <strong>Premiun</strong>
+                  <strong>Premium</strong>
                 </h5>
                 <div className="row">
                   <div className="col-12">
