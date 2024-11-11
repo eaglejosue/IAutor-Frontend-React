@@ -1,24 +1,12 @@
-import { useState, useEffect } from 'react';
-
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
-
-import horizontalImgs from '../../assets/horizontal-imgs';
 import './home-logged.scss'
 import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
-import { rectangle_home_right_admin } from '../../assets/img';
 import { homelogged } from '../../assets/svg';
 import { Button } from 'react-bootstrap';
 
 const HomeLogged = () => {
-  const [imgRandomSrc, setImgRandomSrc] = useState('1');
   const user = AuthenticatedUserModel.fromLocalStorage();
-
-  useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
-    setImgRandomSrc(horizontalImgs[randomIndex]);
-    console.log(user?.firstname+ ' '+ user?.lastname)
-  }, []);
 
   return (
     <div className="d-flex" style={{ height: "100vh" }}>
