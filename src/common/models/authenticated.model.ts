@@ -7,6 +7,7 @@ export class AuthenticatedUserModel {
   email!: string;
   profileImgUrl?: string;
   planId!: number;
+  lastBookId!: number;
   isValid!: boolean;
   token!: string;
 
@@ -20,6 +21,7 @@ export class AuthenticatedUserModel {
       this.email = j.email;
       this.profileImgUrl = j.profileImgUrl;
       this.planId = j.planId;
+      this.lastBookId = j.lastBookId;
       this.isValid = j.isValid;
       this.token = j.token;
     }
