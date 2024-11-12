@@ -37,7 +37,7 @@ const NewHistory = () => {
   const _iaService = new IAService();
   const _planService = new PlanService();
   const _questionService = new QuestionService();
-  const [plan, setUserPlan] = useState<PlanModel>(new PlanModel())
+  const [plan, setPlan] = useState<PlanModel>(new PlanModel())
   const [isLoading1, setIsLoading1] = useState<boolean>(false);
   const [isLoading2, setIsLoading2] = useState<boolean>(false);
   const isLoading = isLoading1 || isLoading2;
@@ -73,7 +73,7 @@ const NewHistory = () => {
     _planService
       .getChaptersAndQuestionsByPlanId(user?.planId ?? 4)
       .then((response: any) => {
-        setUserPlan(response);
+        setPlan(response);
         setChapter(response.chapters[0]);
         setIsFirstQuestion(true);
         const questionRes = response.chapters[0].questions[0];
@@ -95,20 +95,8 @@ const NewHistory = () => {
       });
   };
 
-  const handleChapterClick = (c: ChapterModel) => {
-    setChapter(c);
-    const questionC = c.questions![0];
-    setQuestion(questionC);
-    setQuestionIndex(0);
-    setQuestionAnswer(questionC.questionUserAnswer?.answer ?? '');
-    setQtdCallIASugestionsUsed(questionC.questionUserAnswer.qtdCallIASugestionsUsed);
-
-    const chapterIndex = plan.chapters!.findIndex(f => f.id == c.id);
-    setIsFirstQuestion(chapterIndex === 0);
-  };
-
   const handleSuggestionClick = () => {
-    if (questionAnswer.length === 0) {
+    if (questionAnswer.length == 0) {
       toast.error('Digite sua resposta para consultar!', {
         position: 'top-center',
         style: { width: 450 }
@@ -167,6 +155,23 @@ const NewHistory = () => {
     setQuestionAnswer(IAText);
   };
 
+  const handleChapterClick = (id: number, fromBeforeClick: boolean = false) => {
+    const chapterC = plan.chapters!.find(f => f.id == id);
+    setChapter(chapterC!);
+
+    const questionsLength = chapterC!.questions!.length;
+    const questionC = fromBeforeClick ? chapterC!.questions![questionsLength-1] : chapterC!.questions![0];
+    setQuestion(questionC);
+    const questionCIndex = fromBeforeClick ? questionsLength-1 : 0;
+    setQuestionIndex(questionCIndex);
+    setQuestionAnswer(questionC.questionUserAnswer?.answer ?? '');
+    setBookText(questionC.questionUserAnswer?.answer ?? '');
+    setQtdCallIASugestionsUsed(questionC.questionUserAnswer.qtdCallIASugestionsUsed);
+
+    const chapterIndex = plan.chapters!.findIndex(f => f.id == id);
+    setIsFirstQuestion(chapterIndex == 0 && questionCIndex == 0);
+  };
+
   const handleBeforeQuestionClick = () => {
     setIsLastQuestion(false);
 
@@ -180,7 +185,7 @@ const NewHistory = () => {
     }
 
     if (isFirstQuestion) {
-      handleChapterClick(plan.chapters![chapterIndex - 1]);
+      handleChapterClick(plan.chapters![chapterIndex - 1].id, true);
       return;
     }
 
@@ -211,7 +216,7 @@ const NewHistory = () => {
     }
 
     if (isLastQuestion) {
-      handleChapterClick(plan.chapters![chapterIndex + 1]);
+      handleChapterClick(plan.chapters![chapterIndex + 1].id);
       return;
     }
 
@@ -236,7 +241,11 @@ const NewHistory = () => {
         qtdCallIASugestionsUsed
       }))
       .then(() => {
-        //
+        const planA = plan;
+        const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
+        const questionIndex = plan.chapters!.findIndex(f => f.id == question.id);
+        planA.chapters![chapterIndex].questions![questionIndex].questionUserAnswer.answer = questionAnswer;
+        setPlan(planA);
       })
       .catch((e) => {
         let message = 'Error ao obter dados de participante.';
@@ -365,7 +374,7 @@ const NewHistory = () => {
                     <div key={index}
                       className={`border-bottom p-3 ${chapter.id === c.id ? 'bg-iautor' : ''}`}
                       style={{ cursor: 'pointer' }}
-                      onClick={() => { handleChapterClick(c) }}
+                      onClick={() => { handleChapterClick(c.id) }}
                     >
                       <div className='f-10'>Capítulo {c.chapterNumber}</div>
                       <b className='f-13'>{c.title}</b>
@@ -590,7 +599,7 @@ const NewHistory = () => {
                 </div>
 
                 <div className='d-flex justify-content-center pb-4'>
-                  {bookText.length === 0
+                  {bookText.length == 0
                     ? <img src={previewCapaLivro} />
                     : <img src={previewCapaLivroBranca} />
                   }
