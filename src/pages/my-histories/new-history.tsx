@@ -80,6 +80,7 @@ const NewHistory = () => {
         setQuestion(questionRes);
         setQuestionIndex(0);
         setQuestionAnswer(questionRes.questionUserAnswer?.answer ?? '');
+        setBookText(questionRes.questionUserAnswer?.answer ?? '');
         setQtdCallIASugestionsUsed(questionRes.questionUserAnswer.qtdCallIASugestionsUsed);
       })
       .catch((e: any) => {
@@ -164,7 +165,6 @@ const NewHistory = () => {
     setIsIAModalOpen(false);
     setBookText(IAText);
     setQuestionAnswer(IAText);
-    saveQuestionAnswer();
   };
 
   const handleBeforeQuestionClick = () => {
@@ -188,6 +188,7 @@ const NewHistory = () => {
     setQuestion(questionB)
     setQuestionIndex(questionIndex - 1);
     setQuestionAnswer(questionB.questionUserAnswer?.answer ?? '');
+    setBookText(questionB.questionUserAnswer?.answer ?? '');
     setQtdCallIASugestionsUsed(questionB.questionUserAnswer.qtdCallIASugestionsUsed);
   };
 
@@ -218,6 +219,7 @@ const NewHistory = () => {
     setQuestion(questionN)
     setQuestionIndex(questionIndex + 1);
     setQuestionAnswer(questionN.questionUserAnswer?.answer ?? '');
+    setBookText(questionN.questionUserAnswer?.answer ?? '');
     setQtdCallIASugestionsUsed(questionN.questionUserAnswer.qtdCallIASugestionsUsed);
   };
 
@@ -229,7 +231,7 @@ const NewHistory = () => {
         ...question.questionUserAnswer,
         questionId: question.id,
         userId: user!.id,
-        bookId: user!.id,
+        //bookId: user!.id,
         answer: questionAnswer,
         qtdCallIASugestionsUsed
       }))
@@ -614,9 +616,26 @@ const NewHistory = () => {
           </div>
         </main>
 
-        <Modal show={isHelpModalOpen} onHide={() => setIsHelpModalOpen(false)} centered={true}>
-          <Modal.Body>
-            ?
+        <Modal show={isHelpModalOpen} onHide={() => setIsHelpModalOpen(false)} size='lg' centered={true}>
+          <Modal.Body className='text-center justify-content-center f-18 p-5'
+            style={{
+              paddingTop: '3%',
+              paddingLeft: '10%',
+              paddingRight: '10%'
+            }}
+          >
+            <div className='pt-3'>
+              Na resposta, é importante que você seja o mais sincero possível, e conte todos os detalhes que puder se lembrar, aqui vale vale a regra: quanto mais informação, melhor!
+            </div>
+            <div className='pt-3'>
+              Lembre-se não nunca expor informações  intimos e/ou sensíveis que você não gostaria de compartilhar com outras pessoas.
+            </div>
+            <div className='pt-3'>
+              Após finalizar o texto, escolha uma característica que mais se associa à sua resposta (humor, romantico, etc), e utilize inteligencia artificial do IAutor para revisa-lo  para você.
+            </div>
+            <div className='pt-3'>
+              Não se preocupe, se não gostar da revisão, você consegue voltar atrás, e fazer novas tentativas.
+            </div>
           </Modal.Body>
         </Modal>
 
