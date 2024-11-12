@@ -3,6 +3,7 @@ export class QuestionUserAnswerModel {
   createdAt!: string;
   questionId!: number;
   userId!: number;
+  bookId!: number;
   answer!: string;
   qtdCallIASugestionsUsed!: number;
 
@@ -12,6 +13,7 @@ export class QuestionUserAnswerModel {
       this.createdAt = j.createdAt;
       this.questionId = j.questionId;
       this.userId = j.userId;
+      this.bookId = j.bookId;
       this.answer = j.answer;
       this.qtdCallIASugestionsUsed = j.qtdCallIASugestionsUsed;
     }

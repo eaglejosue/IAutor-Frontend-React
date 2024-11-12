@@ -38,7 +38,9 @@ const NewHistory = () => {
   const _planService = new PlanService();
   const _questionService = new QuestionService();
   const [plan, setUserPlan] = useState<PlanModel>(new PlanModel())
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading1, setIsLoading1] = useState<boolean>(false);
+  const [isLoading2, setIsLoading2] = useState<boolean>(false);
+  const isLoading = isLoading1 || isLoading2;
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
   const [theme, setTheme] = useState('');
@@ -48,6 +50,8 @@ const NewHistory = () => {
   const [chapter, setChapter] = useState(new ChapterModel());
   const [question, setQuestion] = useState(new QuestionModel());
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [isFirstQuestion, setIsFirstQuestion] = useState(true);
+  const [isLastQuestion, setIsLastQuestion] = useState(false);
   const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
   const [questionAnswer, setQuestionAnswer] = useState('');
   const [IAText, setIAText] = useState('');
@@ -64,13 +68,14 @@ const NewHistory = () => {
   }, []);
 
   const getPlan = () => {
-    setIsLoading(true);
+    setIsLoading1(true);
     const user = AuthenticatedUserModel.fromLocalStorage();
     _planService
       .getChaptersAndQuestionsByPlanId(user?.planId ?? 4)
       .then((response: any) => {
         setUserPlan(response);
         setChapter(response.chapters[0]);
+        setIsFirstQuestion(true);
         const questionRes = response.chapters[0].questions[0];
         setQuestion(questionRes);
         setQuestionIndex(0);
@@ -85,15 +90,20 @@ const NewHistory = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading(false);
+        setIsLoading1(false);
       });
   };
 
   const handleChapterClick = (c: ChapterModel) => {
     setChapter(c);
-    setQuestion(c.questions ? c?.questions[0] : new QuestionModel());
+    const questionC = c.questions![0];
+    setQuestion(questionC);
     setQuestionIndex(0);
-    setQtdCallIASugestionsUsed(question.questionUserAnswer.qtdCallIASugestionsUsed);
+    setQuestionAnswer(questionC.questionUserAnswer?.answer ?? '');
+    setQtdCallIASugestionsUsed(questionC.questionUserAnswer.qtdCallIASugestionsUsed);
+
+    const chapterIndex = plan.chapters!.findIndex(f => f.id == c.id);
+    setIsFirstQuestion(chapterIndex === 0);
   };
 
   const handleSuggestionClick = () => {
@@ -126,7 +136,7 @@ const NewHistory = () => {
   };
 
   const postIASugestion = () => {
-    setIsLoading(true);
+    setIsLoading2(true);
     _iaService
       .post({
         question: question.title,
@@ -146,7 +156,7 @@ const NewHistory = () => {
         console.log('Erro: ', message, e);
       })
       .finally(() => {
-        setIsLoading(false);
+        setIsLoading2(false);
       });
   }
 
@@ -158,7 +168,22 @@ const NewHistory = () => {
   };
 
   const handleBeforeQuestionClick = () => {
-    if (questionIndex === 0) return;
+    setIsLastQuestion(false);
+
+    const isFirstQuestion = questionIndex == 0;
+    const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
+    const isFirstChapter = chapterIndex == 0;
+
+    if (isFirstQuestion && isFirstChapter) {
+      setIsFirstQuestion(true);
+      return;
+    }
+
+    if (isFirstQuestion) {
+      handleChapterClick(plan.chapters![chapterIndex - 1]);
+      return;
+    }
+
     const questionB = chapter.questions![questionIndex - 1];
     setQuestion(questionB)
     setQuestionIndex(questionIndex - 1);
@@ -167,8 +192,28 @@ const NewHistory = () => {
   };
 
   const handleNextQuestionClick = (save: boolean = false) => {
-    if (questionIndex + 1 === chapter.questions!.length) return;
-    if (save && questionAnswer.length > 0) saveQuestionAnswer();
+    setIsFirstQuestion(false);
+
+    if (save && questionAnswer.length > 0) {
+      saveQuestionAnswer();
+    }
+
+    const isLastQuestion = questionIndex + 1 == chapter.questions!.length;
+    const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
+    const isLastChapter = chapterIndex + 1 == plan.chapters!.length;
+
+    if (isLastQuestion && isLastChapter)
+    {
+      setIsLastQuestion(true);
+      //finalizado
+      return;
+    }
+
+    if (isLastQuestion) {
+      handleChapterClick(plan.chapters![chapterIndex + 1]);
+      return;
+    }
+
     const questionN = chapter.questions![questionIndex + 1];
     setQuestion(questionN)
     setQuestionIndex(questionIndex + 1);
@@ -177,13 +222,14 @@ const NewHistory = () => {
   };
 
   const saveQuestionAnswer = () => {
-    setIsLoading(true);
+    setIsLoading2(true);
     const user = AuthenticatedUserModel.fromLocalStorage();
     _questionService
       .upsertQuestionUserAnswer(new QuestionUserAnswerModel({
-        id: question.questionUserAnswer.id,
+        ...question.questionUserAnswer,
         questionId: question.id,
         userId: user!.id,
+        bookId: user!.id,
         answer: questionAnswer,
         qtdCallIASugestionsUsed
       }))
@@ -197,7 +243,7 @@ const NewHistory = () => {
         console.log('Erro: ', message, e);
       })
       .finally(() => {
-        setIsLoading(false);
+        setIsLoading2(false);
       });
   }
 
@@ -305,6 +351,12 @@ const NewHistory = () => {
                   </div>
                 </div>
 
+                {isLoading1 && <div className='d-flex justify-content-center align-items-center' style={{ height: '20%', borderRadius: '9px' }}>
+                  <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+                    <span className="sr-only">Carregando...</span>
+                  </div>
+                </div>}
+
                 {/* Capítulos */}
                 {plan.chapters?.map((c, index) => {
                   return (
@@ -365,23 +417,31 @@ const NewHistory = () => {
                 </div>
 
                 {/* Contador de perguntas */}
-                <div className='d-flex align-items-center justify-content-between px-5 pt-5'>
-                  <div>
-                    <div className='f-14'>Capítulo {chapter.chapterNumber}</div>
-                    <b className='f-16'>{chapter.title}</b>
-                  </div>
-                  <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1'
-                    style={{ border: '1px solid #db3737' }}
-                  >
-                    Pergunta {questionIndex + 1}/{chapter.questions?.length}
-                  </div>
-                </div>
-
-                <div className='d-flex align-items-center justify-content-between px-5 pt-3'>
-                  <div>
-                    <span className='text-primary'>{questionIndex + 1} - </span>{question.title}
-                  </div>
-                </div>
+                {isLoading1 ?
+                  <div className='d-flex justify-content-center align-items-center' style={{ height: '20%', borderRadius: '9px' }}>
+                    <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+                      <span className="sr-only">Carregando...</span>
+                    </div>
+                  </div> :
+                  <>
+                    <div className='d-flex align-items-center justify-content-between px-5 pt-5'>
+                      <div>
+                        <div className='f-14'>Capítulo {chapter.chapterNumber}</div>
+                        <b className='f-16'>{chapter.title}</b>
+                      </div>
+                      <div className='text-primary fw-bold rounded-5 f-10 px-4 py-1'
+                        style={{ border: '1px solid #db3737' }}
+                      >
+                        Pergunta {questionIndex + 1}/{chapter.questions?.length}
+                      </div>
+                    </div>
+                    <div className='d-flex align-items-center justify-content-between px-5 pt-3'>
+                      <div>
+                        <span className='text-primary'>{questionIndex + 1} - </span>{question.title}
+                      </div>
+                    </div>
+                  </>
+                }
 
                 {/* Área resposta */}
                 <div className='d-flex px-5 pt-4'>
@@ -396,6 +456,8 @@ const NewHistory = () => {
                       borderRadius: '5px',
                       border: '1px solid #757575',
                     }}
+                    minLength={question.minLimitCharacters}
+                    maxLength={question.maxLimitCharacters}
                   />
                 </div>
 
@@ -425,10 +487,10 @@ const NewHistory = () => {
                             : theme === 'Cômico' ?
                               <img className='me-2' src={clownWithHat} style={{ height: '18px', width: '18px' }} />
                               : theme === 'Dramático' ?
-                              <img className='me-2' src={theater} style={{ height: '18px', width: '18px' }} />
-                              : theme === 'Romântico' ?
-                                <img className='me-2' src={hearts} style={{ height: '18px', width: '18px' }} />
-                              : <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>mood</span>}
+                                <img className='me-2' src={theater} style={{ height: '18px', width: '18px' }} />
+                                : theme === 'Romântico' ?
+                                  <img className='me-2' src={hearts} style={{ height: '18px', width: '18px' }} />
+                                  : <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>mood</span>}
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu className='f-14'>
@@ -469,8 +531,9 @@ const NewHistory = () => {
 
                 {/* Botões navegação das perguntas */}
                 <div className='d-flex align-items-center justify-content-between px-5 pt-3'>
+
                   <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
-                    ${(questionIndex === 0) ? ' disabled' : ''}`}
+                    ${isFirstQuestion ? ' disabled' : ''}`}
                     style={{ height: '48px', minWidth: '140px' }}
                     onClick={handleBeforeQuestionClick}
                   >
@@ -479,14 +542,14 @@ const NewHistory = () => {
                   </div>
 
                   <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
-                    ${(questionIndex + 1 === (chapter.questions?.length ?? 0)) ? ' disabled' : ''}`}
+                    ${isLastQuestion ? ' disabled' : ''}`}
                     onClick={() => { handleNextQuestionClick(false) }}
                   >
                     <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>swipe_right</span>
                   </div>
 
                   <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
-                    ${(questionIndex + 1 === (chapter.questions?.length ?? 0)) ? ' disabled' : ''}`}
+                    ${questionAnswer.length > 0 ? ' bg-black text-white' : ' bg-disabled text-icon'}`}
                     style={{ height: '48px', minWidth: '140px' }}
                     onClick={() => { handleNextQuestionClick(true) }}
                   >
