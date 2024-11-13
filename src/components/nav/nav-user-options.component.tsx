@@ -66,8 +66,8 @@ const NavUserOptions = () => {
             <Dropdown.Divider />
             <Dropdown.Item onClick={() => navigate(paths.TERMS)}>Termos</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.USERS)}>Usuários</Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate(paths.QUESTIONS)}>Perguntas</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.CHAPTERS)}>Capítulos</Dropdown.Item>
+            <Dropdown.Item onClick={() => navigate(paths.QUESTIONS)}>Perguntas</Dropdown.Item>
             <Dropdown.Item onClick={() => navigate(paths.PLANS)}>Planos</Dropdown.Item>
           </>
         }

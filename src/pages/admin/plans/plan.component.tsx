@@ -224,7 +224,7 @@ const PlanForm = (props: PlanFormProps) => {
   //busca peguntas, filtrando por pergunta
   const handleSearchPerguntaSessaoClick = () => {
     //@ts-ignore
-    getQuestions({ title: perguntaSessaoSearch })
+    getQuestions({ title: perguntaSessaoSearch,isActive:true })
   }
 
   //Click no header do accordion

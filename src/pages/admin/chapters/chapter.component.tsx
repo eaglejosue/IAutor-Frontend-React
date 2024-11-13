@@ -25,11 +25,14 @@ const ChapterForm = (p: ChapterFormProps) => {
     setValue,
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors,submitCount }
   } = useForm();
 
   const onSubmit = async (data: any) => {
 
+    if(submitCount>0){
+      return;
+    }
     let chapter = new ChapterModel({
       ...data,
       id: p.chapter?.id
@@ -46,9 +49,9 @@ const ChapterForm = (p: ChapterFormProps) => {
             style: { minWidth: 400 }
           });
           p.handleClose(false);
-          if(p.confirmaSalvar!=null){
+          /*if(p.confirmaSalvar!=null){
             p.confirmaSalvar()
-          }
+          }*/
         })
         .catch((e) => {
           let message = 'Error ao salvar dados.';
