@@ -175,16 +175,16 @@ const NewHistory = () => {
   const handleBeforeQuestionClick = () => {
     setIsLastQuestion(false);
 
-    const isFirstQuestion = questionIndex == 0;
+    const isFirstQuestionB = questionIndex == 0;
     const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
     const isFirstChapter = chapterIndex == 0;
 
-    if (isFirstQuestion && isFirstChapter) {
+    if (isFirstQuestionB && isFirstChapter) {
       setIsFirstQuestion(true);
       return;
     }
 
-    if (isFirstQuestion) {
+    if (isFirstQuestionB) {
       handleChapterClick(plan.chapters![chapterIndex - 1].id, true);
       return;
     }
@@ -200,22 +200,46 @@ const NewHistory = () => {
   const handleNextQuestionClick = (save: boolean = false) => {
     setIsFirstQuestion(false);
 
-    if (save && questionAnswer.length > 0) {
+    if (save) {
+      if (questionAnswer.length == 0) {
+        toast.error('Digite sua resposta para salvar!', {
+          position: 'top-center',
+          style: { width: 450 }
+        });
+        return;
+      }
+
+      if (questionAnswer.length < question.minLimitCharacters) {
+        toast.error(`Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`, {
+          position: 'top-center',
+          style: { width: 450 }
+        });
+        return;
+      }
+
+      if (questionAnswer.length > question.maxLimitCharacters) {
+        toast.error(`Resposta deve conter no máximo ${question.maxLimitCharacters} caracteres!`, {
+          position: 'top-center',
+          style: { width: 450 }
+        });
+        return;
+      }
+
       saveQuestionAnswer();
     }
 
-    const isLastQuestion = questionIndex + 1 == chapter.questions!.length;
+    const isLastQuestionN = questionIndex + 1 == chapter.questions!.length;
     const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
     const isLastChapter = chapterIndex + 1 == plan.chapters!.length;
 
-    if (isLastQuestion && isLastChapter)
+    if (isLastQuestionN && isLastChapter)
     {
       setIsLastQuestion(true);
       //finalizado
       return;
     }
 
-    if (isLastQuestion) {
+    if (isLastQuestionN) {
       handleChapterClick(plan.chapters![chapterIndex + 1].id);
       return;
     }
@@ -241,11 +265,10 @@ const NewHistory = () => {
         qtdCallIASugestionsUsed
       }))
       .then(() => {
-        const planA = plan;
         const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
         const questionIndex = plan.chapters!.findIndex(f => f.id == question.id);
-        planA.chapters![chapterIndex].questions![questionIndex].questionUserAnswer.answer = questionAnswer;
-        setPlan(planA);
+        plan.chapters![chapterIndex].questions![questionIndex].questionUserAnswer.answer = questionAnswer;
+        setPlan(plan);
       })
       .catch((e) => {
         let message = 'Error ao obter dados de participante.';
@@ -564,7 +587,7 @@ const NewHistory = () => {
                     style={{ height: '48px', minWidth: '140px' }}
                     onClick={() => { handleNextQuestionClick(true) }}
                   >
-                    <b className='f-16'>Salvar</b>
+                    <b className='f-16'>{isLastQuestion ? 'Finalizar' : 'Salvar'}</b>
                     <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>play_lesson</span>
                   </div>
                 </div>
@@ -584,17 +607,22 @@ const NewHistory = () => {
                 <div className='d-flex bg-white shadow rounded-3 align-items-center mx-5 my-4 p-4'>
                   <div className='d-flex f-14 px-5'>Ferramentas de Edição</div>
                   <div className='d-flex text-icon ps-4'>
-                    {/* add icons */}
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }} title='Inserir foto'>add_photo_alternate</span>
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }} title='Editar fonte'>draw</span>
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
+                    <span className='material-symbols-outlined px-2'
+                      style={{ fontSize: '24px', cursor: 'pointer' }}
+                      title='Inserir foto'>add_photo_alternate</span>
+                    <span className='material-symbols-outlined px-2'
+                      style={{ fontSize: '24px', cursor: 'pointer' }}
+                      title='Editar fonte'>draw</span>
+                    <span className='material-symbols-outlined px-2'
+                      style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
                       onClick={() => { setIsBookPreviewModalOpen(true) }}
-                      title='Visualizar livro'
-                    >
-                      auto_stories
-                    </span>
-                    <span className='material-symbols-outlined px-2' style={{ fontSize: '24px', cursor: 'pointer' }} title='Download'>file_save</span>
-                    <span className='material-symbols-outlined px-2 pe-4' style={{ fontSize: '24px', cursor: 'pointer' }} title='Presentear'>featured_seasonal_and_gifts</span>
+                      title='Visualizar livro'>auto_stories</span>
+                    <span className='material-symbols-outlined px-2'
+                      style={{ fontSize: '24px', cursor: 'pointer' }}
+                      title='Download'>file_save</span>
+                    <span className='material-symbols-outlined px-2 pe-4'
+                      style={{ fontSize: '24px', cursor: 'pointer' }}
+                      title='Presentear'>featured_seasonal_and_gifts</span>
                   </div>
                 </div>
 
@@ -633,6 +661,9 @@ const NewHistory = () => {
               paddingRight: '10%'
             }}
           >
+            <div className='d-flex justify-content-center'>
+              <b className='f-28'>Ajuda</b>
+            </div>
             <div className='pt-3'>
               Na resposta, é importante que você seja o mais sincero possível, e conte todos os detalhes que puder se lembrar, aqui vale vale a regra: quanto mais informação, melhor!
             </div>
@@ -733,12 +764,8 @@ const NewHistory = () => {
         </Modal>
 
         <Modal show={isBookPreviewModalOpen} onHide={() => setIsBookPreviewModalOpen(false)} size='xl'>
-          <Modal.Body className='justify-content-center f-20'
-            style={{
-              paddingTop: '3%',
-              paddingLeft: '10%',
-              paddingRight: '10%'
-            }}
+          <Modal.Body className='justify-content-center f-20 p-5'
+            style={{ paddingTop: '3%', paddingLeft: '10%', paddingRight: '10%' }}
           >
             <div className='d-flex justify-content-center'>
               Capítulo {chapter.chapterNumber}
