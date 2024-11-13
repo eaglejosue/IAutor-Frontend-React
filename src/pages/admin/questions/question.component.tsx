@@ -29,17 +29,25 @@ const QuestionForm = (p: QuestionFormProps) => {
     setValue,
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors,isSubmitting,submitCount }
   } = useForm();
 
-  const onSubmit = async (data: any) => {
+  //const onSubmit = handleSubmit((data) => console.log(data))
 
+
+  const onSubmit = (data: any) => {
+    
+    if(submitCount>0) {
+      return;
+    }
+
+    setIsLoading(true)
     let question = new QuestionModel({
       ...data,
       id: p.question?.id
     });
 
-    setIsLoading(true)
+    
     if (question.id === undefined) {
       _questionService
         .post(question)
@@ -48,11 +56,11 @@ const QuestionForm = (p: QuestionFormProps) => {
             position: 'top-center',
             style: { minWidth: 400 }
           });
-
-          if(p.confirmaSalvar!=null){
+          p.handleClose(false)
+         /* if(p.confirmaSalvar!=null){
             p.confirmaSalvar()
           }
-          p.handleClose(false);
+          p.handleClose(false);*/
         })
         .catch((e) => {
           let message = 'Error ao salvar dados.';
@@ -99,16 +107,16 @@ const QuestionForm = (p: QuestionFormProps) => {
         <CustomInput
           type='text'
           disabled={isLoading}
-          label='Título'
-          placeholder='Título'
+          label='Pergunta'
+          placeholder='Pergunta'
           register={register}
           errors={errors.title}
           name='title'
           setValue={setValue}
           divClassName='col-12 mt-4'
           validationSchema={{
-            required: 'Título é obrigatório',
-            maxLength: { value: 100, message: "Título deve conter no máximo 100 caracteres" }
+            required: 'Pergunta é obrigatória',
+            maxLength: { value: 100, message: "Pergunta deve conter no máximo 100 caracteres" }
           }}
           maxLength={500}
         />
@@ -184,7 +192,8 @@ const QuestionForm = (p: QuestionFormProps) => {
         </button>
         <button className='btn btn-primary text-white rounded-5 f-14 px-4 py-2'
           type="submit"
-          disabled={isLoading}
+          
+          disabled={isSubmitting}
         >
           Salvar Informações
           {isLoading && <span className="spinner-border spinner-border-sm text-light ms-2" role="status" aria-hidden="true"></span>}

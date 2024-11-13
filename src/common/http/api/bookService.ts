@@ -4,7 +4,7 @@ import { BookModel } from "../../models/book.model";
 import { BookFilter } from "../../models/filters/book.filter";
 
 export class BookService {
-  private endpoint = "/videos";
+  private endpoint = "/books";
   private _httpClient!: HttpClient;
 
   constructor() {

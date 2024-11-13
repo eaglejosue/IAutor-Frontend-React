@@ -43,7 +43,7 @@ const ChapterTable = (props: ChapterTableProps) => {
         a.chapterNumber.localeCompare(b.chapterNumber),
     },
     {
-      title: "Titulo",
+      title: "Titulo do capítulo",
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
