@@ -7,7 +7,7 @@ interface EmptyHomeLoggedProps{
     user: AuthenticatedUserModel |null;
 }
 const EmptyHomeLogged =({user}:EmptyHomeLoggedProps)=>{
-
+    
     return (
       <>
         <div className="col-4 pt-5">

@@ -2,12 +2,43 @@ import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 import './home-logged.scss'
 import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
-import { homelogged } from '../../assets/svg';
 import { Button } from 'react-bootstrap';
 import EmptyHomeLogged from './sections/empty-logged.section';
+import BooksHistory from './sections/books-history-section';
+import { useEffect, useState } from 'react';
+import { BookService } from '../../common/http/api/bookService';
+import { BookModel } from '../../common/models/book.model';
 
 const HomeLogged = () => {
   const user = AuthenticatedUserModel.fromLocalStorage();
+  const _bookService = new BookService();
+  const [book,setBook] = useState<BookModel|null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(()=>{
+    if(user){
+      setIsLoading(true)
+      _bookService
+      .getById(user?.lastBookId )
+      .then((response: any) => {
+        if(response){
+          setBook(response);
+        }
+        console.log(book )
+        console.log(user)
+      })
+      .catch((e: any) => {
+        let message = "Error ao obter plano.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+        setIsLoading(false)
+      });
+    }
+  },[])
   
   return (
     <div className="d-flex" style={{ height: "100vh" }}>
@@ -26,7 +57,19 @@ const HomeLogged = () => {
         <main className="main">
           <div className="container-fluid">
             <div className="row m-5">
-              <EmptyHomeLogged user={user}></EmptyHomeLogged>
+
+            {isLoading ? (
+            <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
+              <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
+                <span className="sr-only">Carregando...</span>
+              </div>
+            </div>
+          ):(
+            book==null?
+              <EmptyHomeLogged user={user} />:
+              <BooksHistory book={book} user={user} />
+          )
+          }
             </div>
 
             <div className="row ">
