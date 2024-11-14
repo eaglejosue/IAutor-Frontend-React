@@ -25,20 +25,21 @@ const ChapterForm = (p: ChapterFormProps) => {
     setValue,
     register,
     handleSubmit,
-    formState: { errors,submitCount }
+    formState: { errors, submitCount }
   } = useForm();
 
   const onSubmit = async (data: any) => {
-
     if(submitCount>0){
       return;
     }
+
+    setIsLoading(true)
+
     let chapter = new ChapterModel({
       ...data,
       id: p.chapter?.id
     });
 
-    setIsLoading(true)
 
     if (chapter.id === undefined) {
       _chapterService
@@ -49,9 +50,6 @@ const ChapterForm = (p: ChapterFormProps) => {
             style: { minWidth: 400 }
           });
           p.handleClose(false);
-          /*if(p.confirmaSalvar!=null){
-            p.confirmaSalvar()
-          }*/
         })
         .catch((e) => {
           let message = 'Error ao salvar dados.';
@@ -88,7 +86,6 @@ const ChapterForm = (p: ChapterFormProps) => {
           setIsLoading(false);
         });
     }
-    setIsLoading(false)
   }
 
   return (
@@ -98,16 +95,16 @@ const ChapterForm = (p: ChapterFormProps) => {
         <CustomInput
           type='text'
           disabled={isLoading}
-          label='Título'
-          placeholder='Título'
+          label='Título do capítulo'
+          placeholder='Título do capítulo'
           register={register}
           errors={errors.title}
           name='title'
           setValue={setValue}
           divClassName='col-12 mt-4'
           validationSchema={{
-            required: 'Título é obrigatório',
-            maxLength: { value: 100, message: "Título deve conter no máximo 100 caracteres" }
+            required: 'Título do capítulo é obrigatório',
+            maxLength: { value: 100, message: "Título do capítulo deve conter no máximo 100 caracteres" }
           }}
           maxLength={500}
         />

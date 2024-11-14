@@ -64,14 +64,14 @@ const NewHistory = () => {
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
-    getPlan();
+    getPlanChaptersQuestionsAndAnswers();
   }, []);
 
-  const getPlan = () => {
+  const getPlanChaptersQuestionsAndAnswers = () => {
     setIsLoading1(true);
     const user = AuthenticatedUserModel.fromLocalStorage();
     _planService
-      .getChaptersAndQuestionsByPlanId(user?.planId ?? 4)
+      .getChaptersAndQuestionsByPlanId(user!.planId, user!.lastBookId)
       .then((response: any) => {
         setPlan(response);
         setChapter(response.chapters[0]);
@@ -260,15 +260,12 @@ const NewHistory = () => {
         ...question.questionUserAnswer,
         questionId: question.id,
         userId: user!.id,
-        //bookId: user!.id,
+        bookId: user!.lastBookId,
         answer: questionAnswer,
         qtdCallIASugestionsUsed
       }))
       .then(() => {
-        const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
-        const questionIndex = plan.chapters!.findIndex(f => f.id == question.id);
-        plan.chapters![chapterIndex].questions![questionIndex].questionUserAnswer.answer = questionAnswer;
-        setPlan(plan);
+        //
       })
       .catch((e) => {
         let message = 'Error ao obter dados de participante.';

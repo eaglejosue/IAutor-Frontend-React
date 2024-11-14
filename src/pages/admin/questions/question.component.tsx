@@ -23,31 +23,25 @@ const QuestionForm = (p: QuestionFormProps) => {
     setValue('subject', p.question?.subject);
   }, []);
 
-  //
-
   const {
     setValue,
     register,
     handleSubmit,
-    formState: { errors,isSubmitting,submitCount }
+    formState: { errors, submitCount }
   } = useForm();
 
-  //const onSubmit = handleSubmit((data) => console.log(data))
-
-
   const onSubmit = (data: any) => {
-    
-    if(submitCount>0) {
+    if(submitCount > 0) {
       return;
     }
 
     setIsLoading(true)
+
     let question = new QuestionModel({
       ...data,
       id: p.question?.id
     });
 
-    
     if (question.id === undefined) {
       _questionService
         .post(question)
@@ -57,10 +51,6 @@ const QuestionForm = (p: QuestionFormProps) => {
             style: { minWidth: 400 }
           });
           p.handleClose(false)
-         /* if(p.confirmaSalvar!=null){
-            p.confirmaSalvar()
-          }
-          p.handleClose(false);*/
         })
         .catch((e) => {
           let message = 'Error ao salvar dados.';
@@ -97,7 +87,6 @@ const QuestionForm = (p: QuestionFormProps) => {
           setIsLoading(false);
         });
     }
-    setIsLoading(false)
   }
 
   return (
@@ -192,8 +181,7 @@ const QuestionForm = (p: QuestionFormProps) => {
         </button>
         <button className='btn btn-primary text-white rounded-5 f-14 px-4 py-2'
           type="submit"
-          
-          disabled={isSubmitting}
+          disabled={isLoading}
         >
           Salvar Informações
           {isLoading && <span className="spinner-border spinner-border-sm text-light ms-2" role="status" aria-hidden="true"></span>}

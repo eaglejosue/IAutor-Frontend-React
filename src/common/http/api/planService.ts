@@ -53,9 +53,9 @@ export class PlanService {
     return response.data;
   }
 
-  public async getChaptersAndQuestionsByPlanId(id: number) {
+  public async getChaptersAndQuestionsByPlanId(planId: number, bookId: number) {
     const response = await this._httpClient.get<string>(
-      `${this.endpoint}/chapters-and-questions/${id}`,
+      `${this.endpoint}/chapters-and-questions/${planId}/${bookId}`,
     );
     return response.data;
   }

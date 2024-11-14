@@ -34,7 +34,7 @@ const QuestionTable = (props: QuestionTableProps) => {
 
   const columnsRegister = [
     {
-      title: "Título",
+      title: "Pergunta",
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },

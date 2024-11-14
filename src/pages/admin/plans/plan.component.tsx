@@ -329,7 +329,7 @@ const PlanForm = (props: PlanFormProps) => {
           <CustomInput
             type="text"
             disabled={isLoading}
-            label="Título"
+            label="Título do plano"
             placeholder="Título do plano"
             register={register}
             errors={errors.title}
@@ -337,10 +337,10 @@ const PlanForm = (props: PlanFormProps) => {
             setValue={setValue}
             divClassName="col-8 mt-4"
             validationSchema={{
-              required: "Título é obrigatório",
+              required: "Título do plano é obrigatório",
               maxLength: {
                 value: 100,
-                message: "Título deve conter no máximo 100 caracteres",
+                message: "Título do plano deve conter no máximo 100 caracteres",
               },
             }}
             maxLength={500}
