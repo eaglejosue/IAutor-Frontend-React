@@ -16,12 +16,12 @@ const SectionHistory = () => {
   const CardHome = (props: CardHomeProps) => {
     return (
       <>
-        <div className="div-home-card text-start p-4 z-4 position-relative"
+        <div className="div-home-card text-start p-3 z- position-relative"
           style={{ marginLeft: props.marginLeft, marginRight: props.marginRight, marginTop: props.marginTop }}>
           <img className="mb-3" alt="icon-home" src={props.icon} />
           <br/>
           <strong>{props.title}</strong>
-          <p className="">{props.text}</p>
+          <p className="textCards">{props.text}</p>
         </div>
       </>
     );
@@ -71,7 +71,7 @@ const SectionHistory = () => {
             text="Mantenha viva suas histórias escrevendo para outras gerações." />
           </div>
           <div className="col-3"><CardHome icon={home3} marginLeft="-85px" marginRight="0px" marginTop="-709px" title="Escreva histórias"
-            text="IAutor possuí mais de 100 perguntas que vai te ajudar a contar as histórias." />
+            text="IAutor possuí mais de 100 perguntas que vão te ajudar a contar as histórias." />
           </div>
           <div className="col-6">
           </div>
