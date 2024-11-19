@@ -46,16 +46,16 @@ export class PlanService {
     return response.data;
   }
 
-  public async getPlanChaptersByPlanId(id: number) {
+  public async getPlanChaptersByPlanId(planId: number) {
     const response = await this._httpClient.get<string>(
-      `${this.endpoint}/planchapter/${id}`,
+      `${this.endpoint}/${planId}/planchapter`,
     );
     return response.data;
   }
 
-  public async getChaptersAndQuestionsByPlanId(planId: number, bookId: number) {
+  public async getChaptersAndQuestionsByPlanId(planId: number) {
     const response = await this._httpClient.get<string>(
-      `${this.endpoint}/chapters-and-questions/${planId}/${bookId}`,
+      `${this.endpoint}/${planId}/chapters-and-questions`,
     );
     return response.data;
   }

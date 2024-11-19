@@ -60,7 +60,7 @@ const routes: Routes[] = [
   { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true, true, false) },
   { path: paths.HOME_LOGGED, element: getRouteElement(HomeLogged, true, true, false) },
   { path: paths.MY_HISTORIES, element: getRouteElement(MyHistories, true, true, false) },
-  { path: paths.NEW_HISTORY, element: getRouteElement(NewHistory, true, true, false) },
+  { path: `${paths.NEW_HISTORY}/:id`, element: getRouteElement(NewHistory, true, true, false) },
   { path: paths.TERMS, element: getRouteElement(Terms, true, true) },
   { path: paths.USERS, element: getRouteElement(Users, true, true) },
   { path: paths.CHAPTERS, element: getRouteElement(Chapters, true, true) },

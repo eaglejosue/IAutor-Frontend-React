@@ -46,7 +46,7 @@ const NewHistory = () => {
                 <div id='img-baixo' style={{ marginTop: '40vh' }}>
 
                   <div className='d-flex justify-content-center'>
-                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px' }} />
+                    <img src={imgRandomSrc} style={{ minWidth: '314px', height: '200px', objectFit: 'cover', borderRadius: '5px' }} />
                   </div>
                   <div className='d-flex justify-content-center mt-2 p-2'>
                     <b className='f-16'>Uma História mais Completa</b>

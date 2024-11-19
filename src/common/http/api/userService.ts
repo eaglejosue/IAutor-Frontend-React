@@ -54,9 +54,9 @@ export class UserService {
     return response.data;
   }
 
-  public async postVideoLog(data: UserBookLogModel) {
+  public async postBookLog(data: UserBookLogModel) {
     const response = await this._httpClient.post<string>(
-      `${this.endpoint}/video-log`, { data }
+      `${this.endpoint}/book-log`, { data }
     );
     return response.data;
   }

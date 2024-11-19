@@ -1,19 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
-import Dropdown from 'react-bootstrap/Dropdown';
 import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import Dropdown from 'react-bootstrap/Dropdown';
 
-import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
-import { IAService } from '../../common/http/api/iaService';
+
+import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
+import { BookService } from '../../common/http/api/bookService';
 import { PlanService } from '../../common/http/api/planService';
 import { QuestionService } from '../../common/http/api/questionService';
-//import { BookModel } from '../../common/models/book.model';
+import { IAService } from '../../common/http/api/iaService';
+import { BookModel } from '../../common/models/book.model';
 import { PlanModel } from '../../common/models/plan.model';
 import { ChapterModel } from '../../common/models/chapter.model';
 import { QuestionModel } from '../../common/models/question.model';
@@ -31,16 +33,23 @@ import theater from '../../assets/svg/theater.svg';
 import hearts from '../../assets/svg/hearts.svg';
 
 const NewHistory = () => {
+
   const navigate = useNavigate();
-  const [imgRandomSrc, setImgRandomSrc] = useState('1');
-  //const [book, setBook] = useState<BookModel>(new BookModel({title: 'Título História'}));
-  const _iaService = new IAService();
+  const param = useParams();
+
+  const _bookService = new BookService();
   const _planService = new PlanService();
   const _questionService = new QuestionService();
-  const [plan, setPlan] = useState<PlanModel>(new PlanModel())
+  const _iaService = new IAService();
+
   const [isLoading1, setIsLoading1] = useState<boolean>(false);
   const [isLoading2, setIsLoading2] = useState<boolean>(false);
-  const isLoading = isLoading1 || isLoading2;
+  const [isLoading3, setIsLoading3] = useState<boolean>(false);
+  const isLoading = isLoading1 || isLoading2 || isLoading3;
+
+  const [imgRandomSrc, setImgRandomSrc] = useState('1');
+  const [book, setBook] = useState<BookModel>(new BookModel({ id: 2, title: 'Título História' }))
+  const [plan, setPlan] = useState<PlanModel>(new PlanModel())
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
   const [theme, setTheme] = useState('');
@@ -52,39 +61,28 @@ const NewHistory = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
+  const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
+  const [answer, setAnswer] = useState('');
   const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
-  const [questionAnswer, setQuestionAnswer] = useState('');
   const [IAText, setIAText] = useState('');
-  const [bookText, setBookText] = useState('');
-  // const [bookText, setBookText] = useState('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
-  // ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
-  // ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.'+
-  // ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ac ultricies lorem. Mauris pulvinar, neque vitae fringilla pharetra, nunc  nibh viverra ipsum, eget viverra metus augue eget nulla. Maecenas tempus imperdiet nisl ac ullamcorper. Class aptent taciti sociosqu ad litora  torquent per conubia nostra, per inceptos himenaeos. Aenean blandit  malesuada velit sit amet maximus. Donec euismod, urna vitae porta  laoreet, est elit viverra est, lobortis congue est massa ut dolor. Donec non dignissim enim.');
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
-    getPlanChaptersQuestionsAndAnswers();
+    getBook(parseInt(param.id!));
+    getPlanChaptersQuestions();
   }, []);
 
-  const getPlanChaptersQuestionsAndAnswers = () => {
+  const getBook = (id: number) => {
     setIsLoading1(true);
-    const user = AuthenticatedUserModel.fromLocalStorage();
-    _planService
-      .getChaptersAndQuestionsByPlanId(user!.planId, user!.lastBookId)
+    _bookService
+      .getById(id)
       .then((response: any) => {
-        setPlan(response);
-        setChapter(response.chapters[0]);
-        setIsFirstQuestion(true);
-        const questionRes = response.chapters[0].questions[0];
-        setQuestion(questionRes);
-        setQuestionIndex(0);
-        setQuestionAnswer(questionRes.questionUserAnswer?.answer ?? '');
-        setBookText(questionRes.questionUserAnswer?.answer ?? '');
-        setQtdCallIASugestionsUsed(questionRes.questionUserAnswer.qtdCallIASugestionsUsed);
+        setBook(response);
+        setTitle(response.title);
       })
       .catch((e: any) => {
-        let message = "Error ao obter plano.";
+        let message = "Error ao obter livro.";
         if (e.response?.data?.length > 0 && e.response.data[0].message)
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
@@ -95,8 +93,54 @@ const NewHistory = () => {
       });
   };
 
-  const handleSuggestionClick = () => {
-    if (questionAnswer.length == 0) {
+  const getPlanChaptersQuestions = () => {
+    setIsLoading2(true);
+    const user = AuthenticatedUserModel.fromLocalStorage();
+    _planService
+      .getChaptersAndQuestionsByPlanId(user!.planId)
+      .then((response: any) => {
+        setPlan(response);
+        setChapter(response.chapters[0]);
+        setIsFirstQuestion(true);
+        const questionRes = response.chapters[0].questions[0];
+        setQuestion(questionRes);
+        setQuestionIndex(0);
+        getQuestionAnswers();
+      })
+      .catch((e: any) => {
+        let message = "Error ao obter plano, capitulos e perguntas.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+        setIsLoading2(false);
+      });
+  };
+
+  const getQuestionAnswers = () => {
+    setIsLoading3(true);
+    _questionService
+      .getAllQuestionUserAnswers(book.id)
+      .then((response: any) => {
+        setQuestionUserAnswers(response);
+        handleQuestionUserAnswer(question.id);
+      })
+      .catch((e: any) => {
+        let message = "Error ao obter respostas.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+        setIsLoading3(false);
+      });
+  };
+
+  const handleIASuggestionClick = () => {
+    if (answer.length == 0) {
       toast.error('Digite sua resposta para consultar!', {
         position: 'top-center',
         style: { width: 450 }
@@ -104,7 +148,7 @@ const NewHistory = () => {
       return;
     }
 
-    if (questionAnswer.length < question.minLimitCharacters) {
+    if (answer.length < question.minLimitCharacters) {
       toast.error(`Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`, {
         position: 'top-center',
         style: { width: 450 }
@@ -125,11 +169,11 @@ const NewHistory = () => {
   };
 
   const postIASugestion = () => {
-    setIsLoading2(true);
+    setIsLoading1(true);
     _iaService
       .post({
         question: question.title,
-        questionAnswer,
+        questionAnswer: answer,
         theme,
         maxCaracters: question.maxLimitCharacters
       })
@@ -145,14 +189,13 @@ const NewHistory = () => {
         console.log('Erro: ', message, e);
       })
       .finally(() => {
-        setIsLoading2(false);
+        setIsLoading1(false);
       });
   }
 
   const handleIAAccept = () => {
     setIsIAModalOpen(false);
-    setBookText(IAText);
-    setQuestionAnswer(IAText);
+    //handleQuestionUserAnswer();
   };
 
   const handleChapterClick = (id: number, fromBeforeClick: boolean = false) => {
@@ -164,9 +207,7 @@ const NewHistory = () => {
     setQuestion(questionC);
     const questionCIndex = fromBeforeClick ? questionsLength-1 : 0;
     setQuestionIndex(questionCIndex);
-    setQuestionAnswer(questionC.questionUserAnswer?.answer ?? '');
-    setBookText(questionC.questionUserAnswer?.answer ?? '');
-    setQtdCallIASugestionsUsed(questionC.questionUserAnswer.qtdCallIASugestionsUsed);
+    handleQuestionUserAnswer(questionC.id);
 
     const chapterIndex = plan.chapters!.findIndex(f => f.id == id);
     setIsFirstQuestion(chapterIndex == 0 && questionCIndex == 0);
@@ -192,41 +233,12 @@ const NewHistory = () => {
     const questionB = chapter.questions![questionIndex - 1];
     setQuestion(questionB)
     setQuestionIndex(questionIndex - 1);
-    setQuestionAnswer(questionB.questionUserAnswer?.answer ?? '');
-    setBookText(questionB.questionUserAnswer?.answer ?? '');
+    handleQuestionUserAnswer(questionB.id);
     setQtdCallIASugestionsUsed(questionB.questionUserAnswer.qtdCallIASugestionsUsed);
   };
 
-  const handleNextQuestionClick = (save: boolean = false) => {
+  const handleNextQuestionClick = () => {
     setIsFirstQuestion(false);
-
-    if (save) {
-      if (questionAnswer.length == 0) {
-        toast.error('Digite sua resposta para salvar!', {
-          position: 'top-center',
-          style: { width: 450 }
-        });
-        return;
-      }
-
-      if (questionAnswer.length < question.minLimitCharacters) {
-        toast.error(`Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`, {
-          position: 'top-center',
-          style: { width: 450 }
-        });
-        return;
-      }
-
-      if (questionAnswer.length > question.maxLimitCharacters) {
-        toast.error(`Resposta deve conter no máximo ${question.maxLimitCharacters} caracteres!`, {
-          position: 'top-center',
-          style: { width: 450 }
-        });
-        return;
-      }
-
-      saveQuestionAnswer();
-    }
 
     const isLastQuestionN = questionIndex + 1 == chapter.questions!.length;
     const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
@@ -247,25 +259,45 @@ const NewHistory = () => {
     const questionN = chapter.questions![questionIndex + 1];
     setQuestion(questionN)
     setQuestionIndex(questionIndex + 1);
-    setQuestionAnswer(questionN.questionUserAnswer?.answer ?? '');
-    setBookText(questionN.questionUserAnswer?.answer ?? '');
+    handleQuestionUserAnswer(questionN.id);
     setQtdCallIASugestionsUsed(questionN.questionUserAnswer.qtdCallIASugestionsUsed);
   };
 
   const saveQuestionAnswer = () => {
+    if (answer.length == 0) {
+      toast.error('Digite sua resposta para consultar!', {
+        position: 'top-center',
+        style: { width: 450 }
+      });
+      return;
+    }
+
+    if (answer.length < question.minLimitCharacters) {
+      toast.error(`Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`, {
+        position: 'top-center',
+        style: { width: 450 }
+      });
+      return;
+    }
+
     setIsLoading2(true);
+
     const user = AuthenticatedUserModel.fromLocalStorage();
+    const newQuestionUserAnswerModel = new QuestionUserAnswerModel({
+      questionId: question.id,
+      chapterId: chapter.id,
+      userId: user!.id,
+      bookId: book.id,
+      answer: answer,
+      qtdCallIASugestionsUsed: qtdCallIASugestionsUsed
+    });
+
     _questionService
-      .upsertQuestionUserAnswer(new QuestionUserAnswerModel({
-        ...question.questionUserAnswer,
-        questionId: question.id,
-        userId: user!.id,
-        bookId: user!.lastBookId,
-        answer: questionAnswer,
-        qtdCallIASugestionsUsed
-      }))
+      .upsertQuestionUserAnswer(newQuestionUserAnswerModel)
       .then(() => {
-        //
+        debugger;
+        const questionUserAnswersFiltered = questionUserAnswers.filter(f => f.id != question.id);
+        setQuestionUserAnswers([...questionUserAnswersFiltered, newQuestionUserAnswerModel]);
       })
       .catch((e) => {
         let message = 'Error ao obter dados de participante.';
@@ -277,6 +309,12 @@ const NewHistory = () => {
         setIsLoading2(false);
       });
   }
+
+  const handleQuestionUserAnswer = (questionId?: number) => {
+    const questionUserAnswer = questionUserAnswers ? questionUserAnswers.find(f => f.id == (questionId ?? question.id)) : null;
+    setAnswer(questionUserAnswer?.answer ?? '');
+    setQtdCallIASugestionsUsed(questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
+  };
 
   return (
     <div className='d-flex'
@@ -383,9 +421,7 @@ const NewHistory = () => {
                 </div>
 
                 {isLoading1 && <div className='d-flex justify-content-center align-items-center' style={{ height: '20%', borderRadius: '9px' }}>
-                  <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
-                    <span className="sr-only">Carregando...</span>
-                  </div>
+                  <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
                 </div>}
 
                 {/* Capítulos */}
@@ -413,7 +449,7 @@ const NewHistory = () => {
                 {/* Img baixo */}
                 <div id='img-baixo' className='pb-2 mt-5'>
                   <div className='d-flex justify-content-center'>
-                    <img src={imgRandomSrc} style={{ width: '380px', height: '250px', objectFit: 'cover', borderRadius: '5px' }} />
+                    <img src={imgRandomSrc} style={{ minWidth: '314px', height: '200px', objectFit: 'cover', borderRadius: '5px' }} />
                   </div>
                   <div className='d-flex justify-content-center mt-2 p-2'>
                     <b className='f-16'>Uma História mais Completa</b>
@@ -450,9 +486,7 @@ const NewHistory = () => {
                 {/* Contador de perguntas */}
                 {isLoading1 ?
                   <div className='d-flex justify-content-center align-items-center' style={{ height: '20%', borderRadius: '9px' }}>
-                    <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
-                      <span className="sr-only">Carregando...</span>
-                    </div>
+                    <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
                   </div> :
                   <>
                     <div className='d-flex align-items-center justify-content-between px-5 pt-5'>
@@ -477,8 +511,9 @@ const NewHistory = () => {
                 {/* Área resposta */}
                 <div className='d-flex px-5 pt-4'>
                   <TextareaAutosize
-                    onChange={(e) => { setQuestionAnswer(e.target.value) }}
-                    value={questionAnswer}
+                    onChange={(e) => { setAnswer(e.target.value) }}
+                    value={answer}
+                    disabled={isLoading}
                     placeholder='Digite sua resposta aqui...'
                     style={{
                       width: '100%',
@@ -494,7 +529,7 @@ const NewHistory = () => {
 
                 {/* Limite caracter, temas e botão IA */}
                 <div className='d-flex align-items-center justify-content-between px-5 py-3'>
-                  <span className='text-muted f-14'>{questionAnswer.length} / {question.maxLimitCharacters}</span>
+                  <span className='text-muted f-14'>{answer.length} / {question.maxLimitCharacters}</span>
 
                   <div className='d-flex justify-content-center'>
 
@@ -553,7 +588,7 @@ const NewHistory = () => {
                   <div className={`d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5
                     ${(plan.maxQtdCallIASugestions - qtdCallIASugestionsUsed) == 0 ? ' disabled' : ''}`}
                     style={{ height: '32px' }}
-                    onClick={handleSuggestionClick}
+                    onClick={handleIASuggestionClick}
                   >
                     <b className='f-12'>Texto sugerido pelo IAutor</b>
                     <img className='ps-1' src={artificialInteligence} />
@@ -572,23 +607,23 @@ const NewHistory = () => {
                     <b className='f-16'>Voltar</b>
                   </div>
 
-                  <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
-                    ${isLastQuestion ? ' disabled' : ''}`}
-                    onClick={() => { handleNextQuestionClick(false) }}
+                  <div className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5 p-2 ${isLastQuestion ? ' disabled' : ''}`}
+                    style={{ border: '1px solid black' }}
+                    onClick={() => { saveQuestionAnswer() }}
                   >
-                    <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>swipe_right</span>
+                    <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>save</span>
                   </div>
 
-                  <div className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
-                    ${questionAnswer.length > 0 ? ' bg-black text-white' : ' bg-disabled text-icon'}`}
+                  <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3 bg-black text-white'
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={() => { handleNextQuestionClick(true) }}
+                    onClick={() => { handleNextQuestionClick() }}
                   >
-                    <b className='f-16'>{isLastQuestion ? 'Finalizar' : 'Salvar'}</b>
-                    <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>play_lesson</span>
+                    <b className='f-16'>{isLastQuestion ? 'Finalizar' : 'Avançar'}</b>
+                    <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>arrow_right_alt</span>
                   </div>
+
                 </div>
-                <div className='d-flex text-icon justify-content-center f-14 pt-2'>Pular Pergunta</div>
+                <div className='d-flex text-black justify-content-center f-14 pt-2'>Salvar Resposta</div>
 
               </div>
 
@@ -601,8 +636,8 @@ const NewHistory = () => {
                   <div className='f-14'>Preview do Livro</div>
                 </div>
 
-                <div className='d-flex bg-white shadow rounded-3 align-items-center mx-5 my-4 p-4'>
-                  <div className='d-flex f-14 px-5'>Ferramentas de Edição</div>
+                <div className='d-flex justify-content-center align-items-center bg-white shadow rounded-3 mx-5 my-4 p-4'>
+                  <div className='d-flex f-14'>Ferramentas de Edição</div>
                   <div className='d-flex text-icon ps-4'>
                     <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer' }}
@@ -617,18 +652,18 @@ const NewHistory = () => {
                     <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer' }}
                       title='Download'>file_save</span>
-                    <span className='material-symbols-outlined px-2 pe-4'
+                    <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer' }}
                       title='Presentear'>featured_seasonal_and_gifts</span>
                   </div>
                 </div>
 
                 <div className='d-flex justify-content-center pb-4'>
-                  {bookText.length == 0
+                  {answer.length == 0
                     ? <img src={previewCapaLivro} />
                     : <img src={previewCapaLivroBranca} />
                   }
-                  {bookText.length > 0 &&
+                  {answer.length > 0 &&
                     <div className='d-flex position-absolute f-10'
                       style={{
                         paddingTop: '2%',
@@ -639,7 +674,7 @@ const NewHistory = () => {
                         lineHeight: '16px'
                       }}
                     >
-                      {bookText}
+                      {answer.substring(0, 1500)}
                     </div>
                   }
                 </div>
@@ -700,9 +735,9 @@ const NewHistory = () => {
 
               <div className='d-flex'>
                 <TextareaAutosize
-                  onChange={(e) => { setQuestionAnswer(e.target.value) }}
+                  onChange={(e) => { setAnswer(e.target.value) }}
                   name='questionAnswer'
-                  value={questionAnswer}
+                  value={answer}
                   disabled={isLoading}
                   style={{
                     width: '100%',
@@ -721,9 +756,7 @@ const NewHistory = () => {
 
               {isLoading ? (
                 <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
-                  <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
-                    <span className="sr-only">Carregando...</span>
-                  </div>
+                  <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
                 </div>
               ) : (
                 <div className='d-flex'>
@@ -771,7 +804,8 @@ const NewHistory = () => {
               <b className='f-28'>{chapter.title}</b>
             </div>
             <div className='pt-3'>
-              {bookText}
+              {/* TODO: tratar aqui livro completo para navegação entre páginas */}
+              {answer}
             </div>
           </Modal.Body>
         </Modal>

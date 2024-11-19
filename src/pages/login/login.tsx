@@ -71,7 +71,7 @@ const Login = () => {
     // else {
     //   navigate(redirect?.length ? `${redirect}?logged=true` : paths.NEW_HISTORY);
     // }
-    navigate(redirect?.length ? `${redirect}?logged=true` : paths.NEW_HISTORY);
+    navigate(redirect?.length ? `${redirect}?logged=true` : `${paths.NEW_HISTORY}/${user.lastBookId}`);
     reset();
   }
 
