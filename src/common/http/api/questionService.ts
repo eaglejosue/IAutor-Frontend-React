@@ -19,6 +19,13 @@ export class QuestionService {
     return response.data;
   }
 
+  public async getAll(filter: QuestionFilter) {
+    const response = await this._httpClient.get<string>(
+      `${this.endpoint}?${queryString.stringify(filter)}`,
+    );
+    return response.data;
+  }
+
   public async post(data: QuestionModel) {
     const response = await this._httpClient.post<string>(this.endpoint, {
       data,
@@ -40,15 +47,15 @@ export class QuestionService {
     return response.data;
   }
 
-  public async getAll(filter: QuestionFilter) {
+  public async getAllQuestionUserAnswers(bookId: number) {
     const response = await this._httpClient.get<string>(
-      `${this.endpoint}?${queryString.stringify(filter)}`,
+      `${this.endpoint}/user-answers-by-book/${bookId}`,
     );
     return response.data;
   }
 
   public async upsertQuestionUserAnswer(data: QuestionUserAnswerModel) {
-    const response = await this._httpClient.post<string>(`${this.endpoint}/user-answer`, {
+    const response = await this._httpClient.post<string>(`${this.endpoint}/user-answers`, {
       data,
     });
     return response.data;

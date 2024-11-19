@@ -39,7 +39,7 @@ const HomeLogged = () => {
       });
     }
   },[])
-  
+
   return (
     <div className="d-flex" style={{ height: "100vh" }}>
       <Sidebar navItem="home" />
@@ -60,9 +60,7 @@ const HomeLogged = () => {
 
             {isLoading ? (
             <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
-              <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status">
-                <span className="sr-only">Carregando...</span>
-              </div>
+              <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
             </div>
           ):(
             book==null?
