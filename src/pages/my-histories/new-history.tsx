@@ -29,6 +29,7 @@ import life from '../../assets/svg/life.svg';
 import clownWithHat from '../../assets/svg/face-of-clown-with-hat.svg';
 import theater from '../../assets/svg/theater.svg';
 import hearts from '../../assets/svg/hearts.svg';
+import HTMLFlipBook from 'react-pageflip';
 
 const NewHistory = () => {
   const navigate = useNavigate();
@@ -764,8 +765,9 @@ const NewHistory = () => {
           <Modal.Body className='justify-content-center f-20 p-5'
             style={{ paddingTop: '3%', paddingLeft: '10%', paddingRight: '10%' }}
           >
+           
             <div className='d-flex justify-content-center'>
-              Capítulo {chapter.chapterNumber}
+              Capítulo {chapter.chapterNumber} 
             </div>
             <div className='d-flex justify-content-center'>
               <b className='f-28'>{chapter.title}</b>
@@ -773,6 +775,9 @@ const NewHistory = () => {
             <div className='pt-3'>
               {bookText}
             </div>
+            
+           
+            
           </Modal.Body>
         </Modal>
 
