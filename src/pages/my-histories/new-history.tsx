@@ -48,7 +48,7 @@ const NewHistory = () => {
   const isLoading = isLoading1 || isLoading2 || isLoading3;
 
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
-  const [book, setBook] = useState<BookModel>(new BookModel({ id: 2, title: 'Título História' }))
+  const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Título História' }))
   const [plan, setPlan] = useState<PlanModel>(new PlanModel())
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
@@ -80,6 +80,7 @@ const NewHistory = () => {
       .then((response: any) => {
         setBook(response);
         setTitle(response.title);
+        getQuestionAnswers();
       })
       .catch((e: any) => {
         let message = "Error ao obter livro.";
@@ -105,7 +106,6 @@ const NewHistory = () => {
         const questionRes = response.chapters[0].questions[0];
         setQuestion(questionRes);
         setQuestionIndex(0);
-        getQuestionAnswers();
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
@@ -607,7 +607,7 @@ const NewHistory = () => {
                     <b className='f-16'>Voltar</b>
                   </div>
 
-                  <div className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5 p-2 ${isLastQuestion ? ' disabled' : ''}`}
+                  <div className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5 p-3 ${isLastQuestion ? ' disabled' : ''}`}
                     style={{ border: '1px solid black' }}
                     onClick={() => { saveQuestionAnswer() }}
                   >
