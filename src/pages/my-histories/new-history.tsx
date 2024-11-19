@@ -80,7 +80,7 @@ const NewHistory = () => {
       .then((response: any) => {
         setBook(response);
         setTitle(response.title);
-        getQuestionAnswers();
+        getQuestionAnswers(response.id);
       })
       .catch((e: any) => {
         let message = "Error ao obter livro.";
@@ -119,10 +119,10 @@ const NewHistory = () => {
       });
   };
 
-  const getQuestionAnswers = () => {
+  const getQuestionAnswers = (bookId: number) => {
     setIsLoading3(true);
     _questionService
-      .getAllQuestionUserAnswers(book.id)
+      .getAllQuestionUserAnswers(bookId)
       .then((response: any) => {
         setQuestionUserAnswers(response);
         handleQuestionUserAnswer(question.id);
