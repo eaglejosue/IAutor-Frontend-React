@@ -23,7 +23,7 @@ const Sidebar = (p: Props) => {
           />
         </li>
 
-        <li className={p.navItem == 'home' ? 'bg-iautor nav-border-right' : ''}>
+        <li className={p.navItem == 'home' ? 'bg-iautor-color nav-border-right' : ''}>
           <a href="#" className="nav-link"
             onClick={() => navigate(paths.HOME_LOGGED)}
           >
@@ -35,7 +35,7 @@ const Sidebar = (p: Props) => {
           </a>
         </li>
 
-        <li className={p?.navItem == 'book' ? 'bg-iautor nav-border-right' : ''}>
+        <li className={p?.navItem == 'book' ? 'bg-iautor-color nav-border-right' : ''}>
           <a href="#" className="nav-link"
             onClick={() => navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`)}
           >
@@ -47,7 +47,7 @@ const Sidebar = (p: Props) => {
           </a>
         </li>
 
-        <li className={p?.navItem == 'my-histories' ? 'bg-iautor nav-border-right' : ''}>
+        <li className={p?.navItem == 'my-histories' ? 'bg-iautor-color nav-border-right' : ''}>
           <a href="#" className="nav-link"
             onClick={() => navigate(paths.MY_HISTORIES)}
           >

@@ -69,7 +69,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <main className='bg-iautorpb-4'
+    <main className='bg-iautor-color pb-4'
       style={{ minHeight: '600px' }}
     >
 

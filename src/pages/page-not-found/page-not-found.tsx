@@ -6,7 +6,7 @@ const PageNotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <main className='main bg-iautorpb-4'
+    <main className='main bg-iautor-color pb-4'
       style={{ minHeight: '603px' }}
     >
 

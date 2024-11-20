@@ -431,7 +431,7 @@ const NewHistory = () => {
                 {plan.chapters?.map((c, index) => {
                   return (
                     <div key={index}
-                      className={`border-bottom p-3 ${chapter.id === c.id ? 'bg-iautor' : ''}`}
+                      className={`border-bottom p-3 ${chapter.id === c.id ? 'bg-iautor-color' : ''}`}
                       style={{ cursor: 'pointer' }}
                       onClick={() => { handleChapterClick(c.id) }}
                     >
@@ -636,7 +636,7 @@ const NewHistory = () => {
               </div>
 
               {/* 3 - Preview */}
-              <div className='col-md bg-iautor p-0'>
+              <div className='col-md bg-iautor-color p-0'>
 
                 <div className='d-flex bg-white justify-content-center px-4 py-3'
                   style={{ borderBottom: '3px solid #db3737' }}

@@ -119,7 +119,7 @@ const Chapters = () => {
     <>
       <NavAdmin />
 
-      <main className='main bg-iautor pb-4'
+      <main className='main bg-iautor-color pb-4'
         style={{ minHeight: '70vh' }}
       >
 

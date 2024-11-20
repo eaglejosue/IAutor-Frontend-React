@@ -110,7 +110,7 @@ const Users = () => {
     <>
       <NavAdmin />
 
-      <main className='main bg-iautor pb-4'
+      <main className='main bg-iautor-color pb-4'
         style={{ minHeight: '70vh' }}
       >
 
@@ -146,7 +146,7 @@ const Users = () => {
           </div>
         </section>
 
-        <section className='container mt-3 px-0' id='table-perfis'>
+        <section className='container mt-3 px-0' id='table'>
           <UserTable
             data={users}
             isLoading={isLoading}

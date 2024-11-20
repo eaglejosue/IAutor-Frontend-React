@@ -39,8 +39,12 @@ $custom-colors: (
   "body-bg" : $body-bg,
 );
 
-.bg-iautor {
+.bg-iautor-color {
   background-color: #f6f5f4;
+}
+
+.bg-iautor {
+  background: linear-gradient(180deg, #FFFFFF 47.65%, #F6F5F4 87.66%);
 }
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
