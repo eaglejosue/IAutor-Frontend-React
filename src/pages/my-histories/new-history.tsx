@@ -97,6 +97,22 @@ const NewHistory = () => {
       });
   };
 
+  const saveBook = async () => {
+    await _bookService
+      .put(new BookModel({...book, title: title}))
+      .then(() => {
+      })
+      .catch((e: any) => {
+        let message = "Error ao salvar livro.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+      });
+  };
+
   const getPlanChaptersQuestions = async (planId: number, bookId: number) => {
     setIsLoading2(true);
     await _planService
@@ -352,8 +368,15 @@ const NewHistory = () => {
                     type='text'
                     value={title}
                     onChange={(e) => { setTitle(e.target.value); }}
-                    onBlur={() => { setIsEditingTitle(false); }}
-                    onKeyDown={(e) => { e.key === 'Enter' && setIsEditingTitle(false); }}
+                    onBlur={() => {
+                      setIsEditingTitle(false);
+                      saveBook();
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key !== 'Enter') return;
+                      setIsEditingTitle(false);
+                      saveBook();
+                    }}
                     autoFocus
                     className='form-control'
                     style={{ width: 'auto' }}

@@ -46,7 +46,7 @@ const Nav = () => {
                   Login
                 </button>
                 <button className='btn bg-secondary text-white rounded-5 f-14 px-4 py-2'
-                  onClick={() => navigate(paths.NEW_HISTORY)}
+                  onClick={() => navigate(paths.LOGIN)}
                 >
                   Experimente Criar uma História
                 </button>
