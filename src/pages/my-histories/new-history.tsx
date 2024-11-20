@@ -461,7 +461,7 @@ const NewHistory = () => {
                   <div className='d-flex text-center f-14 px-4'>
                     Formate a escrita, edite a capa e crie histórias com mais detalhes e momentos.
                   </div>
-                  {plan && plan.title && plan.title.includes('egust') &&
+                  {plan && plan.title && plan.title.toLowerCase().includes('degust') &&
                     <div className='d-flex justify-content-center p-4'>
                       <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
                         style={{ fontWeight: 'bold' }}
