@@ -303,7 +303,6 @@ const NewHistory = () => {
       qtdCallIASugestionsUsed: qtd ?? qtdCallIASugestionsUsed
     });
 
-    setIsLoading2(true);
     _questionService
       .upsertQuestionUserAnswer(newQuestionUserAnswerModel)
       .then(() => {
@@ -317,7 +316,7 @@ const NewHistory = () => {
         console.log('Erro: ', message, e);
       })
       .finally(() => {
-        setIsLoading2(false);
+        //
       });
   }
 
@@ -425,7 +424,7 @@ const NewHistory = () => {
                   </div>
                 </div>
 
-                {isLoading1 && <div className='d-flex justify-content-center align-items-center' style={{ height: '20%', borderRadius: '9px' }}>
+                {isLoading2 && <div className='d-flex justify-content-center align-items-center' style={{ height: '20%', borderRadius: '9px' }}>
                   <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
                 </div>}
 
@@ -462,13 +461,15 @@ const NewHistory = () => {
                   <div className='d-flex text-center f-14 px-4'>
                     Formate a escrita, edite a capa e crie histórias com mais detalhes e momentos.
                   </div>
-                  <div className='d-flex justify-content-center p-4'>
-                    <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
-                      style={{ fontWeight: 'bold' }}
-                    >
-                      Ver Planos
-                    </a>
-                  </div>
+                  {plan && plan.title && plan.title.includes('egust') &&
+                    <div className='d-flex justify-content-center p-4'>
+                      <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
+                        style={{ fontWeight: 'bold' }}
+                      >
+                        Ver Planos
+                      </a>
+                    </div>
+                  }
                 </div>
 
               </div>
@@ -489,7 +490,7 @@ const NewHistory = () => {
                 </div>
 
                 {/* Contador de perguntas */}
-                {isLoading1 ?
+                {isLoading ?
                   <div className='d-flex justify-content-center align-items-center' style={{ height: '20%', borderRadius: '9px' }}>
                     <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
                   </div> :
