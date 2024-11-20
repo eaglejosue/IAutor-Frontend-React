@@ -75,9 +75,9 @@ const NewHistory = () => {
     getBook(parseInt(param.id!));
   }, []);
 
-  const getBook = (id: number) => {
+  const getBook = async (id: number) => {
     setIsLoading1(true);
-    _bookService
+    await _bookService
       .getById(id)
       .then((response: any) => {
         setBook(response);
@@ -97,9 +97,9 @@ const NewHistory = () => {
       });
   };
 
-  const getPlanChaptersQuestions = (planId: number, bookId: number) => {
+  const getPlanChaptersQuestions = async (planId: number, bookId: number) => {
     setIsLoading2(true);
-    _planService
+    await _planService
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
         setPlan(response);
@@ -159,9 +159,9 @@ const NewHistory = () => {
     postIASugestion();
   };
 
-  const postIASugestion = () => {
+  const postIASugestion = async () => {
     setIsLoading1(true);
-    _iaService
+    await _iaService
       .post({
         question: question.title,
         questionAnswer: answer,
@@ -261,19 +261,18 @@ const NewHistory = () => {
   };
 
   useEffect(() => {
-    // Configura um temporizador para disparar a função após 30 segundos
+    if (!answerChanged) return; // Não faz nada se `answerChanged` for falso.
+
     const handler = setTimeout(() => {
-      if (answer && answerChanged) {
-        saveQuestionAnswer(undefined, undefined, true);
-        setAnswerChanged(false);
-      }
-    }, 30000);
+      saveQuestionAnswer();
+      setAnswerChanged(false); // Marca como salvo.
+    }, 30000); // Aguarda 30 segundos após a última digitação.
 
-    // Limpa o temporizador se o valor de `answerChanged` mudar antes de 30 segundos
+    // Limpa o temporizador se o usuário continuar digitando.
     return () => clearTimeout(handler);
-  }, [answerChanged]);
+  }, [answerChanged, answer]);
 
-  const saveQuestionAnswer = (txt?: string, qtd?: number, fromAutomatic: boolean = false) => {
+  const saveQuestionAnswer = async (txt?: string, qtd?: number, fromAutomatic: boolean = false) => {
     if (answer.length == 0) {
       if (!fromAutomatic) {
         toast.error('Digite sua resposta para consultar!', {
@@ -303,7 +302,7 @@ const NewHistory = () => {
       qtdCallIASugestionsUsed: qtd ?? qtdCallIASugestionsUsed
     });
 
-    _questionService
+    await _questionService
       .upsertQuestionUserAnswer(newQuestionUserAnswerModel)
       .then(() => {
         const questionUserAnswersFiltered = questionUserAnswers.filter(f => f.questionId != question.id);
