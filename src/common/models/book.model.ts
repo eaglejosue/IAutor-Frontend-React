@@ -13,6 +13,8 @@ export class BookModel extends BaseModel {
   downloadExpirationDate?: string;
   promotionPrice?: string;
   promotionExpirationDate?: string;
+  planId!: number;
+  userId!: number;
 
   orders?: OrderModel[];
   userBookLogs?: UserBookLogModel[];
@@ -32,6 +34,9 @@ export class BookModel extends BaseModel {
       if (j.downloadExpirationDate) this.downloadExpirationDate = j.downloadExpirationDate;
       if (j.promotionPrice) this.promotionPrice = j.promotionPrice;
       if (j.promotionExpirationDate) this.promotionExpirationDate = j.promotionExpirationDate;
+      if (j.planId) this.planId = j.planId;
+      if (j.userId) this.userId = j.userId;
+
       if (j.orders) this.orders = j.orders;
       if (j.userBookLogs) this.userBookLogs = j.userBookLogs;
 

@@ -10,7 +10,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 
-import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 import { BookService } from '../../common/http/api/bookService';
 import { PlanService } from '../../common/http/api/planService';
 import { QuestionService } from '../../common/http/api/questionService';
@@ -44,25 +43,29 @@ const NewHistory = () => {
 
   const [isLoading1, setIsLoading1] = useState<boolean>(false);
   const [isLoading2, setIsLoading2] = useState<boolean>(false);
-  const [isLoading3, setIsLoading3] = useState<boolean>(false);
-  const isLoading = isLoading1 || isLoading2 || isLoading3;
+  const isLoading = isLoading1 || isLoading2;
 
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
-  const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Título História' }))
+
+  const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Alterar Título da História' }))
   const [plan, setPlan] = useState<PlanModel>(new PlanModel())
+  const [chapter, setChapter] = useState(new ChapterModel());
+  const [question, setQuestion] = useState(new QuestionModel());
+
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState('Título História');
   const [theme, setTheme] = useState('');
+
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isIAModalOpen, setIsIAModalOpen] = useState(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
-  const [chapter, setChapter] = useState(new ChapterModel());
-  const [question, setQuestion] = useState(new QuestionModel());
+
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
   const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
   const [answer, setAnswer] = useState('');
+  const [answerChanged, setAnswerChanged] = useState<boolean>(false);
   const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
   const [IAText, setIAText] = useState('');
 
@@ -70,7 +73,6 @@ const NewHistory = () => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
     getBook(parseInt(param.id!));
-    getPlanChaptersQuestions();
   }, []);
 
   const getBook = (id: number) => {
@@ -80,7 +82,8 @@ const NewHistory = () => {
       .then((response: any) => {
         setBook(response);
         setTitle(response.title);
-        getQuestionAnswers(response.id);
+        setQuestionUserAnswers(response.questionUserAnswers);
+        getPlanChaptersQuestions(response.planId, id);
       })
       .catch((e: any) => {
         let message = "Error ao obter livro.";
@@ -94,11 +97,10 @@ const NewHistory = () => {
       });
   };
 
-  const getPlanChaptersQuestions = () => {
+  const getPlanChaptersQuestions = (planId: number, bookId: number) => {
     setIsLoading2(true);
-    const user = AuthenticatedUserModel.fromLocalStorage();
     _planService
-      .getChaptersAndQuestionsByPlanId(user!.planId)
+      .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
         setPlan(response);
         setChapter(response.chapters[0]);
@@ -106,6 +108,8 @@ const NewHistory = () => {
         const questionRes = response.chapters[0].questions[0];
         setQuestion(questionRes);
         setQuestionIndex(0);
+        setAnswer(questionRes.questionUserAnswer?.answer ?? '');
+        setQtdCallIASugestionsUsed(questionRes.questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
@@ -119,24 +123,10 @@ const NewHistory = () => {
       });
   };
 
-  const getQuestionAnswers = (bookId: number) => {
-    setIsLoading3(true);
-    _questionService
-      .getAllQuestionUserAnswers(bookId)
-      .then((response: any) => {
-        setQuestionUserAnswers(response);
-        handleQuestionUserAnswer(question.id);
-      })
-      .catch((e: any) => {
-        let message = "Error ao obter respostas.";
-        if (e.response?.data?.length > 0 && e.response.data[0].message)
-          message = e.response.data[0].message;
-        if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
-      })
-      .finally(() => {
-        setIsLoading3(false);
-      });
+  const handleQuestionUserAnswer = (questionId: number) => {
+    const questionUserAnswer = questionUserAnswers.find(f => f.questionId == questionId);
+    setAnswer(questionUserAnswer?.answer ?? '');
+    setQtdCallIASugestionsUsed(questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
   };
 
   const handleIASuggestionClick = () => {
@@ -165,6 +155,7 @@ const NewHistory = () => {
     }
 
     setIsIAModalOpen(true);
+    setIAText('');
     postIASugestion();
   };
 
@@ -179,8 +170,9 @@ const NewHistory = () => {
       })
       .then((response: any) => {
         setIAText(response.text);
-        setQtdCallIASugestionsUsed(qtdCallIASugestionsUsed+1);
-        saveQuestionAnswer();
+        const qtd = qtdCallIASugestionsUsed + 1
+        setQtdCallIASugestionsUsed(qtd);
+        saveQuestionAnswer(undefined, qtd, false);
       })
       .catch((e) => {
         let message = 'Error ao obter dados de participante.';
@@ -195,10 +187,13 @@ const NewHistory = () => {
 
   const handleIAAccept = () => {
     setIsIAModalOpen(false);
-    //handleQuestionUserAnswer();
+    setAnswer(IAText);
+    saveQuestionAnswer(IAText);
   };
 
   const handleChapterClick = (id: number, fromBeforeClick: boolean = false) => {
+    setAnswerChanged(false);
+
     const chapterC = plan.chapters!.find(f => f.id == id);
     setChapter(chapterC!);
 
@@ -215,6 +210,7 @@ const NewHistory = () => {
 
   const handleBeforeQuestionClick = () => {
     setIsLastQuestion(false);
+    setAnswerChanged(false);
 
     const isFirstQuestionB = questionIndex == 0;
     const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
@@ -239,6 +235,7 @@ const NewHistory = () => {
 
   const handleNextQuestionClick = () => {
     setIsFirstQuestion(false);
+    setAnswerChanged(false);
 
     const isLastQuestionN = questionIndex + 1 == chapter.questions!.length;
     const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
@@ -263,40 +260,54 @@ const NewHistory = () => {
     setQtdCallIASugestionsUsed(questionN.questionUserAnswer.qtdCallIASugestionsUsed);
   };
 
-  const saveQuestionAnswer = () => {
+  useEffect(() => {
+    // Configura um temporizador para disparar a função após 30 segundos
+    const handler = setTimeout(() => {
+      if (answer && answerChanged) {
+        saveQuestionAnswer(undefined, undefined, true);
+        setAnswerChanged(false);
+      }
+    }, 30000);
+
+    // Limpa o temporizador se o valor de `answerChanged` mudar antes de 30 segundos
+    return () => clearTimeout(handler);
+  }, [answerChanged]);
+
+  const saveQuestionAnswer = (txt?: string, qtd?: number, fromAutomatic: boolean = false) => {
     if (answer.length == 0) {
-      toast.error('Digite sua resposta para consultar!', {
-        position: 'top-center',
-        style: { width: 450 }
-      });
+      if (!fromAutomatic) {
+        toast.error('Digite sua resposta para consultar!', {
+          position: 'top-center',
+          style: { width: 450 }
+        });
+      }
       return;
     }
 
     if (answer.length < question.minLimitCharacters) {
-      toast.error(`Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`, {
-        position: 'top-center',
-        style: { width: 450 }
-      });
+      if (!fromAutomatic) {
+        toast.error(`Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`, {
+          position: 'top-center',
+          style: { width: 450 }
+        });
+      }
       return;
     }
 
-    setIsLoading2(true);
-
-    const user = AuthenticatedUserModel.fromLocalStorage();
     const newQuestionUserAnswerModel = new QuestionUserAnswerModel({
       questionId: question.id,
       chapterId: chapter.id,
-      userId: user!.id,
+      userId: book.userId,
       bookId: book.id,
-      answer: answer,
-      qtdCallIASugestionsUsed: qtdCallIASugestionsUsed
+      answer: txt ?? answer,
+      qtdCallIASugestionsUsed: qtd ?? qtdCallIASugestionsUsed
     });
 
+    setIsLoading2(true);
     _questionService
       .upsertQuestionUserAnswer(newQuestionUserAnswerModel)
       .then(() => {
-        debugger;
-        const questionUserAnswersFiltered = questionUserAnswers.filter(f => f.id != question.id);
+        const questionUserAnswersFiltered = questionUserAnswers.filter(f => f.questionId != question.id);
         setQuestionUserAnswers([...questionUserAnswersFiltered, newQuestionUserAnswerModel]);
       })
       .catch((e) => {
@@ -309,12 +320,6 @@ const NewHistory = () => {
         setIsLoading2(false);
       });
   }
-
-  const handleQuestionUserAnswer = (questionId?: number) => {
-    const questionUserAnswer = questionUserAnswers ? questionUserAnswers.find(f => f.id == (questionId ?? question.id)) : null;
-    setAnswer(questionUserAnswer?.answer ?? '');
-    setQtdCallIASugestionsUsed(questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
-  };
 
   return (
     <div className='d-flex'
@@ -511,7 +516,10 @@ const NewHistory = () => {
                 {/* Área resposta */}
                 <div className='d-flex px-5 pt-4'>
                   <TextareaAutosize
-                    onChange={(e) => { setAnswer(e.target.value) }}
+                    onChange={(e) => {
+                      setAnswer(e.target.value);
+                      setAnswerChanged(true);
+                    }}
                     value={answer}
                     disabled={isLoading}
                     placeholder='Digite sua resposta aqui...'
@@ -607,8 +615,8 @@ const NewHistory = () => {
                     <b className='f-16'>Voltar</b>
                   </div>
 
-                  <div className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5 p-3 ${isLastQuestion ? ' disabled' : ''}`}
-                    style={{ border: '1px solid black' }}
+                  <div className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5 ${isLastQuestion ? ' disabled' : ''}`}
+                    style={{ border: '1px solid black', padding: '0.7rem' }}
                     onClick={() => { saveQuestionAnswer() }}
                   >
                     <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>save</span>
@@ -664,18 +672,26 @@ const NewHistory = () => {
                     : <img src={previewCapaLivroBranca} />
                   }
                   {answer.length > 0 &&
-                    <div className='d-flex position-absolute f-10'
-                      style={{
-                        paddingTop: '2%',
-                        paddingLeft: '9%',
-                        paddingRight: '9%',
-                        fontFamily: 'Times New Roman',
-                        fontSize: '13px',
-                        lineHeight: '16px'
-                      }}
-                    >
-                      {answer.substring(0, 1500)}
-                    </div>
+                    <>
+                      <div id='chapter' className='d-flex position-absolute text-center f-11'
+                        style={{ fontFamily: 'Times New Roman', marginTop: '6vh' }}
+                      >
+                        Capítulo {chapter.chapterNumber}
+                      </div>
+                      <div id='title' className='d-flex position-absolute text-center f-18'
+                        style={{ fontFamily: 'Times New Roman', marginTop: '8vh' }}
+                      >
+                        <b>{chapter.title}</b>
+                      </div>
+                      <div className='d-flex position-absolute f-13'
+                        style={{
+                          fontFamily: 'Times New Roman', lineHeight: '16px',
+                          marginTop: '13vh', marginLeft: '9%', marginRight: '9%'
+                        }}
+                      >
+                        {answer.substring(0, 1400)}
+                      </div>
+                    </>
                   }
                 </div>
 

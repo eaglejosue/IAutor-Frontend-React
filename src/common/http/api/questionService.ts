@@ -47,7 +47,7 @@ export class QuestionService {
     return response.data;
   }
 
-  public async getAllQuestionUserAnswers(bookId: number) {
+  public async getAllQuestionUserAnswersByBookId(bookId: number) {
     const response = await this._httpClient.get<string>(
       `${this.endpoint}/user-answers-by-book/${bookId}`,
     );

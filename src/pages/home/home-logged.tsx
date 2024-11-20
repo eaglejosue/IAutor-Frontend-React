@@ -1,31 +1,33 @@
-import Sidebar from '../../components/nav/sidebar.component';
-import NavUserOptions from '../../components/nav/nav-user-options.component';
-import './home-logged.scss'
+import { useEffect, useState } from 'react';
+
 import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 import { Button } from 'react-bootstrap';
-import EmptyHomeLogged from './sections/empty-logged.section';
-import BooksHistory from './sections/books-history-section';
-import { useEffect, useState } from 'react';
 import { BookService } from '../../common/http/api/bookService';
 import { BookModel } from '../../common/models/book.model';
+
+import Sidebar from '../../components/nav/sidebar.component';
+import NavUserOptions from '../../components/nav/nav-user-options.component';
+import EmptyHomeLogged from './sections/empty-logged.section';
+import BooksHistory from './sections/books-history-section';
+
+import './home-logged.scss'
 
 const HomeLogged = () => {
   const user = AuthenticatedUserModel.fromLocalStorage();
   const _bookService = new BookService();
-  const [book,setBook] = useState<BookModel|null>(null);
+  const [book, setBook] = useState<BookModel | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  useEffect(()=>{
-    if(user){
-      setIsLoading(true)
-      _bookService
-      .getById(user?.lastBookId )
+  useEffect(() => {
+    if (!user) return
+
+    setIsLoading(true)
+    _bookService
+      .getById(user?.lastBookId)
       .then((response: any) => {
-        if(response){
+        if (response) {
           setBook(response);
         }
-        console.log(book )
-        console.log(user)
       })
       .catch((e: any) => {
         let message = "Error ao obter plano.";
@@ -37,8 +39,7 @@ const HomeLogged = () => {
       .finally(() => {
         setIsLoading(false)
       });
-    }
-  },[])
+  }, [])
 
   return (
     <div className="d-flex" style={{ height: "100vh" }}>
@@ -58,16 +59,16 @@ const HomeLogged = () => {
           <div className="container-fluid">
             <div className="row m-5">
 
-            {isLoading ? (
-            <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
-              <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
-            </div>
-          ):(
-            book==null?
-              <EmptyHomeLogged user={user} />:
-              <BooksHistory book={book} user={user} />
-          )
-          }
+              {isLoading ? (
+                <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
+                  <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
+                </div>
+              ) : (
+                book == null ?
+                  <EmptyHomeLogged user={user} /> :
+                  <BooksHistory book={book} user={user} />
+              )
+              }
             </div>
 
             <div className="row ">
