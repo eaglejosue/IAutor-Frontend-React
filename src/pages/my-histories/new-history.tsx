@@ -45,6 +45,8 @@ const NewHistory = () => {
   const [isLoading2, setIsLoading2] = useState<boolean>(false);
   const isLoading = isLoading1 || isLoading2;
 
+  const [isLoadingSaveAnswer, setIsLoadingSaveAnswer] = useState<boolean>(false);
+
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
   const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Alterar Título da História' }))
@@ -250,6 +252,8 @@ const NewHistory = () => {
   };
 
   const handleNextQuestionClick = () => {
+    saveQuestionAnswer();
+
     setIsFirstQuestion(false);
     setAnswerChanged(false);
 
@@ -280,9 +284,9 @@ const NewHistory = () => {
     if (!answerChanged) return; // Não faz nada se `answerChanged` for falso.
 
     const handler = setTimeout(() => {
-      saveQuestionAnswer();
+      saveQuestionAnswer(undefined, undefined, true);
       setAnswerChanged(false); // Marca como salvo.
-    }, 30000); // Aguarda 30 segundos após a última digitação.
+    }, 10000); // Aguarda 10 segundos após a última digitação.
 
     // Limpa o temporizador se o usuário continuar digitando.
     return () => clearTimeout(handler);
@@ -318,6 +322,7 @@ const NewHistory = () => {
       qtdCallIASugestionsUsed: qtd ?? qtdCallIASugestionsUsed
     });
 
+    setIsLoadingSaveAnswer(true);
     await _questionService
       .upsertQuestionUserAnswer(newQuestionUserAnswerModel)
       .then(() => {
@@ -331,7 +336,7 @@ const NewHistory = () => {
         console.log('Erro: ', message, e);
       })
       .finally(() => {
-        //
+        setIsLoadingSaveAnswer(false);
       });
   }
 
@@ -654,7 +659,10 @@ const NewHistory = () => {
                   </div>
 
                 </div>
-                <div className='d-flex text-black justify-content-center f-14 pt-2'>Salvar Resposta</div>
+                <div className='d-flex text-black justify-content-center f-14 pt-2'>
+                  Salvar Resposta
+                  {isLoadingSaveAnswer && <span className="spinner-border spinner-border-sm text-light ms-2" role="status" aria-hidden="true"></span>}
+                </div>
 
               </div>
 
