@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 import Logo from '../../assets/img/favicon-32x32.png';
 import paths from '../../routes/paths';
 
@@ -8,6 +9,7 @@ export interface Props {
 
 const Sidebar = (p: Props) => {
   const navigate = useNavigate();
+  const user = AuthenticatedUserModel.fromLocalStorage();
 
   return (
     <div className="d-flex flex-column bg-white border-end p-0"
@@ -21,7 +23,7 @@ const Sidebar = (p: Props) => {
           />
         </li>
 
-        <li className={p.navItem == 'home' ? 'bg-iautor nav-border-right' : ''}>
+        <li className={p.navItem == 'home' ? 'bg-iautor-color nav-border-right' : ''}>
           <a href="#" className="nav-link"
             onClick={() => navigate(paths.HOME_LOGGED)}
           >
@@ -33,9 +35,9 @@ const Sidebar = (p: Props) => {
           </a>
         </li>
 
-        <li className={p?.navItem == 'book' ? 'bg-iautor nav-border-right' : ''}>
+        <li className={p?.navItem == 'book' ? 'bg-iautor-color nav-border-right' : ''}>
           <a href="#" className="nav-link"
-            onClick={() => navigate(paths.NEW_HISTORY)}
+            onClick={() => navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`)}
           >
             <span className="material-symbols-outlined"
               style={{ fontSize: '32px', color: 'black' }}
@@ -45,7 +47,7 @@ const Sidebar = (p: Props) => {
           </a>
         </li>
 
-        <li className={p?.navItem == 'my-histories' ? 'bg-iautor nav-border-right' : ''}>
+        <li className={p?.navItem == 'my-histories' ? 'bg-iautor-color nav-border-right' : ''}>
           <a href="#" className="nav-link"
             onClick={() => navigate(paths.MY_HISTORIES)}
           >

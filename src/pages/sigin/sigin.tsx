@@ -138,7 +138,7 @@ const SigIn = () => {
   };
 
   return (
-    <main className='bg-iautor pb-4'
+    <main className='bg-iautor-color pb-4'
       style={{ minHeight: '940px' }}
     >
 

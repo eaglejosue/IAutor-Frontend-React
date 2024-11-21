@@ -89,7 +89,7 @@ const Terms = () => {
     <>
       <NavAdmin />
 
-      <main className='main bg-iautor px-4 pb-4'>
+      <main className='main bg-iautor-color px-4 pb-4'>
 
         <section className='container my-3' id='videos'>
           <div className='row'>
@@ -128,7 +128,7 @@ const Terms = () => {
 
                 <button
                   type='submit'
-                  className='btn bg-IAutor mt-4 p-2 fw-bold text-body-bg'
+                  className='btn bg-primary mt-4 p-2 fw-bold text-body-bg'
                   disabled={isLoading}
                 >
                   Salvar Informações
