@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
-import { Modal, ModalHeader } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Dropdown from 'react-bootstrap/Dropdown';
 
