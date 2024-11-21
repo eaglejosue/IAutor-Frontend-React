@@ -665,7 +665,10 @@ const NewHistory = () => {
                     style={{ border: '1px solid black', padding: '0.7rem' }}
                     onClick={() => { saveQuestionAnswer() }}
                   >
-                    <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>save</span>
+                    {isLoadingSaveAnswer ?
+                      <span className="spinner-border spinner-border-sm text-black ms-2" role="status" aria-hidden="true"></span> :
+                      <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>save</span>
+                    }
                   </div>
 
                   <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3 bg-black text-white'
@@ -677,10 +680,7 @@ const NewHistory = () => {
                   </div>
 
                 </div>
-                <div className='d-flex text-black justify-content-center f-14 pt-2'>
-                  Salvar Resposta
-                  {isLoadingSaveAnswer && <span className="spinner-border spinner-border-sm text-light ms-2" role="status" aria-hidden="true"></span>}
-                </div>
+                <div className='d-flex text-black justify-content-center f-14 pt-2'>Salvar Resposta</div>
 
               </div>
 
