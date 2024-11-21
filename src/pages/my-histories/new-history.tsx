@@ -30,6 +30,11 @@ import life from '../../assets/svg/life.svg';
 import clownWithHat from '../../assets/svg/face-of-clown-with-hat.svg';
 import theater from '../../assets/svg/theater.svg';
 import hearts from '../../assets/svg/hearts.svg';
+import BookViewer from './book-viewer';
+
+import 'react-responsive-modal/styles.css';
+import { Modal as ModalResponsive } from 'react-responsive-modal';
+
 
 const NewHistory = () => {
 
@@ -77,9 +82,21 @@ const NewHistory = () => {
     getBook(parseInt(param.id!));
   }, []);
 
-  const getBook = async (id: number) => {
+
+  const closeIcon = (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <mask id="mask0_693_22769"  maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <rect width="24" height="24" fill="#D9D9D9"/>
+    </mask>
+    <g mask="url(#mask0_693_22769)">
+    <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="white"/>
+    </g>
+    </svg>
+    
+  );
+  const getBook = (id: number) => {
     setIsLoading1(true);
-    await _bookService
+     _bookService
       .getById(id)
       .then((response: any) => {
         setBook(response);
@@ -840,22 +857,20 @@ const NewHistory = () => {
           </Modal.Footer>
         </Modal>
 
-        <Modal show={isBookPreviewModalOpen} onHide={() => setIsBookPreviewModalOpen(false)} size='xl'>
-          <Modal.Body className='justify-content-center f-20 p-5'
-            style={{ paddingTop: '3%', paddingLeft: '10%', paddingRight: '10%' }}
-          >
-            <div className='d-flex justify-content-center'>
-              Capítulo {chapter.chapterNumber}
-            </div>
-            <div className='d-flex justify-content-center'>
-              <b className='f-28'>{chapter.title}</b>
-            </div>
-            <div className='pt-3'>
-              {/* TODO: tratar aqui livro completo para navegação entre páginas */}
-              {answer}
-            </div>
-          </Modal.Body>
-        </Modal>
+
+        <ModalResponsive open={isBookPreviewModalOpen}
+         classNames={{
+          overlay: 'customOverlay',
+          modal: 'customModal',
+        
+        }}
+        closeIcon={closeIcon}
+        onClose={() => setIsBookPreviewModalOpen(false)} center>
+        
+        <BookViewer book={book} plan={plan} questionAnsewers={questionUserAnswers} />
+      </ModalResponsive>
+
+       
 
       </section>
     </div>
