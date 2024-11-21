@@ -1,0 +1,41 @@
+h4 {
+  color: white;
+}
+
+.customOverlay {
+  background: rgba(0, 0, 0, 1) !important;
+  opacity: 0.8 !important;
+
+}
+
+.customModal {
+  background: transparent !important;
+  min-width: 800px !important;
+  max-width: max-content !important;
+}
+
+.viewTitle {
+  color: white;
+}
+.bgWaterMark{
+  background-color: transparent;
+  z-index: 1000;
+  background-image: url('../../assets/img/Camada_1.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  
+}
+.page-left {
+  background: linear-gradient(270deg, #B3B3B3 0%, #DADADA 9%, #DBDBDB 20%, #E4E4E4 27%, #F0F0F0 40%, #F4F4F4 53%, #F0F0F0 100%);
+  min-height: 650px;
+  z-index: -1;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.page-right {
+  background: linear-gradient(90deg, #A1A1A1 0%, #DADADA 2%, #E4E4E4 9%, #F0F0F0 22%, #F4F4F4 35%, #F0F0F0 100%);
+  z-index: -1;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}

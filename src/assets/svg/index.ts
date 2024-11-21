@@ -7,3 +7,7 @@ export { default as home3 } from './home-3.svg'
 export { default as home4 } from './home-4.svg'
 export { default as homelogged } from './button-home-logged.svg'
 export {default as bookuserbooks} from './book-user-books.svg'
+
+export {default as closeIcon} from './close-icon.svg'
+export {default as arrowLeft} from './arrow-left.svg'
+export {default as arrowRight} from './arrow-right.svg'
