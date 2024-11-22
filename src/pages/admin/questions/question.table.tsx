@@ -39,7 +39,7 @@ const QuestionTable = (props: QuestionTableProps) => {
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
     {
-      title: "Sessão",
+      title: "Sub-título",
       dataIndex: "subject",
       sorter: (a: any, b: any) => a.title.localeCompare(b.subject),
     },
@@ -147,7 +147,7 @@ const QuestionTable = (props: QuestionTableProps) => {
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
     {
-      title: "Sessão",
+      title: "Sub-título",
       dataIndex: "subject",
       sorter: (a: any, b: any) => a.title.localeCompare(b.subject),
     },

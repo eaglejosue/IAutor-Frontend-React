@@ -10,17 +10,19 @@ export interface BookViewerProps {
   book: BookModel;
   questionAnsewers: QuestionUserAnswerModel[];
   plan: PlanModel;
+  chapters:ChapterModel[]
 }
 interface BookViewerNavigate {
   idChapter: number;
   chapter: string;
   answer: string;
+  subject?:string;
 }
 const BookViewer = (props: BookViewerProps) => {
   const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(1);
-
+ // console.log(props.chapters)
   const increase = () => {
     let value = right < bookViewerAr.length - 1 ? right + 2 : right;
     setRight(value);
@@ -40,10 +42,18 @@ const BookViewer = (props: BookViewerProps) => {
         props.questionAnsewers
           .filter((b) => b.chapterId == r.id)
           .map((g: QuestionUserAnswerModel) => {
+            let chapterQuestions = props.chapters?.find(j=>j.id == r.id)?.questions;
+            let subject;
+            if(chapterQuestions){
+              let question = chapterQuestions.find(r=>r.id ==g.questionId);
+              subject = question?.subject
+            }
+
             let booksVw: BookViewerNavigate = {
               idChapter: r.id,
               answer: g.answer,
               chapter: r.title,
+              subject:subject
             };
             arBooks.push(booksVw);
           });
@@ -54,7 +64,7 @@ const BookViewer = (props: BookViewerProps) => {
   useEffect(() => {
     if (bookViewerAr.length == 0) {
       // setRight(0);
-      console.log(bookViewerAr.length);
+    
     }
   }, [bookViewerAr]);
 
@@ -85,18 +95,18 @@ const BookViewer = (props: BookViewerProps) => {
           <div className="col-5 page-left ">
             <div className="row p-3">
               <div className="col-12 text-center ">
-                <strong>Capítulo - {bookViewerAr[left]?.idChapter}</strong>
+                <strong>Capítulo - {bookViewerAr[left]?.idChapter} - {bookViewerAr[left]?.chapter}</strong>
               </div>
-              <div className="col-12 text-center pt-2"><h3>{bookViewerAr[left]?.chapter}</h3></div>
+              <div className="col-12 text-center pt-2"><h3>{bookViewerAr[left]?.subject}</h3></div>
               <div className="col-12  text-justify pt-2">{bookViewerAr[left]?.answer}</div>
             </div>
           </div>
           <div className="col-5 page-right">
             <div className="row p-3">
               <div className="col-12 text-center">
-              <strong>Capítulo - {bookViewerAr[right]?.idChapter}</strong>
+              <strong>Capítulo - {bookViewerAr[right]?.idChapter} - {bookViewerAr[right]?.chapter}</strong>
               </div>
-              <div className="col-12 text-center pt-2"><h3>{bookViewerAr[right]?.chapter}</h3></div>
+              <div className="col-12 text-center pt-2"><h3>{bookViewerAr[right]?.subject}</h3></div>
               <div className="col-12 text-justify pt-2">{bookViewerAr[right]?.answer}</div>
             </div>
           </div>

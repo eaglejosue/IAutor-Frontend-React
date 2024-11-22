@@ -16,6 +16,8 @@ export class PlanModel extends BaseModel {
   //used on front
   chapters?: [ChapterModel];
 
+  planChapters?:[any]
+
   constructor(j?: any) {
     super(j);
     if (j) {
@@ -27,6 +29,7 @@ export class PlanModel extends BaseModel {
       this.finalValidityPeriod = j.finalValidityPeriod;
       this.caractersLimitFactor = j.caractersLimitFactor;
       this.chapterQuestions = j.chapterPlanQuestion;
+      this.planChapters = j.planChapters;
     }
   }
 }
