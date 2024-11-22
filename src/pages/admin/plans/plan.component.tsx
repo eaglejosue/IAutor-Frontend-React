@@ -63,7 +63,9 @@ const PlanForm = (props: PlanFormProps) => {
       setValue('initialValidityPeriod', props.planEdit?.initialValidityPeriod.toString().split('T')[0]);
       setValue('finalValidityPeriod', props.planEdit?.finalValidityPeriod.toString().split('T')[0]);
       setValue('caractersLimitFactor', props.planEdit?.caractersLimitFactor);
+      setValue('planChapters', props.planEdit?.planChapters);
 
+    
       setIsLoading(true);
       _planService
         .getPlanChaptersByPlanId(props.planEdit.id)
@@ -110,12 +112,14 @@ const PlanForm = (props: PlanFormProps) => {
   //salva form
   //@ts-ignore
   const onSubmit = async (data: any) => {
+
     let plan = new PlanModel({
       ...data,
       price: Number(data.price.toString().replace("R$", "").replace(",", ".")),
-      id: props.planEdit?.id
+      id: props.planEdit?.id,
+      maxQtdCallIASugestions:data.qtdMaxCallIASugestions
     });
-
+ 
     //@ts-ignore
     var arr: [ChapterIdQuestionId] = [];
     plan.chapterQuestions = arr;
@@ -235,12 +239,15 @@ const PlanForm = (props: PlanFormProps) => {
 
   //remover pergunta capitulo
   const handlerRemoveItemQuestion = (pergunta: QuestionModel, chapter: ChapterModel) => {
+    
+
     let oldQuestions = [...chapterQuestions]
-    let planChapterFound = oldQuestions?.find(r => r.ChapterId == chapter.id);
+    //@ts-ignore
+    let planChapterFound = oldQuestions?.find(r => r.ChapterId == chapter.ChapterId);
     if (planChapterFound) {
-      var index = planChapterFound.Questions.indexOf(pergunta)
-      if (index !== -1) {
-        planChapterFound.Questions.splice(index, 1);
+      var verifica = planChapterFound.Questions.find(r=>r.id == pergunta.id);
+      if (verifica !=undefined) {
+        planChapterFound.Questions.splice( planChapterFound.Questions.indexOf(verifica) , 1);
       }
       setChapterQuestions(oldQuestions);
     }
@@ -492,7 +499,7 @@ const PlanForm = (props: PlanFormProps) => {
                                 <tr>
                                   <th>Id</th>
                                   <th>Pergunta</th>
-                                  <th>Sessão</th>
+                                  <th>Sub-título</th>
                                   <th>
                                     <div className="form-check"></div>
                                   </th>

@@ -112,16 +112,16 @@ const QuestionForm = (p: QuestionFormProps) => {
         <CustomInput
           type='text'
           disabled={isLoading}
-          label='Sessão'
-          placeholder='Sessão'
+          label='Sub-título'
+          placeholder='Sub-título'
           register={register}
           errors={errors.subject}
           name='subject'
           setValue={setValue}
           divClassName='col-12 mt-4'
           validationSchema={{
-            required: 'Sessão é obrigatório',
-            maxLength: { value: 100, message: "Sessão deve conter no máximo 100 caracteres" }
+            required: 'Sub-título é obrigatório',
+            maxLength: { value: 100, message: "Sub-título deve conter no máximo 100 caracteres" }
           }}
           maxLength={500}
         />
