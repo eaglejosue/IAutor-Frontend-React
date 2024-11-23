@@ -143,7 +143,6 @@ const NewHistory = () => {
         setQuestionIndex(0);
         setAnswer(questionRes.questionUserAnswer?.answer ?? '');
         setQtdCallIASugestionsUsed(questionRes.questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
-        setChapters(response.chapters)
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
