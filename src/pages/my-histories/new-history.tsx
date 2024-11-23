@@ -19,7 +19,6 @@ import { BookService } from '../../common/http/api/bookService';
 import { PlanService } from '../../common/http/api/planService';
 import { QuestionService } from '../../common/http/api/questionService';
 import { IAService } from '../../common/http/api/iaService';
-import { UserModel } from '../../common/models/user.model';
 import { BookModel } from '../../common/models/book.model';
 import { PlanModel } from '../../common/models/plan.model';
 import { ChapterModel } from '../../common/models/chapter.model';
