@@ -4,10 +4,12 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useGoogleLogin } from '@react-oauth/google';
 
-import CustomInput from '../../components/forms/customInput/customInput';
 import { LoginService } from '../../common/http/api/loginService';
 import { LoginRequest } from '../../common/models/login.request';
 import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
+import { EnumUserTypes } from '../../common/enums/status.enum';
+
+import CustomInput from '../../components/forms/customInput/customInput';
 
 import GoogleSvg24 from '../../assets/svg/icons8-google-24.svg';
 import paths from '../../routes/paths';
@@ -61,17 +63,12 @@ const Login = () => {
   const setUserAuthenticated = (response: any) => {
     const user = new AuthenticatedUserModel(response);
     AuthenticatedUserModel.saveToLocalStorage(user);
-    // if (!user.isValid) {
-    //   toast.warning('CPF e Data de Nascimento obrigatórios para cadastro!', {
-    //     position: 'top-left',
-    //     style: { minWidth: 600 }
-    //   });
-    //   navigate(paths.MY_ACCOUNT);
-    // }
-    // else {
-    //   navigate(redirect?.length ? `${redirect}?logged=true` : paths.NEW_HISTORY);
-    // }
-    navigate(redirect?.length ? `${redirect}?logged=true` : `${paths.NEW_HISTORY}/${user.lastBookId}`);
+
+    let url = `${paths.NEW_HISTORY}/${user.lastBookId}`;
+    if (user.type === EnumUserTypes.Admin) url = paths.HOME_LOGGED;
+    if (redirect?.length) url = `${redirect}?logged=true`;
+
+    navigate(url);
     reset();
   }
 

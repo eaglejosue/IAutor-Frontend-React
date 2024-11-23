@@ -9,6 +9,7 @@ export class AuthenticatedUserModel {
   planId!: number;
   lastBookId!: number;
   isValid!: boolean;
+  termsAccepted!: boolean;
   token!: string;
 
   constructor(j?: any) {
@@ -23,6 +24,7 @@ export class AuthenticatedUserModel {
       this.planId = j.planId;
       this.lastBookId = j.lastBookId;
       this.isValid = j.isValid;
+      this.termsAccepted = j.termsAccepted;
       this.token = j.token;
     }
   }

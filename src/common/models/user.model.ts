@@ -9,6 +9,8 @@ export class UserModel extends BaseModel {
   signInWith!: string;
   birthDate?: string;
   profileImgUrl?: string;
+  acceptedTermsAt?: string;
+
   oldPassword?: string;
   password?: string;
   fullname!: string;
@@ -24,6 +26,8 @@ export class UserModel extends BaseModel {
       this.signInWith = j.signInWith;
       this.birthDate = j.birthDate;
       this.profileImgUrl = j.profileImgUrl;
+      this.acceptedTermsAt = j.acceptedTermsAt;
+
       this.oldPassword = j.oldPassword;
       this.password = j.password;
       this.fullname = j.fullname;

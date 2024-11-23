@@ -54,6 +54,13 @@ export class UserService {
     return response.data;
   }
 
+  public async saveUserAcceptedTerms(id: number) {
+    const response = await this._httpClient.put<string>(
+      `${this.endpoint}/accepted-terms/${id}`
+    );
+    return response.data;
+  }
+
   public async postBookLog(data: UserBookLogModel) {
     const response = await this._httpClient.post<string>(
       `${this.endpoint}/book-log`, { data }
