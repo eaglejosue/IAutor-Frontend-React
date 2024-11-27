@@ -20,12 +20,14 @@ interface BookViewerNavigate {
   chapter: string;
   answer: string;
   subject?: string;
+  imageUrl?:string; 
+  captionPicture?:string;
 }
 const BookViewer = (props: BookViewerProps) => {
   const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(1);
-
+  
   const increase = () => {
     let value = right < bookViewerAr.length - 1 ? right + 2 : right;
     setRight(value);
@@ -53,6 +55,8 @@ const BookViewer = (props: BookViewerProps) => {
               chapter: r.title,
               subject: subject,
               answer: g.answer,
+              imageUrl:g.imagePhotoUrl,
+              captionPicture:g.imagePhotoLabel
             };
             arBooks.push(booksVw);
           });
@@ -96,8 +100,12 @@ const BookViewer = (props: BookViewerProps) => {
               <strong>Capítulo - {bookViewerAr[left]?.idChapter} - {bookViewerAr[left]?.chapter}</strong>
             </div>
             <div className="col-12 text-center pt-2"><h3>{bookViewerAr[left]?.subject}</h3></div>
+            <div className="col-12 text-center pt-2"><img className="img-thumbnail" src={bookViewerAr[left]?.imageUrl}></img> </div>
+            <div className="col-12 text-center pt-2"><small> {bookViewerAr[left]?.captionPicture} </small> </div>
             <div className="col-12  text-justify pt-2">{bookViewerAr[left]?.answer}</div>
+           
           </div>
+         
         </div>
 
         <div className="col-5 page-right">
@@ -106,8 +114,11 @@ const BookViewer = (props: BookViewerProps) => {
               <strong>Capítulo - {bookViewerAr[right]?.idChapter} - {bookViewerAr[right]?.chapter}</strong>
             </div>
             <div className="col-12 text-center pt-2"><h3>{bookViewerAr[right]?.subject}</h3></div>
+            <div className="col-12 text-center pt-2"><img className="img-thumbnail" src={bookViewerAr[right]?.imageUrl}></img> </div>
+            <div className="col-12 text-center pt-2"><small> {bookViewerAr[right]?.captionPicture} </small> </div>
             <div className="col-12 text-justify pt-2">{bookViewerAr[right]?.answer}</div>
           </div>
+        
         </div>
 
         <div className="col-1  align-self-center">
@@ -121,6 +132,13 @@ const BookViewer = (props: BookViewerProps) => {
           />
         </div>
 
+      </div>
+
+      <div className="row">
+           <div className="col-1   align-self-center text-end"></div>
+           <div className="col-5   align-self-center text-center page-left-bg">{left}/{bookViewerAr.length}</div>
+           <div className="col-5   align-self-center text-center page-right-bg">{right}/{bookViewerAr.length}</div>
+           <div className="col-1   align-self-center text-end"></div>
       </div>
     </div>
   );

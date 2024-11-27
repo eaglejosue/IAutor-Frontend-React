@@ -37,13 +37,13 @@ const ChapterTable = (props: ChapterTableProps) => {
   }
   const columnsRegister = [
     {
-      title: "Número do capítulo",
+      title: "Capítulo",
       dataIndex: "chapterNumber",
       sorter: (a: any, b: any) =>
         a.chapterNumber.localeCompare(b.chapterNumber),
     },
     {
-      title: "Capítulo",
+      title: "Nome do Capítulo",
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },
@@ -133,13 +133,13 @@ const ChapterTable = (props: ChapterTableProps) => {
 
   const columnsRegisterPlan = [
     {
-      title: "Nr do capítulo",
+      title: "Capítulo",
       dataIndex: "chapterNumber",
       sorter: (a: any, b: any) =>
         a.chapterNumber.localeCompare(b.chapterNumber),
     },
     {
-      title: "Título",
+      title: "Nome do Capítulo",
       dataIndex: "title",
       sorter: (a: any, b: any) => a.title.localeCompare(b.title),
     },

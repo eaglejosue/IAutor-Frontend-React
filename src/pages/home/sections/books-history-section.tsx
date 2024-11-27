@@ -86,7 +86,7 @@ interface BooksHistoryProps{
                                 <div className="col-auto"><img alt="MyHistory"  src={bookuserbooks} ></img></div>
                                 <div className="col-auto">
                                   <span>{book?.title}</span><br></br>
-                                  <span>{book?.description}  {book?.updatedAt !=null?  `Última edição há ${differenceInDays(new Date(), book?.updatedAt)} dias`: ''} </span>
+                                  <span>{book?.updatedAt !=null?  `Última edição há ${differenceInDays(new Date(), book?.updatedAt)} dias`: ''} </span>
                                 </div>
                             </div>
                         </td>

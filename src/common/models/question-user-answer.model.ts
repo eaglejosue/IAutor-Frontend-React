@@ -7,7 +7,8 @@ export class QuestionUserAnswerModel {
   bookId!: number;
   answer!: string;
   qtdCallIASugestionsUsed!: number;
-
+  imagePhotoUrl!:string;
+  imagePhotoLabel!:string;
   constructor(j?: any) {
     if (j) {
       this.id = j.id;
@@ -18,6 +19,8 @@ export class QuestionUserAnswerModel {
       this.bookId = j.bookId;
       this.answer = j.answer;
       this.qtdCallIASugestionsUsed = j.qtdCallIASugestionsUsed;
+      this.imagePhotoUrl = j.imagePhotoUrl;
+      this.imagePhotoLabel = j.imagePhotoLabel;
     }
   }
 }

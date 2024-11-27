@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
-import { Modal } from 'react-bootstrap';
+import { Modal, ModalHeader } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -13,8 +13,6 @@ import 'react-responsive-modal/styles.css';
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 
-import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
-import { UserService } from '../../common/http/api/userService';
 import { BookService } from '../../common/http/api/bookService';
 import { PlanService } from '../../common/http/api/planService';
 import { QuestionService } from '../../common/http/api/questionService';
@@ -36,14 +34,13 @@ import clownWithHat from '../../assets/svg/face-of-clown-with-hat.svg';
 import theater from '../../assets/svg/theater.svg';
 import hearts from '../../assets/svg/hearts.svg';
 import BookViewer from './book-viewer';
-import WomanIsTyping from '../../assets/img/woman-is-typing-laptop-with-lamp-her.png';
+import UploadPhotosContainer from './photos/upload-photos.container';
 
 const NewHistory = () => {
 
   const navigate = useNavigate();
   const param = useParams();
 
-  const _userService = new UserService();
   const _bookService = new BookService();
   const _planService = new PlanService();
   const _questionService = new QuestionService();
@@ -63,18 +60,13 @@ const NewHistory = () => {
   const [question, setQuestion] = useState(new QuestionModel());
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('Título História');
   const [theme, setTheme] = useState('');
-
-  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
-  const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [termsTextModal, setTermsTextModal] = useState(1);
-  const [errorMessage, setErrorMessage] = useState('');
 
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isIAModalOpen, setIsIAModalOpen] = useState(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
-
+  const [isPhotoUploadModalOpen, setPhotoUploadModalOpen] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
@@ -83,52 +75,24 @@ const NewHistory = () => {
   const [answerChanged, setAnswerChanged] = useState<boolean>(false);
   const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
   const [IAText, setIAText] = useState('');
+  const [chapters, setChapters] = useState<ChapterModel[]>([]);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
-
-    const user = AuthenticatedUserModel.fromLocalStorage()!;
-    if (user.termsAccepted) {
-      getBook(parseInt(param.id!));
-    }
-    else {
-      setTermsTextModal(1);
-      setIsTermsModalOpen(true);
-    }
+    getBook(parseInt(param.id!));
   }, []);
 
-  const handleAcceptTerms = () => {
-    if (!acceptedTerms) {
-      setErrorMessage("Antes de prosseguir, por favor, confirme que leu e concorda com nossos termos e condições.");
-    } else {
-      setErrorMessage('');
-      saveUserAcceptedTerms();
-    }
-  };
-
-  const saveUserAcceptedTerms = async () => {
-    setIsLoading2(true);
-    const user = AuthenticatedUserModel.fromLocalStorage()!;
-    await _userService
-      .saveUserAcceptedTerms(user.id)
-      .then(() => {
-        setIsTermsModalOpen(false);
-        getBook(parseInt(param.id!));
-        user.termsAccepted = true;
-        AuthenticatedUserModel.saveToLocalStorage(user);
-      })
-      .catch((e: any) => {
-        let message = "Error ao salvar aceite de termos pelo usuário.";
-        if (e.response?.data?.length > 0 && e.response.data[0].message)
-          message = e.response.data[0].message;
-        if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
-      })
-      .finally(() => {
-        setIsLoading2(false);
-      });
-  };
+  const closeIcon = (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <mask id="mask0_693_22769"  maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <rect width="24" height="24" fill="#D9D9D9"/>
+    </mask>
+    <g mask="url(#mask0_693_22769)">
+    <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="white"/>
+    </g>
+    </svg>
+  );
 
   const getBook = (id: number) => {
     setIsLoading1(true);
@@ -181,6 +145,7 @@ const NewHistory = () => {
         setQuestionIndex(0);
         setAnswer(questionRes.questionUserAnswer?.answer ?? '');
         setQtdCallIASugestionsUsed(questionRes.questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
+        setChapters(response.chapters)
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
@@ -347,6 +312,11 @@ const NewHistory = () => {
     return () => clearTimeout(handler);
   }, [answerChanged, answer]);
 
+  const updateUserAnsewers =() =>{
+    setPhotoUploadModalOpen(false)
+    window.location.reload();
+
+  }
   const saveQuestionAnswer = async (txt?: string, qtd?: number, fromAutomatic: boolean = false) => {
     if (answer.length == 0) {
       if (!fromAutomatic) {
@@ -394,17 +364,6 @@ const NewHistory = () => {
         setIsLoadingSaveAnswer(false);
       });
   }
-
-  const closeIcon = (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <mask id="mask0_693_22769"  maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-    <rect width="24" height="24" fill="#D9D9D9"/>
-    </mask>
-    <g mask="url(#mask0_693_22769)">
-    <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="white"/>
-    </g>
-    </svg>
-  );
 
   return (
     <div className='d-flex'
@@ -744,8 +703,8 @@ const NewHistory = () => {
                 <div className='d-flex justify-content-center align-items-center bg-white shadow rounded-3 mx-5 my-4 p-4'>
                   <div className='d-flex f-14'>Ferramentas de Edição</div>
                   <div className='d-flex text-icon ps-4'>
-                    <span className='material-symbols-outlined px-2'
-                      style={{ fontSize: '24px', cursor: 'pointer' }}
+                    <span className='material-symbols-outlined px-2' onClick={()=>setPhotoUploadModalOpen(true)}
+                      style={{ fontSize: '24px', cursor: 'pointer' , color: '#db3737'}}
                       title='Inserir foto'>add_photo_alternate</span>
                     <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer' }}
@@ -778,14 +737,15 @@ const NewHistory = () => {
                       <div id='title' className='d-flex position-absolute text-center f-18'
                         style={{ fontFamily: 'Times New Roman', marginTop: '8vh' }}
                       >
-                        <b>{chapter.title}</b>
+                        <b>{chapter.title}</b>                    
                       </div>
+                     
                       <div className='d-flex position-absolute f-13'
                         style={{
                           fontFamily: 'Times New Roman', lineHeight: '16px',
                           marginTop: '13vh', marginLeft: '9%', marginRight: '9%'
                         }}
-                      >
+                      >                       
                         {answer.substring(0, 1400)}
                       </div>
                     </>
@@ -798,89 +758,6 @@ const NewHistory = () => {
           </div>
         </main>
 
-        <Modal show={isTermsModalOpen} onHide={() => setIsTermsModalOpen(false)} centered={true} backdrop="static" keyboard={false}>
-          <Modal.Body className='text-center justify-content-center pt-0 px-5'
-            style={{}}
-          >
-            <div className='d-flex w-100 justify-content-center align-items-center'>
-              <img src={WomanIsTyping} alt="Woman is typing laptop with lamp" />
-            </div>
-
-            {termsTextModal === 1 &&
-              <>
-                <div className='d-flex justify-content-center pt-4'>
-                  <b className='f-22'>Livro Degustação</b>
-                </div>
-                <div className='border-bottom f-15 pt-2 pb-3'>
-                  Bem vindo Autor, você dará inicio à criação de sua história. No livro degustação você poderá experimentar a criação de um livro de memórias usando os recursos da plataforma <b>IAutor</b>.
-                </div>
-                <div className='d-flex justify-content-center pt-3'>
-                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
-                    style={{ fontWeight: 'bold' }}
-                    onClick={() => { setTermsTextModal(2) }}
-                  >
-                    Próximo
-                  </a>
-                </div>
-              </>
-            }
-            {termsTextModal === 2 &&
-              <>
-                <div className='d-flex justify-content-center pt-4'>
-                  <b className='f-22'>Temas Sensíveis</b>
-                </div>
-                <div className='border-bottom f-15 pt-2 pb-3'>
-                  Responda as perguntas com sinceridade e o máximo de detalhes possíveis.
-                  Ao mesmo tempo, evite compartilhar informações íntimas ou sensíveis.
-                </div>
-                <div className='d-flex justify-content-center pt-3'>
-                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
-                    style={{ fontWeight: 'bold' }}
-                    onClick={() => { setTermsTextModal(3) }}
-                  >
-                    Próximo
-                  </a>
-                </div>
-              </>
-            }
-            {termsTextModal === 3 &&
-              <>
-              <div className='d-flex justify-content-center pt-4'>
-                <b className='f-22'>Aproveite a Experiência</b>
-              </div>
-              <div className='f-15 pt-2 pb-3'>
-                Após finalizar o texto, escolha uma característica que resuma a resposta (como humor ou romantismo) antes do envio para a Inteligência artificial do <b>IAutor</b>.
-              </div>
-              <label className='f-12 py-3'>
-                <input type="checkbox" className='mr-1' checked={acceptedTerms}
-                  onChange={(e) => {
-                    setAcceptedTerms(e.target.checked);
-                    setErrorMessage('');
-                  }}
-                />
-                Li e concordo com os <a href='#' className='fw-bold'>Termos e Condições</a> da plataforma.
-              </label>
-
-              {errorMessage &&
-                <div className='d-flex justify-content-center align-items-center pb-3'>
-                  <span className="text-danger f-12">{errorMessage}</span>
-                </div>
-              }
-
-              <div className='d-flex border-top justify-content-center pt-3'>
-                <a href='#' className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
-                  style={{ fontWeight: 'bold' }}
-                  onClick={handleAcceptTerms}
-                >
-                  Começar
-                </a>
-              </div>
-              </>
-            }
-
-          </Modal.Body>
-        </Modal>
-
         <Modal show={isHelpModalOpen} onHide={() => setIsHelpModalOpen(false)} size='lg' centered={true}>
           <Modal.Body className='text-center justify-content-center f-18 p-5'
             style={{
@@ -890,19 +767,19 @@ const NewHistory = () => {
             }}
           >
             <div className='d-flex justify-content-center'>
-              <b className='f-28'>Como responder às perguntas</b>
+              <b className='f-28'>Ajuda</b>
             </div>
             <div className='pt-3'>
-              Responda-as com sinceridade e o máximo de detalhes possíveis, ressaltando que mais informações tornam o conteúdo mais valioso.
+              Na resposta, é importante que você seja o mais sincero possível, e conte todos os detalhes que puder se lembrar, aqui vale vale a regra: quanto mais informação, melhor!
             </div>
             <div className='pt-3'>
-              Ao mesmo tempo, evite compartilhar informações íntimas ou sensíveis.
+              Lembre-se não nunca expor informações  intimos e/ou sensíveis que você não gostaria de compartilhar com outras pessoas.
             </div>
             <div className='pt-3'>
-              Após finalizar o texto, escolha uma característica que resuma a resposta (como humor ou romantismo) antes do envio para a Inteligência artificial do <b>IAutor</b>.
+              Após finalizar o texto, escolha uma característica que mais se associa à sua resposta (humor, romantico, etc), e utilize inteligencia artificial do IAutor para revisa-lo  para você.
             </div>
             <div className='pt-3'>
-              Lembre-se que a plataforma permite voltar à versão original ou fazer novas revisões, caso o resultado da revisão não seja satisfatório.
+              Não se preocupe, se não gostar da revisão, você consegue voltar atrás, e fazer novas tentativas.
             </div>
           </Modal.Body>
         </Modal>
@@ -995,6 +872,13 @@ const NewHistory = () => {
         >
           <BookViewer book={book} plan={plan} questionAnsewers={questionUserAnswers} />
         </ModalResponsive>
+
+        <Modal show={isPhotoUploadModalOpen} onHide={() => setPhotoUploadModalOpen(false)} size='lg' backdrop="static" keyboard={false}>
+          <ModalHeader closeButton><span className='text-primary'><strong>Upload de fotos - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
+        <Modal.Body>
+              <UploadPhotosContainer closeModal={()=>{updateUserAnsewers()}} book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question}  />
+        </Modal.Body>
+        </Modal>
 
       </section>
     </div>
