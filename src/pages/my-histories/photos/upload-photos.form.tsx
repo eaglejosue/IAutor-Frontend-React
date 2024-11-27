@@ -26,13 +26,10 @@ export interface BookViewerNavigate {
   }
 const UploadPhotosForm =(props:UploadPhotosFormProps) =>{
 
-    const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
-    const [bookViewerfiltered, setBookViewerfiltered] = useState<BookViewerNavigate[]>([]);
+    //const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
     const[isLoading,setIsloading] = useState(false)
     const [file, setFile] = useState();
-    const [perguntaSessaoSearch, setSearchPerguntaSessao] = useState('')
     const [disableFup,setDisableFup] = useState(false)
-    const [selectedQuestion, setSelectedQuestion] = useState<QuestionModel |null>(null);
     const [inactivationModalOpen, setInactivationModalOpen] = useState(false);
     const _questionService = new QuestionService();
     //console.log(props.question?.questionUserAnswer)
@@ -67,7 +64,7 @@ const UploadPhotosForm =(props:UploadPhotosFormProps) =>{
               });
           });
     
-        setBookViewerAr(arBooks);
+        //setBookViewerAr(arBooks);
         if( props.question?.questionUserAnswer.imagePhotoUrl!==null){
           setValue('caption', props.question?.questionUserAnswer.imagePhotoLabel);
           setDisableFup(true)

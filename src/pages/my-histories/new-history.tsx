@@ -75,7 +75,7 @@ const NewHistory = () => {
   const [answerChanged, setAnswerChanged] = useState<boolean>(false);
   const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
   const [IAText, setIAText] = useState('');
-  const [chapters, setChapters] = useState<ChapterModel[]>([]);
+  //const [chapters, setChapters] = useState<ChapterModel[]>([]);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
@@ -145,7 +145,7 @@ const NewHistory = () => {
         setQuestionIndex(0);
         setAnswer(questionRes.questionUserAnswer?.answer ?? '');
         setQtdCallIASugestionsUsed(questionRes.questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
-        setChapters(response.chapters)
+        //setChapters(response.chapters)
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
