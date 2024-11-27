@@ -60,4 +60,23 @@ export class QuestionService {
     });
     return response.data;
   }
+
+  public async uploadPhotoQuestionUserAnswer(data: any) {
+    
+    const response = await this._httpClient.post<string>(`${this.endpoint}/uploadPhotoQuestionUserAnswer/${data.idQuestionUserAnwser}/${encodeURI(data.label==''? '-':data.label)}`, {
+      data, headers: {
+        'content-type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  }
+
+  
+  public async updatePhotoQuestionUserAnswer(data: QuestionUserAnswerModel) {
+    
+    const response = await this._httpClient.put<string>(`${this.endpoint}/user-answers-edit-photos`, {
+      data
+    });
+    return response.data;
+  }
 }
