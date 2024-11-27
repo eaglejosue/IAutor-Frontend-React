@@ -13,6 +13,7 @@ import { AuthenticatedUserModel } from '../../common/models/authenticated.model'
 import { LoginRequest } from '../../common/models/login.request';
 import { CpfValidator } from '../../common/validation/cpfValidator';
 import { BirthDateValidator } from '../../common/validation/birthDateValidator';
+import { EnumUserTypes } from '../../common/enums/status.enum';
 
 import GoogleSvg24 from '../../assets/svg/icons8-google-24.svg';
 import paths from '../../routes/paths';
@@ -36,16 +37,12 @@ const SigIn = () => {
   const setUserAuthenticated = (response: any) => {
     const user = new AuthenticatedUserModel(response);
     AuthenticatedUserModel.saveToLocalStorage(user);
-    if (!user.isValid) {
-      toast.warning('CPF e Data de Nascimento obrigatórios para cadastro!', {
-        position: 'top-left',
-        style: { minWidth: 600 }
-      });
-      navigate(paths.MY_ACCOUNT);
-    }
-    else {
-      navigate(redirect?.length ? `${redirect}?logged=true` : paths.NEW_HISTORY);
-    }
+
+    let url = `${paths.NEW_HISTORY}/${user.lastBookId}`;
+    if (user.type === EnumUserTypes.Admin) url = paths.HOME_LOGGED;
+    if (redirect?.length) url = `${redirect}?logged=true`;
+
+    navigate(url);
     reset();
   }
 
@@ -115,11 +112,11 @@ const SigIn = () => {
       _loginService
         .sigin(new LoginRequest(data))
         .then(() => {
-          toast.success('Conta criada e e-mail enviado para ativação!', {
+          toast.success('Sua conta foi criada com sucesso! Para ativá-la, verifique seu e-mail, caso não encontre a mensagem, verifique sua caixa de spam.', {
             position: 'top-center',
             style: { minWidth: 400 }
           });
-          navigate(paths.MY_HISTORIES);
+          navigate(paths.HOME_LOGGED);
           reset();
         })
         .catch((e) => {
@@ -353,7 +350,7 @@ const SigIn = () => {
 
               <div className='d-flex w-100 mt-3'>
                 <p className='text-muted f-12' style={{ textAlign: 'start' }}>
-                  Ao criar a Conta no IAutore, você está ciente de que seus dados pessoais serão tratados de acordo com a nossa Política de Privacidade.
+                  Ao criar a Conta no IAutor, você está ciente de que seus dados pessoais serão tratados de acordo com a nossa Política de Privacidade.
                 </p>
               </div>
 

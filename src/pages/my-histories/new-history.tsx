@@ -75,7 +75,6 @@ const NewHistory = () => {
   const [answerChanged, setAnswerChanged] = useState<boolean>(false);
   const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
   const [IAText, setIAText] = useState('');
-  //const [chapters, setChapters] = useState<ChapterModel[]>([]);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
@@ -266,7 +265,6 @@ const NewHistory = () => {
     setQuestion(questionB)
     setQuestionIndex(questionIndex - 1);
     handleQuestionUserAnswer(questionB.id);
-    setQtdCallIASugestionsUsed(questionB.questionUserAnswer.qtdCallIASugestionsUsed);
   };
 
   const handleNextQuestionClick = () => {
@@ -297,7 +295,6 @@ const NewHistory = () => {
     setQuestion(questionN)
     setQuestionIndex(questionIndex + 1);
     handleQuestionUserAnswer(questionN.id);
-    setQtdCallIASugestionsUsed(questionN.questionUserAnswer.qtdCallIASugestionsUsed);
   };
 
   useEffect(() => {
@@ -312,11 +309,11 @@ const NewHistory = () => {
     return () => clearTimeout(handler);
   }, [answerChanged, answer]);
 
-  const updateUserAnsewers =() =>{
+  const updateUserAnsewers = () => {
     setPhotoUploadModalOpen(false)
     window.location.reload();
-
   }
+
   const saveQuestionAnswer = async (txt?: string, qtd?: number, fromAutomatic: boolean = false) => {
     if (answer.length == 0) {
       if (!fromAutomatic) {
@@ -673,7 +670,7 @@ const NewHistory = () => {
                     onClick={() => { saveQuestionAnswer() }}
                   >
                     {isLoadingSaveAnswer ?
-                      <span className="spinner-border spinner-border-sm text-black ms-2" role="status" aria-hidden="true"></span> :
+                      <span className="spinner-border spinner-border-sm text-black" role="status" aria-hidden="true"></span> :
                       <span className='material-symbols-outlined' style={{ fontSize: '24px' }}>save</span>
                     }
                   </div>
@@ -703,22 +700,33 @@ const NewHistory = () => {
                 <div className='d-flex justify-content-center align-items-center bg-white shadow rounded-3 mx-5 my-4 p-4'>
                   <div className='d-flex f-14'>Ferramentas de Edição</div>
                   <div className='d-flex text-icon ps-4'>
-                    <span className='material-symbols-outlined px-2' onClick={()=>setPhotoUploadModalOpen(true)}
-                      style={{ fontSize: '24px', cursor: 'pointer' , color: '#db3737'}}
-                      title='Inserir foto'>add_photo_alternate</span>
-                    <span className='material-symbols-outlined px-2'
-                      style={{ fontSize: '24px', cursor: 'pointer' }}
-                      title='Editar fonte'>draw</span>
                     <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
-                      onClick={() => { setIsBookPreviewModalOpen(true) }}
-                      title='Visualizar livro'>auto_stories</span>
+                      onClick={() => setIsBookPreviewModalOpen(true) }
+                      title='Visualizar livro'>
+                      auto_stories
+                    </span>
+                    <span className='material-symbols-outlined px-2'
+                      style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
+                      onClick={() => setPhotoUploadModalOpen(true)}
+                      title='Inserir/Alterar foto'>
+                      add_photo_alternate
+                    </span>
                     <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer' }}
-                      title='Download'>file_save</span>
+                      title='Alterar fonte'>
+                      draw
+                    </span>
                     <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer' }}
-                      title='Presentear'>featured_seasonal_and_gifts</span>
+                      title='Download'>
+                      file_save
+                    </span>
+                    <span className='material-symbols-outlined px-2'
+                      style={{ fontSize: '24px', cursor: 'pointer' }}
+                      title='Presentear'>
+                      featured_seasonal_and_gifts
+                    </span>
                   </div>
                 </div>
 
@@ -737,15 +745,15 @@ const NewHistory = () => {
                       <div id='title' className='d-flex position-absolute text-center f-18'
                         style={{ fontFamily: 'Times New Roman', marginTop: '8vh' }}
                       >
-                        <b>{chapter.title}</b>                    
+                        <b>{chapter.title}</b>
                       </div>
-                     
+
                       <div className='d-flex position-absolute f-13'
                         style={{
                           fontFamily: 'Times New Roman', lineHeight: '16px',
                           marginTop: '13vh', marginLeft: '9%', marginRight: '9%'
                         }}
-                      >                       
+                      >
                         {answer.substring(0, 1400)}
                       </div>
                     </>
@@ -875,9 +883,9 @@ const NewHistory = () => {
 
         <Modal show={isPhotoUploadModalOpen} onHide={() => setPhotoUploadModalOpen(false)} size='lg' backdrop="static" keyboard={false}>
           <ModalHeader closeButton><span className='text-primary'><strong>Upload de fotos - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
-        <Modal.Body>
-              <UploadPhotosContainer closeModal={()=>{updateUserAnsewers()}} book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question}  />
-        </Modal.Body>
+          <Modal.Body>
+            <UploadPhotosContainer closeModal={() => { updateUserAnsewers() }} book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question} />
+          </Modal.Body>
         </Modal>
 
       </section>
