@@ -29,7 +29,10 @@ const ForgotPassword = () => {
     _loginService
         .forgotPassword(data.email)
         .then(() => {
-          toast.success('Se o e-mail informado estiver cadastrado, você receberá instruções para redefinir sua senha em alguns minutos. Por favor, verifique sua caixa de entrada e spam.', { position: 'top-center' });
+          toast.success('Se o e-mail informado estiver cadastrado, você receberá instruções para redefinir sua senha em alguns minutos. Por favor, verifique sua caixa de entrada e spam.', {
+            position: 'top-center',
+            style: { minWidth: 600 }
+          });
         })
         .catch((e) => {
           let message = 'Error enviar e-mail.';

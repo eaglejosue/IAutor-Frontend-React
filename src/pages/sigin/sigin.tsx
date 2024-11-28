@@ -114,7 +114,7 @@ const SigIn = () => {
         .then(() => {
           toast.success('Sua conta foi criada com sucesso! Para ativá-la, verifique seu e-mail, caso não encontre a mensagem, verifique sua caixa de spam.', {
             position: 'top-center',
-            style: { minWidth: 400 }
+            style: { minWidth: 600 }
           });
           navigate(paths.HOME_LOGGED);
           reset();
