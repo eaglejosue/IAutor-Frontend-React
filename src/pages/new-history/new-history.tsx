@@ -56,7 +56,6 @@ const NewHistory = () => {
   const isLoading = isLoading1 || isLoading2;
 
   const [isLoadingSaveAnswer, setIsLoadingSaveAnswer] = useState<boolean>(false);
-
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
   const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Alterar Título da História' }))
@@ -65,7 +64,7 @@ const NewHistory = () => {
   const [question, setQuestion] = useState(new QuestionModel());
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [title, setTitle] = useState('Título História');
+  const [title, setTitle] = useState('Alterar Título da História');
   const [theme, setTheme] = useState('');
 
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
