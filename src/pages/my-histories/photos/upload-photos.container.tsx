@@ -19,7 +19,8 @@ const UploadPhotosContainer =(props:UploadPhotosContainerProps) =>{
         <>
             <div className="row containerPhoto">
                 <div className="col-12">
-                    <UploadPhotosForm  closeModal={props.closeModal} questionAnsewers={props.questionAnsewers} plan={props.plan} question={props.question}  />
+                    <UploadPhotosForm  closeModal={props.closeModal} questionAnsewers={props.questionAnsewers} plan={props.plan}
+                     question={props.question}  />
                     
                 </div>
               

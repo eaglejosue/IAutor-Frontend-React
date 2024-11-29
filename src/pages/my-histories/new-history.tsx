@@ -745,17 +745,69 @@ const NewHistory = () => {
                       <div id='title' className='d-flex position-absolute text-center f-18'
                         style={{ fontFamily: 'Times New Roman', marginTop: '8vh' }}
                       >
-                        <b>{chapter.title}</b>
+                        <b>{chapter.title}</b><br></br>
                       </div>
+                     
+                     {
+                     question?.questionUserAnswer?.imagePhotoUrl  && <div id='img' className='d-flex position-absolute text-center '
+                        style={{  marginTop: '12vh' }}
+                      >
+
+                <button
+                  className='btn  p-0 my-2 border-0 bg-transparent'
+                  type='button'
+                  onClick={()=>setPhotoUploadModalOpen(true)}
+                  style={{ outline: 'none', position: 'relative' }}
+                >
+                  <div
+                    className="rounded-circle bg-light d-flex justify-content-center align-items-center"
+                    style={{ width: '220px',  position: 'relative' }}
+                  >
+                    {question?.questionUserAnswer?.imagePhotoUrl ? (
+                      <img
+                        src={question?.questionUserAnswer?.imagePhotoUrl}
+                        alt="Participante"
+                        className="img-fluid img-thumbnail "
+                        style={{  maxHeight:'155px',   objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <span className="material-symbols-outlined" style={{ fontSize: '45px', color: '#6c63ff' }}>
+                        person
+                      </span>
+                    )}
+                  </div>
+                  <div
+                    className="d-flex justify-content-center align-items-center bg-body-bg rounded-circle"
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      position: 'absolute',
+                      bottom: '5px',
+                      right: '5px',
+                      border: '1px solid #ccc'
+                    }}
+                  >
+                    <span className="material-symbols-outlined" style={{ fontSize: '16px', color: '#DB3737' }}>
+                      edit
+                    </span>
+                  </div>
+                </button>
+
+
+
+                      </div>
+                     }
 
                       <div className='d-flex position-absolute f-13'
                         style={{
                           fontFamily: 'Times New Roman', lineHeight: '16px',
-                          marginTop: '13vh', marginLeft: '9%', marginRight: '9%'
-                        }}
-                      >
-                        {answer.substring(0, 1400)}
+                          marginTop: question?.questionUserAnswer?.imagePhotoUrl==null? '12vh' :'31vh', marginLeft: '9%', marginRight: '9%'
+                        }}>
+                      
+                        {answer.substring(0, question?.questionUserAnswer?.imagePhotoUrl==null? 1400:900)}
+                       
                       </div>
+                     
                     </>
                   }
                 </div>
@@ -878,13 +930,15 @@ const NewHistory = () => {
           classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
           onClose={() => setIsBookPreviewModalOpen(false)}
         >
-          <BookViewer book={book} plan={plan} questionAnsewers={questionUserAnswers} />
+          <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
         </ModalResponsive>
 
-        <Modal show={isPhotoUploadModalOpen} onHide={() => setPhotoUploadModalOpen(false)} size='lg' backdrop="static" keyboard={false}>
-          <ModalHeader closeButton><span className='text-primary'><strong>Upload de fotos - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
+        <Modal show={isPhotoUploadModalOpen}  onHide={() => setPhotoUploadModalOpen(false)} 
+         size='lg' backdrop="static" keyboard={false}>
+          <ModalHeader closeButton><span className='text-primary'><strong>Inserir foto - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
           <Modal.Body>
-            <UploadPhotosContainer closeModal={() => { updateUserAnsewers() }} book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question} />
+            <UploadPhotosContainer closeModal={() => { updateUserAnsewers() }} book={book} questionAnsewers={questionUserAnswers} 
+            plan={plan} question={question} />
           </Modal.Body>
         </Modal>
 

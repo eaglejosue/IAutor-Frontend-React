@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-
 import { arrowLeft, arrowRight } from "../../assets/svg";
-
 import { BookModel } from "../../common/models/book.model";
 import { PlanModel } from "../../common/models/plan.model";
 import { ChapterModel } from "../../common/models/chapter.model";
@@ -13,6 +11,7 @@ export interface BookViewerProps {
   book: BookModel;
   questionAnsewers: QuestionUserAnswerModel[];
   plan: PlanModel;
+  chapter:ChapterModel;
 }
 
 interface BookViewerNavigate {
@@ -22,19 +21,20 @@ interface BookViewerNavigate {
   subject?: string;
   imageUrl?:string; 
   captionPicture?:string;
+  idAnserQuestionUser:number;
 }
 const BookViewer = (props: BookViewerProps) => {
   const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(1);
-  
-  const increase = () => {
+  //console.log(props.questionAnsewers)
+  const increase = async () => {
     let value = right < bookViewerAr.length - 1 ? right + 2 : right;
     setRight(value);
     setLeft(value - 1);
   };
 
-  const decrease = () => {
+  const decrease = async () => {
     let value = right - 2 < 0 ? 0 : right - 2;
     setLeft(value);
     setRight(value + 1);
@@ -44,32 +44,53 @@ const BookViewer = (props: BookViewerProps) => {
     let arBooks: BookViewerNavigate[] = [];
 
     props.plan.chapters
-      ?.sort((r) => r.id)
+      ?.sort((x1,x2) => x1.chapterNumber - x2.chapterNumber)
       .map((r: ChapterModel) => {
         props.questionAnsewers
           .filter((b) => b.chapterId == r.id)
+          .sort((n1,n2) => n1.questionId - n2.questionId)
           .map((g: QuestionUserAnswerModel) => {
             let subject = r.questions?.find(f => f.id == g.questionId)?.subject;
+    
             let booksVw: BookViewerNavigate = {
               idChapter: r.id,
               chapter: r.title,
               subject: subject,
               answer: g.answer,
               imageUrl:g.imagePhotoUrl,
-              captionPicture:g.imagePhotoLabel
+              captionPicture:g.imagePhotoLabel,
+              idAnserQuestionUser:g.id
             };
+            console.log(booksVw)
             arBooks.push(booksVw);
           });
       });
 
     setBookViewerAr(arBooks);
+
+    
+
   }, []);
 
+  
   useEffect(() => {
-    if (bookViewerAr.length == 0) {
-      // setRight(0);
-    }
+   /* if (bookViewerAr.length> 0) {
+      console.log(props.chapter?.chapterNumber)
+      if(props.chapter?.chapterNumber ){
+      
+        for (let index = 1; index < props.chapter?.chapterNumber; index++) {
+          setTimeout(async () => {
+            await increase()
+            console.log('aqui')
+          }, 100);
+          
+          
+        }
+      }
+    }*/
+   //console.log(bookViewerAr)
   }, [bookViewerAr]);
+  
 
   return (
     <div className="bgWaterMark">
@@ -136,8 +157,8 @@ const BookViewer = (props: BookViewerProps) => {
 
       <div className="row">
            <div className="col-1   align-self-center text-end"></div>
-           <div className="col-5   align-self-center text-center page-left-bg">{left}/{bookViewerAr.length}</div>
-           <div className="col-5   align-self-center text-center page-right-bg">{right}/{bookViewerAr.length}</div>
+           <div className="col-5   align-self-center text-center page-left-bg">{left+1}/{bookViewerAr.length}</div>
+           <div className="col-5   align-self-center text-center page-right-bg">{right+1}/{bookViewerAr.length}</div>
            <div className="col-1   align-self-center text-end"></div>
       </div>
     </div>

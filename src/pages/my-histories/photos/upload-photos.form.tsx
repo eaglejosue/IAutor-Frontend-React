@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import CustomInput from "../../../components/forms/customInput/customInput";
+
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import { QuestionModel } from "../../../common/models/question.model";
@@ -10,6 +10,7 @@ import { QuestionService } from "../../../common/http/api/questionService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {  faRemove } from "@fortawesome/free-solid-svg-icons";
 import { Modal } from "react-bootstrap";
+import CustomTextArea from "../../../components/forms/customTextArea/customTextArea.component";
 
 export interface UploadPhotosFormProps{
     questionAnsewers: QuestionUserAnswerModel[];
@@ -32,9 +33,10 @@ const UploadPhotosForm =(props:UploadPhotosFormProps) =>{
     const [disableFup,setDisableFup] = useState(false)
     const [inactivationModalOpen, setInactivationModalOpen] = useState(false);
     const _questionService = new QuestionService();
-    //console.log(props.question?.questionUserAnswer)
+    console.log(props.question?.questionUserAnswer)
     const {
         setValue,
+        watch,
         register,
         handleSubmit,
         formState: { errors },
@@ -156,16 +158,17 @@ const UploadPhotosForm =(props:UploadPhotosFormProps) =>{
           </div>
          {
           disableFup && <div className="col-12 mt-2 text-center">
-             <img width={250} className="img-fluid img-thumbnail " src={props.question?.questionUserAnswer.imagePhotoUrl} alt={'Photo'}>
+             <img width={250}  className="img-fluid img-thumbnail " src={props.question?.questionUserAnswer.imagePhotoUrl} alt={'Photo'}>
              
              </img>  <FontAwesomeIcon icon={faRemove} onClick={()=>setInactivationModalOpen(true)}  className="mx-2 text-primary" style={{cursor:'pointer'}} />
           </div>
           }
         </div>
-        <div className="row mt-2">
+        <div className="row mt-2 text-end">
           <div className="col-12 ">
-            <CustomInput
+            <CustomTextArea 
               type="text"
+              rows={3}
               label="Legenda foto"
               placeholder="Legenda foto"
               register={register}
@@ -173,6 +176,7 @@ const UploadPhotosForm =(props:UploadPhotosFormProps) =>{
               errors={errors.title}
               name="caption"
               setValue={setValue}
+              
               divClassName="col-12 "
               validationSchema={{
                 maxLength: {
@@ -180,17 +184,18 @@ const UploadPhotosForm =(props:UploadPhotosFormProps) =>{
                   message: "Legenda foto deve conter no máximo 200 caracteres",
                 },
               }}
+
               maxLength={200}
             />
           </div>
-          
+          <small><span>{watch("caption")?.length??0 }/200</span></small>
           <div className="col-12 text-end mt-2">
             <button
               className="btn btn-primary text-white rounded-4 f-14 px-4 py-2"
               type="submit"
               disabled={disableFup}
             >
-              Upload
+              Salvar foto
               {isLoading && (
                 <span
                   className="spinner-border spinner-border-sm text-light ms-2"
