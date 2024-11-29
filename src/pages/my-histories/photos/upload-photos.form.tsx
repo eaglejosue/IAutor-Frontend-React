@@ -8,11 +8,11 @@ import { PlanModel } from "../../../common/models/plan.model";
 import { ChapterModel } from "../../../common/models/chapter.model";
 import { QuestionService } from "../../../common/http/api/questionService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {   faCameraRetro, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {    faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Modal } from "react-bootstrap";
 import CustomTextArea from "../../../components/forms/customTextArea/customTextArea.component";
 import 'rsuite/Uploader/styles/index.css';
-import { Uploader } from 'rsuite';
+//import { Uploader } from 'rsuite';
 
 export interface UploadPhotosFormProps{
     questionAnsewers: QuestionUserAnswerModel[];
@@ -149,7 +149,7 @@ const UploadPhotosForm =(props:UploadPhotosFormProps) =>{
         </span>
         <div className="row rowTopUpload border-top mt-3 pt-3">
           <div className="col-12 mt-2">
-           {/* <input
+           { <input
               type="file"
               accept="image/*"
               disabled={disableFup}
@@ -157,14 +157,14 @@ const UploadPhotosForm =(props:UploadPhotosFormProps) =>{
               id="fup"
               multiple={false}
             ></input>
-            */}
+            }
 
-           <Uploader locale={{error:'Erro',clear:'Limpar',loading:'Carregando',remove:'Remover',emptyMessage:'Sem mensagem'}}  
+           {/*<Uploader locale={{error:'Erro',clear:'Limpar',loading:'Carregando',remove:'Remover',emptyMessage:'Sem mensagem'}}  
             listType="picture" action="//jsonplaceholder.typicode.com/posts/">
             <button>
               <FontAwesomeIcon icon={faCameraRetro}  />
             </button>
-          </Uploader>
+          </Uploader>*/}
           </div>
          {
           disableFup && <div className="col-12 mt-2 text-center">
