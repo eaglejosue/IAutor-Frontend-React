@@ -16,7 +16,7 @@ const EsqueceuSenha = lazy(() => import('../pages/forgot-password/forgot-passwor
 const TrocarSenha = lazy(() => import('../pages/reset-password/reset-password'));
 const MyAccount = lazy(() => import("../pages/my-account/my-account"));
 const HomeLogged = lazy(() => import('../pages/home/home-logged'));
-const NewHistory = lazy(() => import("../pages/my-histories/new-history"));
+const NewHistory = lazy(() => import("../pages/new-history/new-history"));
 const MyHistories = lazy(() => import("../pages/my-histories/my-histories"));
 const Terms = lazy(() => import("../pages/admin/terms/terms"));
 const Users = lazy(() => import("../pages/admin/users/users"));
