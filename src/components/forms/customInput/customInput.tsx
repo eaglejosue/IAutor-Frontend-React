@@ -229,6 +229,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
             }
             disabled={disabled}
             autoComplete='off'
+            
             onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}

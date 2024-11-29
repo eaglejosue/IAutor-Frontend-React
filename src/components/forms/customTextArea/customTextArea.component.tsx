@@ -18,6 +18,7 @@ interface CustomTextAreaProps {
   style?: CSSProperties | undefined;
   minLength?: number | undefined;
   maxLength?: number | undefined;
+  rows?:number
 }
 
 const CustomTextArea: React.FC<CustomTextAreaProps> = ({
@@ -33,6 +34,7 @@ const CustomTextArea: React.FC<CustomTextAreaProps> = ({
   style: inputStyle,
   minLength,
   maxLength,
+  rows
 }) => {
   const [isFocused, setFocused] = useState<boolean>(false);
   const [hasValue, setHasValue] = useState(true);
@@ -83,6 +85,7 @@ const CustomTextArea: React.FC<CustomTextAreaProps> = ({
             }
             disabled={disabled}
             onChange={handleChange}
+            rows={rows}
             onFocus={() => { setFocused(true); }}
             onBlur={() => { setFocused(false); }}
             style={inputStyle}
