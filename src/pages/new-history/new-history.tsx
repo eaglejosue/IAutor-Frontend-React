@@ -1050,9 +1050,9 @@ const NewHistory = () => {
           <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
         </ModalResponsive>
 
-        <Modal show={isPhotoUploadModalOpen} onHide={() => setPhotoUploadModalOpen(false)}
-          size='lg' backdrop="static" keyboard={false}>
-          <ModalHeader closeButton><span className='text-primary'><strong>Inserir foto - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
+        <Modal show={isPhotoUploadModalOpen}  onHide={() => setPhotoUploadModalOpen(false)} 
+         size='lg' backdrop="static" keyboard={false}>
+          <ModalHeader closeButton><span className='text-primary'><strong>Inserir/Alterar foto - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
           <Modal.Body>
             <UploadPhotosContainer closeModal={() => setPhotoUploadModalOpen(false)} book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question} />
           </Modal.Body>

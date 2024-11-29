@@ -53,7 +53,7 @@ const BookViewer = (props: BookViewerProps) => {
             let subject = r.questions?.find(f => f.id == g.questionId)?.subject;
 
             let booksVw: BookViewerNavigate = {
-              idChapter: r.id,
+              idChapter: r.chapterNumber,
               chapter: r.title,
               subject: subject,
               answer: g.answer,
