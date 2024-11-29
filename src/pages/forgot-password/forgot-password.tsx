@@ -30,12 +30,11 @@ const ForgotPassword = () => {
         .forgotPassword(data.email)
         .then(() => {
           toast.success('Se o e-mail informado estiver cadastrado, você receberá instruções para redefinir sua senha em alguns minutos. Por favor, verifique sua caixa de entrada e spam.', {
-            position: 'top-center',
-            style: { minWidth: 600 }
+            position: 'top-center'
           });
         })
         .catch((e) => {
-          let message = 'Error enviar e-mail.';
+          let message = 'Error ao enviar e-mail.';
           if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
           if (e.response?.data?.detail) message = e.response?.data?.detail;
           toast.error(message, {

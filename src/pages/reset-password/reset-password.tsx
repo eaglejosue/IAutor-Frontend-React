@@ -48,7 +48,7 @@ const ResetPassword = () => {
           })
         )
         .then(() => {
-          toast.success('Sucesso ao trocar senha!', { position: 'top-center' });
+          toast.success('Sucesso ao trocar senha.', { position: 'top-center' });
           AuthenticatedUserModel.removeLocalStorage();
           navigate(paths.LOGIN);
           reset();
