@@ -12,11 +12,16 @@ import 'react-responsive-modal/styles.css';
 
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
+import BookViewer from './book-viewer';
+import UploadPhotosContainer from './photos/upload-photos.container';
 
+import { UserService } from '../../common/http/api/userService';
 import { BookService } from '../../common/http/api/bookService';
 import { PlanService } from '../../common/http/api/planService';
 import { QuestionService } from '../../common/http/api/questionService';
 import { IAService } from '../../common/http/api/iaService';
+
+import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
 import { BookModel } from '../../common/models/book.model';
 import { PlanModel } from '../../common/models/plan.model';
 import { ChapterModel } from '../../common/models/chapter.model';
@@ -33,14 +38,14 @@ import life from '../../assets/svg/life.svg';
 import clownWithHat from '../../assets/svg/face-of-clown-with-hat.svg';
 import theater from '../../assets/svg/theater.svg';
 import hearts from '../../assets/svg/hearts.svg';
-import BookViewer from './book-viewer';
-import UploadPhotosContainer from './photos/upload-photos.container';
+import WomanIsTyping from '../../assets/img/woman-is-typing-laptop-with-lamp-her.png';
 
 const NewHistory = () => {
 
   const navigate = useNavigate();
   const param = useParams();
 
+  const _userService = new UserService();
   const _bookService = new BookService();
   const _planService = new PlanService();
   const _questionService = new QuestionService();
@@ -63,6 +68,11 @@ const NewHistory = () => {
   const [title, setTitle] = useState('Título História');
   const [theme, setTheme] = useState('');
 
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [termsTextModal, setTermsTextModal] = useState(1);
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isIAModalOpen, setIsIAModalOpen] = useState(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
@@ -79,23 +89,63 @@ const NewHistory = () => {
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
-    getBook(parseInt(param.id!));
+
+    const user = AuthenticatedUserModel.fromLocalStorage()!;
+    if (user.termsAccepted) {
+      getBook(parseInt(param.id!));
+    }
+    else {
+      setTermsTextModal(1);
+      setIsTermsModalOpen(true);
+    }
   }, []);
+
+  const handleAcceptTerms = () => {
+    if (!acceptedTerms) {
+      setErrorMessage("Antes de prosseguir, por favor, confirme que leu e concorda com nossos termos e condições.");
+    } else {
+      setErrorMessage('');
+      saveUserAcceptedTerms();
+    }
+  };
+
+  const saveUserAcceptedTerms = async () => {
+    setIsLoading2(true);
+    const user = AuthenticatedUserModel.fromLocalStorage()!;
+    await _userService
+      .saveUserAcceptedTerms(user.id)
+      .then(() => {
+        setIsTermsModalOpen(false);
+        getBook(parseInt(param.id!));
+        user.termsAccepted = true;
+        AuthenticatedUserModel.saveToLocalStorage(user);
+      })
+      .catch((e: any) => {
+        let message = "Error ao salvar aceite de termos pelo usuário.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+        setIsLoading2(false);
+      });
+  };
 
   const closeIcon = (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <mask id="mask0_693_22769"  maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-    <rect width="24" height="24" fill="#D9D9D9"/>
-    </mask>
-    <g mask="url(#mask0_693_22769)">
-    <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="white"/>
-    </g>
+      <mask id="mask0_693_22769" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+        <rect width="24" height="24" fill="#D9D9D9" />
+      </mask>
+      <g mask="url(#mask0_693_22769)">
+        <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="white" />
+      </g>
     </svg>
   );
 
   const getBook = (id: number) => {
     setIsLoading1(true);
-     _bookService
+    _bookService
       .getById(id)
       .then((response: any) => {
         setBook(response);
@@ -117,7 +167,7 @@ const NewHistory = () => {
 
   const saveBook = async () => {
     await _bookService
-      .put(new BookModel({...book, title: title}))
+      .put(new BookModel({ ...book, title: title }))
       .then(() => {
       })
       .catch((e: any) => {
@@ -233,9 +283,9 @@ const NewHistory = () => {
     setChapter(chapterC!);
 
     const questionsLength = chapterC!.questions!.length;
-    const questionC = fromBeforeClick ? chapterC!.questions![questionsLength-1] : chapterC!.questions![0];
+    const questionC = fromBeforeClick ? chapterC!.questions![questionsLength - 1] : chapterC!.questions![0];
     setQuestion(questionC);
-    const questionCIndex = fromBeforeClick ? questionsLength-1 : 0;
+    const questionCIndex = fromBeforeClick ? questionsLength - 1 : 0;
     setQuestionIndex(questionCIndex);
     handleQuestionUserAnswer(questionC.id);
 
@@ -279,8 +329,7 @@ const NewHistory = () => {
     const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
     const isLastChapter = chapterIndex + 1 == plan.chapters!.length;
 
-    if (isLastQuestionN && isLastChapter)
-    {
+    if (isLastQuestionN && isLastChapter) {
       setIsLastQuestion(true);
       //finalizado
       return;
@@ -308,11 +357,6 @@ const NewHistory = () => {
     // Limpa o temporizador se o usuário continuar digitando.
     return () => clearTimeout(handler);
   }, [answerChanged, answer]);
-
-  const updateUserAnsewers = () => {
-    setPhotoUploadModalOpen(false)
-    window.location.reload();
-  }
 
   const saveQuestionAnswer = async (txt?: string, qtd?: number, fromAutomatic: boolean = false) => {
     if (answer.length == 0) {
@@ -702,7 +746,7 @@ const NewHistory = () => {
                   <div className='d-flex text-icon ps-4'>
                     <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
-                      onClick={() => setIsBookPreviewModalOpen(true) }
+                      onClick={() => setIsBookPreviewModalOpen(true)}
                       title='Visualizar livro'>
                       auto_stories
                     </span>
@@ -745,69 +789,64 @@ const NewHistory = () => {
                       <div id='title' className='d-flex position-absolute text-center f-18'
                         style={{ fontFamily: 'Times New Roman', marginTop: '8vh' }}
                       >
-                        <b>{chapter.title}</b><br></br>
+                        <b>{question.subject}</b>
                       </div>
-                     
-                     {
-                     question?.questionUserAnswer?.imagePhotoUrl  && <div id='img' className='d-flex position-absolute text-center '
-                        style={{  marginTop: '12vh' }}
-                      >
 
-                <button
-                  className='btn  p-0 my-2 border-0 bg-transparent'
-                  type='button'
-                  onClick={()=>setPhotoUploadModalOpen(true)}
-                  style={{ outline: 'none', position: 'relative' }}
-                >
-                  <div
-                    className="rounded-circle bg-light d-flex justify-content-center align-items-center"
-                    style={{ width: '220px',  position: 'relative' }}
-                  >
-                    {question?.questionUserAnswer?.imagePhotoUrl ? (
-                      <img
-                        src={question?.questionUserAnswer?.imagePhotoUrl}
-                        alt="Participante"
-                        className="img-fluid img-thumbnail "
-                        style={{  maxHeight:'155px',   objectFit: 'cover' }}
-                      />
-                    ) : (
-                      <span className="material-symbols-outlined" style={{ fontSize: '45px', color: '#6c63ff' }}>
-                        person
-                      </span>
-                    )}
-                  </div>
-                  <div
-                    className="d-flex justify-content-center align-items-center bg-body-bg rounded-circle"
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      position: 'absolute',
-                      bottom: '5px',
-                      right: '5px',
-                      border: '1px solid #ccc'
-                    }}
-                  >
-                    <span className="material-symbols-outlined" style={{ fontSize: '16px', color: '#DB3737' }}>
-                      edit
-                    </span>
-                  </div>
-                </button>
-
-
-
-                      </div>
-                     }
+                      {question?.questionUserAnswer?.imagePhotoUrl &&
+                        <div id='img' className='d-flex position-absolute text-center '
+                          style={{ marginTop: '12vh' }}
+                        >
+                          <button
+                            className='btn  p-0 my-2 border-0 bg-transparent'
+                            type='button'
+                            onClick={() => setPhotoUploadModalOpen(true)}
+                            style={{ outline: 'none', position: 'relative' }}
+                          >
+                            <div
+                              className="rounded-circle bg-light d-flex justify-content-center align-items-center"
+                              style={{ width: '220px', position: 'relative' }}
+                            >
+                              {question?.questionUserAnswer?.imagePhotoUrl ? (
+                                <img
+                                  src={question?.questionUserAnswer?.imagePhotoUrl}
+                                  alt="Participante"
+                                  className="img-fluid img-thumbnail "
+                                  style={{ maxHeight: '155px', objectFit: 'cover' }}
+                                />
+                              ) : (
+                                <span className="material-symbols-outlined" style={{ fontSize: '45px', color: '#6c63ff' }}>
+                                  person
+                                </span>
+                              )}
+                            </div>
+                            <div
+                              className="d-flex justify-content-center align-items-center bg-body-bg rounded-circle"
+                              style={{
+                                width: '24px',
+                                height: '24px',
+                                position: 'absolute',
+                                bottom: '5px',
+                                right: '5px',
+                                border: '1px solid #ccc'
+                              }}
+                            >
+                              <span className="material-symbols-outlined" style={{ fontSize: '16px', color: '#DB3737' }}>
+                                edit
+                              </span>
+                            </div>
+                          </button>
+                        </div>
+                      }
 
                       <div className='d-flex position-absolute f-13'
                         style={{
                           fontFamily: 'Times New Roman', lineHeight: '16px',
-                          marginTop: question?.questionUserAnswer?.imagePhotoUrl==null? '12vh' :'31vh', marginLeft: '9%', marginRight: '9%'
-                        }}>
-                      
-                        {answer.substring(0, question?.questionUserAnswer?.imagePhotoUrl==null? 1400:900)}
-                       
+                          marginTop: question?.questionUserAnswer?.imagePhotoUrl == null ? '12vh' : '31vh', marginLeft: '9%', marginRight: '9%'
+                        }}
+                      >
+                        {answer.substring(0, question?.questionUserAnswer?.imagePhotoUrl == null ? 1400 : 900)}
                       </div>
-                     
+
                     </>
                   }
                 </div>
@@ -818,6 +857,85 @@ const NewHistory = () => {
           </div>
         </main>
 
+        <Modal show={isTermsModalOpen} onHide={() => setIsTermsModalOpen(false)} centered={true} backdrop="static" keyboard={false}>
+          <Modal.Body className='text-center justify-content-center pt-0 px-5'
+            style={{}}
+          >
+            <div className='d-flex w-100 justify-content-center align-items-center'>
+              <img src={WomanIsTyping} alt="Woman is typing laptop with lamp" />
+            </div>
+            {termsTextModal === 1 &&
+              <>
+                <div className='d-flex justify-content-center pt-4'>
+                  <b className='f-22'>Livro Degustação</b>
+                </div>
+                <div className='border-bottom f-15 pt-2 pb-3'>
+                  Bem vindo Autor, você dará inicio à criação de sua história. No livro degustação você poderá experimentar a criação de um livro de memórias usando os recursos da plataforma <b>IAutor</b>.
+                </div>
+                <div className='d-flex justify-content-center pt-3'>
+                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
+                    style={{ fontWeight: 'bold' }}
+                    onClick={() => { setTermsTextModal(2) }}
+                  >
+                    Próximo
+                  </a>
+                </div>
+              </>
+            }
+            {termsTextModal === 2 &&
+              <>
+                <div className='d-flex justify-content-center pt-4'>
+                  <b className='f-22'>Temas Sensíveis</b>
+                </div>
+                <div className='border-bottom f-15 pt-2 pb-3'>
+                  Responda as perguntas com sinceridade e o máximo de detalhes possíveis.
+                  Ao mesmo tempo, evite compartilhar informações íntimas ou sensíveis.
+                </div>
+                <div className='d-flex justify-content-center pt-3'>
+                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
+                    style={{ fontWeight: 'bold' }}
+                    onClick={() => { setTermsTextModal(3) }}
+                  >
+                    Próximo
+                  </a>
+                </div>
+              </>
+            }
+            {termsTextModal === 3 &&
+              <>
+                <div className='d-flex justify-content-center pt-4'>
+                  <b className='f-22'>Aproveite a Experiência</b>
+                </div>
+                <div className='f-15 pt-2 pb-3'>
+                  Após finalizar o texto, escolha uma característica que resuma a resposta (como humor ou romantismo) antes do envio para a Inteligência artificial do <b>IAutor</b>.
+                </div>
+                <label className='f-12 py-3'>
+                  <input type="checkbox" className='mr-1' checked={acceptedTerms}
+                    onChange={(e) => {
+                      setAcceptedTerms(e.target.checked);
+                      setErrorMessage('');
+                    }}
+                  />
+                  Li e concordo com os <a href='#' className='fw-bold' onClick={() => { window.open(paths.TERMS, '_blank'); }}>Termos e Condições</a> da plataforma.
+                </label>
+                {errorMessage &&
+                  <div className='d-flex justify-content-center align-items-center pb-3'>
+                    <span className="text-danger f-12">{errorMessage}</span>
+                  </div>
+                }
+                <div className='d-flex border-top justify-content-center pt-3'>
+                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
+                    style={{ fontWeight: 'bold' }}
+                    onClick={handleAcceptTerms}
+                  >
+                    Começar
+                  </a>
+                </div>
+              </>
+            }
+          </Modal.Body>
+        </Modal>
+
         <Modal show={isHelpModalOpen} onHide={() => setIsHelpModalOpen(false)} size='lg' centered={true}>
           <Modal.Body className='text-center justify-content-center f-18 p-5'
             style={{
@@ -827,19 +945,19 @@ const NewHistory = () => {
             }}
           >
             <div className='d-flex justify-content-center'>
-              <b className='f-28'>Ajuda</b>
+              <b className='f-28'>Como responder às perguntas</b>
             </div>
             <div className='pt-3'>
-              Na resposta, é importante que você seja o mais sincero possível, e conte todos os detalhes que puder se lembrar, aqui vale vale a regra: quanto mais informação, melhor!
+              Responda-as com sinceridade e o máximo de detalhes possíveis, ressaltando que mais informações tornam o conteúdo mais valioso.
             </div>
             <div className='pt-3'>
-              Lembre-se não nunca expor informações  intimos e/ou sensíveis que você não gostaria de compartilhar com outras pessoas.
+              Ao mesmo tempo, evite compartilhar informações íntimas ou sensíveis.
             </div>
             <div className='pt-3'>
-              Após finalizar o texto, escolha uma característica que mais se associa à sua resposta (humor, romantico, etc), e utilize inteligencia artificial do IAutor para revisa-lo  para você.
+              Após finalizar o texto, escolha uma característica que resuma a resposta (como humor ou romantismo) antes do envio para a Inteligência artificial do <b>IAutor</b>.
             </div>
             <div className='pt-3'>
-              Não se preocupe, se não gostar da revisão, você consegue voltar atrás, e fazer novas tentativas.
+              Lembre-se que a plataforma permite voltar à versão original ou fazer novas revisões, caso o resultado da revisão não seja satisfatório.
             </div>
           </Modal.Body>
         </Modal>
@@ -937,8 +1055,7 @@ const NewHistory = () => {
          size='lg' backdrop="static" keyboard={false}>
           <ModalHeader closeButton><span className='text-primary'><strong>Inserir/Alterar foto - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
           <Modal.Body>
-            <UploadPhotosContainer closeModal={() => { updateUserAnsewers() }} book={book} questionAnsewers={questionUserAnswers} 
-            plan={plan} question={question} />
+            <UploadPhotosContainer closeModal={() => setPhotoUploadModalOpen(false)} book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question} />
           </Modal.Body>
         </Modal>
 
