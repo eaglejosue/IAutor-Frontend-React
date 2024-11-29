@@ -79,4 +79,13 @@ export class QuestionService {
     });
     return response.data;
   }
+
+  
+  public async getQuestionUserAnwerById(id: number) {
+    const response = await this._httpClient.get<string>(
+      `${this.endpoint}/questions-user-answers/${id}`,
+    );
+    return response.data;
+  }
+
 }
