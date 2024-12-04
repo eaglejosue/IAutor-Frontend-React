@@ -2,9 +2,46 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import paths from '../../../routes/paths';
+import { PlanFilter } from "../../../common/models/filters/plan.filter";
+import { useEffect, useState } from "react";
+import { PlanService } from "../../../common/http/api/planService";
+import { ItensPlanHome, PlanModel } from "../../../common/models/plan.model";
 
 const SectionPlan = () => {
   const navigate = useNavigate();
+
+  const _planService = new PlanService();
+  const [plans, setPlans] = useState<PlanModel[]>([]);
+  
+
+  useEffect(()=>{
+    //@ts-ignore
+    getPlans({isActive:true})
+  },[])
+
+  useEffect(()=>{
+    console.log(plans)
+  },[plans])
+
+  const getPlans = (filter?: PlanFilter) => {
+
+    _planService
+      .getAll(filter ?? new PlanFilter())
+      .then((response: any) => {
+        setPlans(response?.length ? response : []);
+      })
+      .catch((e: any) => {
+        let message = "Error ao obter planos.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+      
+      });
+  };
+  
 
   return (
     <div className="mb-5">
@@ -17,143 +54,64 @@ const SectionPlan = () => {
         para <br />
         atender suas necessidades específicas.
       </p>
+
       <div className="row">
-        <div className="divLeft">
-          <div className="card">
-            <div className="card-body text-start m-3">
-              <h5>
-                <strong>Degustação</strong>
-              </h5>
-              <div className="row">
-                <div className="col-12">
-                  <h1>
-                    <strong>R$ 0</strong>{' '}<small className="fs-6">grátis</small>
-                  </h1>
+
+          {
+            plans?.map((r:PlanModel)=>{
+              return (
+                <div className="col-sm-12 col-lg-4 mt-2">
+                  <div className="card">
+                    <div className="card-body text-start m-3">
+                      <h5>
+                        <strong>{r.title}</strong>
+                      </h5>
+                      <div className="row">
+                        <div className="col-12">
+                          <h1>
+                            <strong>{r.currency} {r.price}</strong>{" "}
+                            <small className="fs-6">/mês</small>
+                          </h1>
+                        </div>
+                      </div>
+                      <p className="mb-5">
+                        {r.description}
+                      </p>
+                      <hr />
+                      <ul className="mt-5 mb-4 f-14">
+                        {
+                          r.itensPlanHome?.map((r:ItensPlanHome,a:number)=>{
+                            return(
+                              <li key={a.toString()} className="fw-bold">{r.description}</li>
+                            )
+                          })
+                        }
+                        
+                       
+                      </ul>
+
+                      <div className="d-grid gap-2 mb-3">
+                        <Button
+                          variant="secondary"
+                          className=" rounded-5  f-14 px-2 p-3"
+                          size="lg"
+                          onClick={() => {
+                            navigate(paths.NEW_HISTORY);
+                          }}
+                        >
+                          Experimentar agora
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              );
+            })
+          }
+         
 
-              <p className="mb-5">
-                Lorem ipsum dolor sit amet dolor siti conse ctetur adipiscing
-                elit.{" "}
-              </p>
-              <hr />
-              <ul className="mt-5 mb-4 f-14">
-                <li className="fw-bold">10 até 50 Páginas</li>
-                <li className="fw-bold">1 até 3 fotos Autorais</li>
-                <li className="fw-bold">
-                  +R$100,00 / Livro Impresso (opcional)
-                </li>
-                <li className="fw-bold">Lorem Ipsum dolor</li>
-                <li className="fw-bold">Lorem Ipsum dolor</li>
-              </ul>
-
-              <div className="d-grid gap-2 mb-3">
-                <Button
-                  variant="secondary"
-                  className=" rounded-5  f-14 px-2 p-3"
-                  size="lg"
-                  onClick={() => { navigate(paths.NEW_HISTORY) }}
-                >
-                  Experimentar agora
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="divCenter">
-          <div className="card card-inter">
-            <div className="card-body text-start  m-3">
-              <h5>
-                <strong>Intermediário</strong>
-              </h5>
-              <div className="row">
-                <div className="col-8">
-                  <h1>
-                    <strong>R$ 199</strong>{' '}<small className="fs-6">/mês</small>
-                  </h1>
-                </div>
-                <div className="col-4">
-                  <Button
-                    variant=" btn-custom-gray-2"
-                    className=" rounded-5  f-14  p-2"
-                    size="sm"
-                  >
-                    <strong>Padrão</strong>
-                  </Button>
-                </div>
-              </div>
-
-              <p className="mb-5">
-                Lorem ipsum dolor sit amet dolor siti conse ctetur adipiscing
-                elit.{" "}
-              </p>
-              <hr />
-              <ul className="mt-5 mb-4 f-14">
-                <li className="fw-bold">51 até 100 Páginas</li>
-                <li className="fw-bold">4 até 5 fotos Autorais</li>
-                <li className="fw-bold">
-                  +R$100,00 / Livro Impresso (opcional)
-                </li>
-                <li className="fw-bold">Lorem Ipsum dolor</li>
-                <li className="fw-bold">Lorem Ipsum dolor</li>
-              </ul>
-
-              <div className="d-grid gap-2 mb-3">
-                <Button
-                  variant=" btn-custom-gray-2"
-                  className=" rounded-5  f-14 px-4 p-3"
-                  size="lg"
-                >
-                  Comprar agora
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="divRight">
-          <div className="card">
-            <div className="card-body text-start  m-3">
-              <h5>
-                <strong>Premium</strong>
-              </h5>
-              <div className="row">
-                <div className="col-12">
-                  <h1>
-                    <strong>R$ 399</strong>{' '}<small className="fs-6">/mês</small>
-                  </h1>
-                </div>
-
-              </div>
-
-              <p className="mb-5">
-                Lorem ipsum dolor sit amet dolor siti conse ctetur adipiscing
-                elit.{" "}
-              </p>
-              <hr />
-              <ul className="mt-5 mb-4 f-14">
-                <li className="fw-bold">101 até 200 Páginas</li>
-                <li className="fw-bold">6 ou 7 fotos Autorais</li>
-                <li className="fw-bold">
-                  +R$100,00/Livro Impresso (opcional)
-                </li>
-                <li className="fw-bold">Lorem Ipsum dolor</li>
-                <li className="fw-bold ">Lorem Ipsum dolor</li>
-              </ul>
-              <div className="d-grid gap-2 mb-3">
-                <Button
-                  variant="secondary"
-                  className=" rounded-5  f-14 px-4 p-3"
-                  size="lg"
-                >
-                  Comprar agora
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
+    
     </div>
   );
 }
