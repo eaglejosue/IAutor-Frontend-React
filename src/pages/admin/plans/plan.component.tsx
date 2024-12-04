@@ -2,8 +2,8 @@ import { FunctionComponent, useEffect, useState } from "react";
 import CustomInput from "../../../components/forms/customInput/customInput";
 import { useForm } from "react-hook-form";
 import { Divider } from "antd";
-import { Accordion, Table, Button, Modal } from "react-bootstrap";
-import { faAdd } from '@fortawesome/free-solid-svg-icons';
+import { Accordion, Table, Button, Modal, Form } from "react-bootstrap";
+import { faAdd,faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isDate } from "date-fns";
 import { ChapterFilter } from "../../../common/models/filters/chapter.filter";
@@ -16,10 +16,11 @@ import ChapterTable, { ChapterMode } from "../chapters/chapters.table";
 import QuestionTable, { QuestionMode } from "../questions/question.table";
 import SearchInput from "../../../components/forms/searchInput/searchInput";
 import CustomButton from "../../../components/forms/customButton/customButton";
-import { PlanModel, ChapterIdQuestionId } from "../../../common/models/plan.model";
+import { PlanModel, ChapterIdQuestionId, ItensPlanHome } from "../../../common/models/plan.model";
 import { toast } from 'react-toastify';
 import { PlanService } from "../../../common/http/api/planService";
 import { ChapterQuestionsInterface } from "../../../common/models/interfaces/chapter-questions.interface";
+import CustomTextArea from "../../../components/forms/customTextArea/customTextArea.component";
 
 interface PlanFormProps {
   handleModal(isOpen: boolean): void
@@ -40,11 +41,15 @@ const PlanForm = (props: PlanFormProps) => {
   const [questions, setQuestions] = useState<QuestionModel[]>([]);
   const [chapterQuestions, setChapterQuestions] = useState<ChapterQuestionsInterface[]>([]);
   const _planService = new PlanService();
+  const[openModalItemPlano,setOpenModalItensPlano] = useState(false);
+  const [itemPlan,setItemPlan] = useState('');
+  const [itensPlan,setItensPlan] = useState<ItensPlanHome[]>([]);
 
   const {
     setValue,
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
@@ -64,11 +69,12 @@ const PlanForm = (props: PlanFormProps) => {
       setValue('finalValidityPeriod', props.planEdit?.finalValidityPeriod.toString().split('T')[0]);
       setValue('caractersLimitFactor', props.planEdit?.caractersLimitFactor);
       setValue('planChapters', props.planEdit?.planChapters);
-
+      setValue('description', props.planEdit?.description);
     
       setIsLoading(true);
       _planService
         .getPlanChaptersByPlanId(props.planEdit.id)
+        
         .then((response: any) => {
           //console.log(response)
           if (response?.length) {
@@ -97,6 +103,10 @@ const PlanForm = (props: PlanFormProps) => {
           setIsLoading(false);
         });
     }
+    if(props.planEdit?.itensPlanHome){
+      setItensPlan(props.planEdit?.itensPlanHome)
+    }
+
   }, [])
 
   //abre fecha/modal de pergunta
@@ -113,13 +123,17 @@ const PlanForm = (props: PlanFormProps) => {
   //@ts-ignore
   const onSubmit = async (data: any) => {
 
+    setIsLoading(true)
     let plan = new PlanModel({
       ...data,
       price: Number(data.price.toString().replace("R$", "").replace(",", ".")),
       id: props.planEdit?.id,
-      maxQtdCallIASugestions:data.qtdMaxCallIASugestions
+      maxQtdCallIASugestions:data.qtdMaxCallIASugestions,
+      itensPlanHome:itensPlan
     });
  
+
+   
     //@ts-ignore
     var arr: [ChapterIdQuestionId] = [];
     plan.chapterQuestions = arr;
@@ -130,6 +144,7 @@ const PlanForm = (props: PlanFormProps) => {
         plan.chapterQuestions.push(chapterQuestion)
       })
     })
+
 
     if (plan.id === undefined) {
       _planService
@@ -296,8 +311,32 @@ const PlanForm = (props: PlanFormProps) => {
         //setIsLoading(false);
       });
   };
+  const handleItemChange =(e:any)=>{
+    setItemPlan(e.target.value)
+  }
+  const handlerAddItemPlan=()=>{
+    if(!isBlank(itemPlan)){
+      
+      setItensPlan((prev)=>[...prev,{description:itemPlan} ])
+      setItemPlan('')
 
+    }else{
+      toast.error('Item obrigatório', {
+        position: 'top-center',
+        style: { minWidth: 400 }
+      });
+    }
+  }
+  const handlerRemoveItemPlan =(item:any)=>{
+    
+    var old  = [...itensPlan];
+    old.splice(itensPlan.indexOf(item),1)
+    setItensPlan(old)
 
+  }
+  function isBlank(str:string) {
+    return (!str || /^\s*$/.test(str));
+  }
   interface ItemTableProps {
     questions: [QuestionModel];
     chapter: ChapterModel
@@ -384,6 +423,8 @@ const PlanForm = (props: PlanFormProps) => {
               },
             }}
           />
+
+
           <CustomInput
             type="date"
             disabled={isLoading}
@@ -458,20 +499,47 @@ const PlanForm = (props: PlanFormProps) => {
             }
           />
 
-          <div className="col-auto my-3">
-            <h4>Capítulos</h4>
-          </div>
-          <div className="col-auto my-3">
+            <CustomTextArea 
+              type="text"
+              rows={4}
+              label="Descrição do plano"
+              placeholder="Descrição do plano"
+              register={register}
+              errors={errors.description}
+              name="description"
+              setValue={setValue}
+              divClassName="col-12 "
+              validationSchema={{
+                maxLength: {
+                  value: 500,
+                  message: "Descrição do plano deve conter no máximo 500 caracteres",
+                },
+              }}
+              maxLength={500}
+            />
+         <div className="col-12 text-end"> <small><span>{watch("description")?.length??0 }/500</span></small></div>
+
+          <div className="col-8 my-3">
+           
             <Button
               className="btn btn-primary rounded-5 mb-1 "
               size="sm"
               disabled={isLoading}
               onClick={() => handleCloseModalCapitulo(true)}
             >
-              <FontAwesomeIcon icon={faAdd} className="mx-2" />
+               <span className="fs-6"><>Capítulos</></span> <FontAwesomeIcon icon={faAdd} className="mx-2" />
             </Button>
           </div>
 
+          <div className="col-4 my-3 text-end">
+              <button
+                className="btn btn-primary text-white rounded-5 f-14 px-4 py-2"
+                type="button"
+                onClick={()=>setOpenModalItensPlano(true)}
+              >
+                Itens do plano
+              </button>
+          </div>
           {isLoading ? (
             <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
               <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
@@ -694,6 +762,65 @@ const PlanForm = (props: PlanFormProps) => {
         </Modal.Footer>
       </Modal>
 
+
+      <Modal
+        show={openModalItemPlano}
+        onHide={() => setOpenModalItensPlano(false)}
+        centered
+        size="lg"
+        backdrop="static"
+      >
+        <Modal.Header closeButton className="bg-white border-0 pb-0">
+          <Modal.Title>Itens do plano</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="bg-white pt-0">
+          <Divider />
+          <div className="row">
+            <div className="col-8">
+                <Form.Control type="text" value={itemPlan} onChange={(e)=>handleItemChange(e)}  placeholder="Item" />
+            </div>
+            <div className="col-4">
+                <Button
+                  className="btn btn-primary rounded-5 mb-1 "
+                  size="sm"
+                  disabled={isLoading}
+                  onClick={() => handlerAddItemPlan()}
+                >
+                  <FontAwesomeIcon icon={faAdd} className="mx-2" />
+                </Button>
+            </div>
+          </div>
+          <div className="row mt-3">
+            <div className="col-12">
+              <Table striped bordered hover size="sm">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Item</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      itensPlan?.map((r,i:number)=>{
+                        return(
+                          <tr key={(i).toString()}>
+                          <td>{(1+i).toString()}</td>
+                          <td>{r.description}</td>
+                          <td> <FontAwesomeIcon icon={faTrash} onClick={()=>handlerRemoveItemPlan(r)} 
+                                    className="mx-2 text-primary" style={{cursor:'pointer'}} /></td>
+                        </tr>
+                        )
+                      })
+                    }
+                   
+                  
+                  </tbody>
+                </Table>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
