@@ -193,7 +193,6 @@ const NewHistory = () => {
         setQuestionIndex(0);
         setAnswer(questionRes.questionUserAnswer?.answer ?? '');
         setQtdCallIASugestionsUsed(questionRes.questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
-        //setChapters(response.chapters)
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
@@ -207,8 +206,8 @@ const NewHistory = () => {
       });
   };
 
-  const handleQuestionUserAnswer = (questionId: number) => {
-    const questionUserAnswer = questionUserAnswers.find(f => f.questionId == questionId);
+  const handleQuestionUserAnswer = (questionId: number, chapterId: number) => {
+    const questionUserAnswer = questionUserAnswers.find(f => f.questionId == questionId && f.chapterId == chapterId);
     setAnswer(questionUserAnswer?.answer ?? '');
     setQtdCallIASugestionsUsed(questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
   };
@@ -286,7 +285,7 @@ const NewHistory = () => {
     setQuestion(questionC);
     const questionCIndex = fromBeforeClick ? questionsLength - 1 : 0;
     setQuestionIndex(questionCIndex);
-    handleQuestionUserAnswer(questionC.id);
+    handleQuestionUserAnswer(questionC.id, chapterC!.id);
 
     const chapterIndex = plan.chapters!.findIndex(f => f.id == id);
     setIsFirstQuestion(chapterIndex == 0 && questionCIndex == 0);
@@ -313,7 +312,7 @@ const NewHistory = () => {
     const questionB = chapter.questions![questionIndex - 1];
     setQuestion(questionB)
     setQuestionIndex(questionIndex - 1);
-    handleQuestionUserAnswer(questionB.id);
+    handleQuestionUserAnswer(questionB.id, chapter.id);
   };
 
   const handleNextQuestionClick = () => {
@@ -342,7 +341,7 @@ const NewHistory = () => {
     const questionN = chapter.questions![questionIndex + 1];
     setQuestion(questionN)
     setQuestionIndex(questionIndex + 1);
-    handleQuestionUserAnswer(questionN.id);
+    handleQuestionUserAnswer(questionN.id, chapter.id);
   };
 
   useEffect(() => {
@@ -1050,7 +1049,7 @@ const NewHistory = () => {
           <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
         </ModalResponsive>
 
-        <Modal show={isPhotoUploadModalOpen}  onHide={() => setPhotoUploadModalOpen(false)} 
+        <Modal show={isPhotoUploadModalOpen}  onHide={() => setPhotoUploadModalOpen(false)}
          size='lg' backdrop="static" keyboard={false}>
           <ModalHeader closeButton><span className='text-primary'><strong>Inserir/Alterar foto - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
           <Modal.Body>
