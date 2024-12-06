@@ -821,7 +821,7 @@ const NewHistory = () => {
                         <b>{question.subject}</b>
                       </div>
 
-                      {question?.questionUserAnswer?.imagePhotoUrl &&
+                      {question.questionUserAnswers && question.questionUserAnswers[0].imagePhotoUrl &&
                         <div id='img' className='d-flex position-absolute text-center '
                           style={{ marginTop: '12vh' }}
                         >
@@ -835,9 +835,9 @@ const NewHistory = () => {
                               className="rounded-circle bg-light d-flex justify-content-center align-items-center"
                               style={{ width: '220px', position: 'relative' }}
                             >
-                              {question?.questionUserAnswer?.imagePhotoUrl ? (
+                              {question.questionUserAnswers[0].imagePhotoUrl ? (
                                 <img
-                                  src={question?.questionUserAnswer?.imagePhotoUrl}
+                                  src={question.questionUserAnswers[0].imagePhotoUrl}
                                   alt="Participante"
                                   className="img-fluid img-thumbnail "
                                   style={{ maxHeight: '155px', objectFit: 'cover' }}
@@ -870,10 +870,10 @@ const NewHistory = () => {
                       <div className='d-flex position-absolute f-13'
                         style={{
                           fontFamily: 'Times New Roman', lineHeight: '16px',
-                          marginTop: question?.questionUserAnswer?.imagePhotoUrl == null ? '12vh' : '31vh', marginLeft: '9%', marginRight: '9%'
+                          marginTop: (question.questionUserAnswers && question.questionUserAnswers[0].imagePhotoUrl == null) ? '12vh' : '31vh', marginLeft: '9%', marginRight: '9%'
                         }}
                       >
-                        {answer.substring(0, question?.questionUserAnswer?.imagePhotoUrl == null ? 1400 : 900)}
+                        {answer.substring(0, (question.questionUserAnswers && question.questionUserAnswers[0].imagePhotoUrl == null) ? 1400 : 900)}
                       </div>
 
                     </>

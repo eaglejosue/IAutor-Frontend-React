@@ -6,10 +6,10 @@ export class QuestionModel extends BaseModel {
   maxLimitCharacters!: number;
   minLimitCharacters!: number;
   subject!: string;
+  questionUserAnswers?: [QuestionUserAnswerModel];
 
   //used on front
   selected!: boolean;
-  questionUserAnswer!: QuestionUserAnswerModel;
 
   constructor(j?: any) {
     super(j);
@@ -18,9 +18,9 @@ export class QuestionModel extends BaseModel {
       this.maxLimitCharacters = j.maxLimitCharacters;
       this.minLimitCharacters = j.minLimitCharacters;
       this.subject = j.subject;
+      this.questionUserAnswers = j.questionUserAnswers;
 
       this.selected = j.selected;
-      this.questionUserAnswer = j.questionUserAnswer;
     }
   }
 }
