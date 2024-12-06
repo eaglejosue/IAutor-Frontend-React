@@ -36,7 +36,7 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
   const [isLoading, setIsloading] = useState(false)
   const [inactivationModalOpen, setInactivationModalOpen] = useState(false);
   const _questionService = new QuestionService();
-  const [urlPostPhoto] = useState(`${import.meta.env.VITE_BASE_URL}questions/uploadPhotoQuestionUserAnswer/${props.question?.questionUserAnswer.id}`)
+  const [urlPostPhoto, setUrlPostPhoto] = useState('')
   const user = AuthenticatedUserModel.fromLocalStorage();
   const [uploading, setUploading] = useState(false);
   const [fileInfo, setFileInfo] = useState(null);
@@ -55,12 +55,15 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
   }, []);
 
   const getUserAnwer = () => {
+    if (props.question?.questionUserAnswers?.length) return;
+
     setIsloading(true)
     _questionService
-      .getQuestionUserAnwerById(props.question?.questionUserAnswer.id)
+      .getQuestionUserAnwerById(props.question.questionUserAnswers![0].id)
       .then((response: any) => {
         setUserQuestionSelected(response);
         setValue('caption', response.imagePhotoLabel);
+        setUrlPostPhoto(`${import.meta.env.VITE_BASE_URL}questions/uploadPhotoQuestionUserAnswer/${response.id}`);
       })
       .catch((e) => {
         //@ts-ignore
@@ -122,7 +125,8 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
         <div className="col-12 mt-2 text-center">
           <Uploader headers={{ authorization: 'Bearer ' + user?.token }}
             locale={{ error: 'Erro', clear: 'Limpar', loading: 'Carregando', remove: 'Remover', emptyMessage: 'Sem mensagem' }}
-            listType="picture" action={urlPostPhoto}
+            listType="picture"
+            action={urlPostPhoto}
             fileListVisible={false}
             onUpload={file => {
               setUploading(true);
