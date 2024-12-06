@@ -11,10 +11,11 @@ import paths from "../../../routes/paths";
 interface BooksHistoryProps{
   book: BookModel |null;
   user: AuthenticatedUserModel | null;
+  handlerSelect():void;
 }
- const BooksHistory =({book,user}:BooksHistoryProps)=>{
+ const BooksHistory =({book,user,handlerSelect}:BooksHistoryProps)=>{
   const navigate = useNavigate();
-
+  
   const CustomToggle = React.forwardRef(({ children, onClick }:any, ref) => (
         <a
           href=""
@@ -111,7 +112,7 @@ interface BooksHistoryProps{
                             <Dropdown>
                                 <Dropdown.Toggle as={CustomToggle} />
                                 <Dropdown.Menu  title="">
-                                <Dropdown.Item>Visualizar</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>handlerSelect()}>Visualizar</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </td>

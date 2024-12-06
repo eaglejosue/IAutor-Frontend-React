@@ -129,7 +129,7 @@ const PlanForm = (props: PlanFormProps) => {
       price: Number(data.price.toString().replace("R$", "").replace(",", ".")),
       id: props.planEdit?.id,
       maxQtdCallIASugestions:data.qtdMaxCallIASugestions,
-      itensPlanHome:itensPlan
+      planItems:itensPlan
     });
 
 
