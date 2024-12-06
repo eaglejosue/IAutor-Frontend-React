@@ -52,6 +52,11 @@ export class BookService {
     );
     return response.data;
   }
+
+  public async bookPDF(id: number) {
+    const response = await this._httpClient.post<string>(`${this.endpoint}/${id}/pdf`);
+    return response.data;
+  }
 }
 
 export default new BookService();

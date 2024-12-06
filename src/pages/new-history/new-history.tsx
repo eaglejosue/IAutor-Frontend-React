@@ -58,6 +58,8 @@ const NewHistory = () => {
   const [isLoadingSaveAnswer, setIsLoadingSaveAnswer] = useState<boolean>(false);
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
 
+  const [isLoadingPDF, setIsLoadingPDF] = useState<boolean>(false);
+
   const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Alterar Título da História' }))
   const [plan, setPlan] = useState<PlanModel>(new PlanModel())
   const [chapter, setChapter] = useState(new ChapterModel());
@@ -191,8 +193,8 @@ const NewHistory = () => {
         const questionRes = response.chapters[0].questions[0];
         setQuestion(questionRes);
         setQuestionIndex(0);
-        setAnswer(questionRes.questionUserAnswer?.answer ?? '');
-        setQtdCallIASugestionsUsed(questionRes.questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
+        setAnswer(questionRes.questionUserAnswers[0]?.answer ?? '');
+        setQtdCallIASugestionsUsed(questionRes.questionUserAnswers[0]?.qtdCallIASugestionsUsed ?? 0);
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
@@ -401,6 +403,31 @@ const NewHistory = () => {
       })
       .finally(() => {
         setIsLoadingSaveAnswer(false);
+      });
+  }
+
+  const bookPDF = async () => {
+    setIsLoadingPDF(true);
+    await _bookService
+      .bookPDF(book.id)
+      .then((response: any) => {
+        debugger;
+        const url = window.URL.createObjectURL(new Blob([response]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', response.fileDownloadName);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch((e) => {
+        let message = 'Error ao obter dados de participante.';
+        if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log('Erro: ', message, e);
+      })
+      .finally(() => {
+        setIsLoadingPDF(false);
       });
   }
 
@@ -759,11 +786,15 @@ const NewHistory = () => {
                       title='Alterar fonte'>
                       draw
                     </span>
-                    <span className='material-symbols-outlined px-2'
-                      style={{ fontSize: '24px', cursor: 'pointer' }}
-                      title='Download'>
-                      file_save
-                    </span>
+                    {isLoadingPDF ?
+                      <span className="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span> :
+                      <span className='material-symbols-outlined px-2'
+                        style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
+                        onClick={bookPDF}
+                        title='Download'>
+                        file_save
+                      </span>
+                    }
                     <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer' }}
                       title='Presentear'>

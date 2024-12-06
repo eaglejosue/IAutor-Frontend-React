@@ -10,9 +10,10 @@ export class PlanModel extends BaseModel {
   finalValidityPeriod!: Date;
   caractersLimitFactor!: number;
   description!: string;
+
   //used on Plan Crud
   chapterQuestions?: [ChapterIdQuestionId]
-  itensPlanHome?:[ItensPlanHome]
+  planItems?:[PlanItens]
   //used on front
   chapters?: [ChapterModel];
 
@@ -31,7 +32,7 @@ export class PlanModel extends BaseModel {
       this.chapterQuestions = j.chapterPlanQuestion;
       this.planChapters = j.planChapters;
       this.description = j.description;
-      this.itensPlanHome = j.itensPlanHome;
+      this.planItems = j.planItems;
     }
   }
 }
@@ -40,7 +41,8 @@ export interface ChapterIdQuestionId {
   chapterId: number | undefined;
   questionId: number;
 }
-export interface ItensPlanHome {
+
+export interface PlanItens {
   description: string;
 }
 
