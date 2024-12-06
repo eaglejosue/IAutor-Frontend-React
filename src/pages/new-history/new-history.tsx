@@ -786,20 +786,7 @@ const NewHistory = () => {
                       title='Alterar fonte'>
                       draw
                     </span>
-                    {isLoadingPDF ?
-                      <span className="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span> :
-                      <span className='material-symbols-outlined px-2'
-                        style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
-                        onClick={bookPDF}
-                        title='Download'>
-                        file_save
-                      </span>
-                    }
-                    <span className='material-symbols-outlined px-2'
-                      style={{ fontSize: '24px', cursor: 'pointer' }}
-                      title='Presentear'>
-                      featured_seasonal_and_gifts
-                    </span>
+                   
                   </div>
                 </div>
 

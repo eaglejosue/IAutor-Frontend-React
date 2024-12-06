@@ -44,14 +44,12 @@ const SectionPlan = () => {
 
   return (
     <div className="mb-5">
-      <h5 className="text-primary text-uppercase">Assinatura</h5>
+      <h5 className="text-primary text-uppercase">Pacotes</h5>
       <h3>
-        <strong>Conheça nossos Planos e Preços</strong>
+        <strong>Conheça nossos Pacotes e Preços</strong>
       </h3>
       <p className="mt-3 mb-5">
-        Descubra a flexibilidade e benefícios das nossas ofertas de assinatura
-        para <br />
-        atender suas necessidades específicas.
+      Descubra a flexibilidade e benefícios das nossas ofertas de pacotes para<br></br> atender suas necessidades especificas  
       </p>
 
       <div className="row">
@@ -59,8 +57,8 @@ const SectionPlan = () => {
           {
             plans?.map((r:PlanModel)=>{
               return (
-                <div className="col-sm-12 col-lg-4 mt-2">
-                  <div className="card">
+                <div className="col-sm-12 col-lg-4 mt-2" >
+                  <div className="card" style={{minHeight:'500px'}}>
                     <div className="card-body text-start m-3">
                       <h5>
                         <strong>{r.title}</strong>
@@ -69,7 +67,7 @@ const SectionPlan = () => {
                         <div className="col-12">
                           <h1>
                             <strong>{r.currency} {r.price}</strong>{" "}
-                            <small className="fs-6">/mês</small>
+                            <small className="fs-6"></small>
                           </h1>
                         </div>
                       </div>

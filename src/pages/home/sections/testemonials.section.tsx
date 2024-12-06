@@ -11,63 +11,19 @@ const SectionTestemonials =() =>{
             <Tab.Content className="testemonial-content">
               <Tab.Pane eventKey="first">
                 <p>
-                Amet justo esse dolore dolor dolores ipsum lorem vel eirmod erat
-                lorem eos ut doming. Duo feugiat consequat et quis diam facilisi
-                dolores et kasd tation stet et lorem stet consequat et esse.
-                Nibh clita adipiscing dolore ipsum dolor justo et diam erat sit
-                kasd et. Amet tempor justo duo magna eum eos amet nisl dolores
-                tempor. Elitr dolore id at imperdiet accusam lorem sit ea ex est
-                ipsum labore rebum elitr aliquyam. Eirmod facilisis eirmod
-                sanctus diam lorem clita clita vel dolor takimata veniam duo
-                sanctus. Ipsum eos gubergren vulputate consequat magna sit magna
-                euismod consectetuer et et consequat. Ea et dolor sadipscing
-                gubergren duo et laoreet stet et. Eu nonummy rebum dignissim sit
-                no ut stet sed. Diam velit et amet. Et dolor takimata facilisis
-                rebum stet et sit aliquyam dignissim ipsum erat no sanctus elitr
-                lorem gubergren et diam. Qui ipsum clita aliquyam vero gubergren
-                et ullamcorper minim at diam et ipsum eirmod congue euismod
-                nulla. Nisl no dolore lorem ut lorem consetetur sed takimata
-                euismod amet qui duo magna autem takimata. Ipsum ut nostrud
-                facer dolor duo aliquip et aliquam elitr eirmod ut. Sea ut qui
-                at dolor ea ut vel dolores clita justo et ipsum. Te sit takimata
-                sit sit elitr ipsum erat. Dolor exerci dolores elitr ad wisi sit
-                sea. Sanctus et eu sed sit sadipscing erat et accusam adipiscing
-                velit et sea vero sit et. Et lorem sit dignissim elitr labore
-                nihil nibh volutpat dolore ut sed lorem dolor et est sed
-                voluptua.</p>
+              <strong>  Transformei minha ideia em um livro completo! </strong><br></br>
+"Nunca imaginei que seria tão fácil dar vida à minha história. A plataforma é intuitiva, cheia de recursos úteis e realmente me ajudou a organizar e editar o livro dos meus sonhos. A primeira cópia impressa ficou incrível!" </p>
               </Tab.Pane>
               <Tab.Pane eventKey="second">
                 <p>
-                  "Utilizar esta plataforma para escrever minha bibliografia foi
-                  uma experiência extremamente satisfatória. A usabilidade
-                  intuitiva e os recursos bem-organizados facilitaram o
-                  processo, permitindo-me focar mais no conteúdo e menos na
-                  formatação. A inteligência artificial economizou um tempo
-                  valioso. Estou impressionado com a eficiência e a
-                  funcionalidade da plataforma, tornando a tarefa de escrever
-                  histórias não apenas mais fácil, mas também mais agradável."
+               <strong> Uma experiência emocionante e prática </strong><br></br>
+                "A possibilidade de criar um livro do zero, no meu ritmo, foi incrível. A ferramenta de edição é tão simples de usar que até quem não tem experiência se sente um escritor profissional. Receber a versão impressa foi uma emoção indescritível!" 
                 </p>
               </Tab.Pane>
               <Tab.Pane eventKey="third">
                 <p>
-                Sed sit magna dolores. Nisl sit in dolore tempor in et justo
-                iusto congue ad kasd velit ipsum ut justo ipsum aliquip amet.
-                Diam duo dolore luptatum blandit kasd dolor ex. Et at ut
-                aliquyam volutpat accusam dolore et augue diam dolor. Accusam
-                eleifend laoreet. Consetetur aliquyam clita dolor at at duis
-                invidunt est sea esse tempor clita ipsum dolore in. Rebum
-                sanctus tincidunt illum aliquyam ea sadipscing lorem et
-                invidunt. Ut eros et esse kasd sed vero ea invidunt ullamcorper
-                clita et dolore amet vel. Eleifend nulla hendrerit consequat no
-                labore sanctus no. Ipsum in delenit ea qui consetetur rebum qui
-                dolore labore euismod ipsum lorem elitr duo vero sit. At ex
-                dolore consetetur dolore dignissim invidunt dolore vero in sed
-                ipsum clita aliquyam. Elitr stet consequat kasd justo amet stet
-                dolores ipsum amet ea ea. Dolor iusto nonumy gubergren laoreet
-                dolores dolore ut stet lorem diam sadipscing nonumy sadipscing
-                et. Dolor et accusam vero eirmod amet aliquyam et stet. Lorem
-                nonummy labore kasd. Et lorem at rebum. Sit dolore dolore amet
-                takimata molestie et sea.</p>
+                <strong>Um tributo emocionante à história da minha avó </strong><br></br>
+"Criar o livro de memórias da minha avó foi uma experiência transformadora. A plataforma tornou tudo simples e prático, desde organizar as fotos e histórias até a edição final. Cada página ficou cheia de vida e significado. Quando entreguei o livro para ela, foi emocionante ver suas lágrimas de felicidade ao revisitar momentos tão especiais. Essa ferramenta me ajudou a eternizar nossa história familiar de forma inesquecível." </p>
               </Tab.Pane>
             </Tab.Content>
           </div>
@@ -84,9 +40,9 @@ const SectionTestemonials =() =>{
                     </div>
                     <div className="col text-start">
                       <span>
-                        <strong>Manoel Gomes</strong>
+                        <strong>Keila Galebe </strong>
                       </span>
-                      <br></br>@manoelgomes
+                      <br></br>@KeilaGalebe 
                     </div>
                   </div>
                 </Nav.Link>
@@ -99,9 +55,9 @@ const SectionTestemonials =() =>{
                     </div>
                     <div className="col text-start">
                       <span>
-                        <strong>Paloma Duarte</strong>
+                        <strong>Liana Fonseca </strong>
                       </span>
-                      <br></br>@palomaduarte
+                      <br></br>@LianaFonseca 
                     </div>
                   </div>
                 </Nav.Link>
@@ -114,9 +70,9 @@ const SectionTestemonials =() =>{
                     </div>
                     <div className="col text-start">
                       <span>
-                        <strong>Josias Oliveira</strong>
+                        <strong>Luiz Fernandes </strong>
                       </span>
-                      <br></br>@josiasoliveira
+                      <br></br>@LuizCarlosFernandesJr 
                     </div>
                   </div>
                 </Nav.Link>
