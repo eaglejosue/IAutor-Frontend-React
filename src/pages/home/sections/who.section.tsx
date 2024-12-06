@@ -28,12 +28,9 @@ const SectionWho =() =>{
             </div>
             <div className="row">
 
-              <div className="col-md-10 offset-md-2"><button
-              className="btn btn-primary rounded-5 f-14 px-5 py-3  btn-lg"
-              type="button" onClick={() => navigate(paths.NEW_HISTORY)}
-            >
-              <strong>Experimente Criar uma História</strong>
-            </button></div>
+              <div className="col-md-10 offset-md-2">
+                <a className="btn btn-primary rounded-5 f-14 px-5 py-3  btn-lg" href="#plans" > <strong>Experimente Criar uma História</strong></a>
+                </div>
             </div>
 
           </div>

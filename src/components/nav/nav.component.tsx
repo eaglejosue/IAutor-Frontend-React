@@ -25,7 +25,7 @@ const Nav = () => {
       </div>
       <div className='col-md'>
         <a href='#plans' className='btn btn-outline-secondary rounded-5 f-14 px-4 py-2'>
-          Ver Planos
+          Ver Pacotes
           <FontAwesomeIcon icon={faChevronRight} className='text-primary ms-2 pt-1' />
         </a>
       </div>

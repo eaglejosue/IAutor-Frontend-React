@@ -12,7 +12,7 @@ export class PlanModel extends BaseModel {
   description!: string;
   //used on Plan Crud
   chapterQuestions?: [ChapterIdQuestionId]
-  itensPlanHome?:[ItensPlanHome]
+  planItems?:[ItensPlanHome]
   //used on front
   chapters?: [ChapterModel];
 
@@ -31,7 +31,7 @@ export class PlanModel extends BaseModel {
       this.chapterQuestions = j.chapterPlanQuestion;
       this.planChapters = j.planChapters;
       this.description = j.description;
-      this.itensPlanHome = j.itensPlanHome;
+      this.planItems = j.planItems;
     }
   }
 }

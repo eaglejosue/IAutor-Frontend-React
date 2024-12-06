@@ -103,8 +103,8 @@ const PlanForm = (props: PlanFormProps) => {
           setIsLoading(false);
         });
     }
-    if(props.planEdit?.itensPlanHome){
-      setItensPlan(props.planEdit?.itensPlanHome)
+    if(props.planEdit?.planItems){
+      setItensPlan(props.planEdit?.planItems)
     }
 
   }, [])
@@ -129,7 +129,7 @@ const PlanForm = (props: PlanFormProps) => {
       price: Number(data.price.toString().replace("R$", "").replace(",", ".")),
       id: props.planEdit?.id,
       maxQtdCallIASugestions:data.qtdMaxCallIASugestions,
-      itensPlanHome:itensPlan
+      planItems:itensPlan
     });
  
 

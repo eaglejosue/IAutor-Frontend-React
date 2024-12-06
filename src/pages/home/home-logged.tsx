@@ -9,15 +9,20 @@ import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
 import EmptyHomeLogged from './sections/empty-logged.section';
 import BooksHistory from './sections/books-history-section';
-
+import { Modal as ModalResponsive } from 'react-responsive-modal';
 import './home-logged.scss'
+import BookViewer from '../new-history/book-viewer';
+import { PlanModel } from '../../common/models/plan.model';
 
 const HomeLogged = () => {
   const user = AuthenticatedUserModel.fromLocalStorage();
   const _bookService = new BookService();
   const [book, setBook] = useState<BookModel | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
+  const [plan, setPlan] = useState<PlanModel>(new PlanModel())
 
+  
   useEffect(() => {
     if (!user) return
 
@@ -41,7 +46,21 @@ const HomeLogged = () => {
       });
   }, [])
 
+  const handlerSelect =()=>{
+    setIsBookPreviewModalOpen(true)
+  }
+  const closeIcon = (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <mask id="mask0_693_22769" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+        <rect width="24" height="24" fill="#D9D9D9" />
+      </mask>
+      <g mask="url(#mask0_693_22769)">
+        <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="white" />
+      </g>
+    </svg>
+  );
   return (
+    <>
     <div className="d-flex" style={{ height: "100vh" }}>
       <Sidebar navItem="home" />
       <section className="flex-grow-1">
@@ -66,7 +85,7 @@ const HomeLogged = () => {
               ) : (
                 book == null ?
                   <EmptyHomeLogged user={user} /> :
-                  <BooksHistory book={book} user={user} />
+                  <BooksHistory book={book} user={user} handlerSelect={handlerSelect} />
               )
               }
             </div>
@@ -117,6 +136,15 @@ const HomeLogged = () => {
         </main>
       </section>
     </div>
+
+    <ModalResponsive open={isBookPreviewModalOpen} closeIcon={closeIcon} center
+          classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
+          onClose={() => setIsBookPreviewModalOpen(false)}
+        >
+           
+        </ModalResponsive>
+</>
+    
   );
 };
 

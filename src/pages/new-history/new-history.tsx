@@ -759,16 +759,7 @@ const NewHistory = () => {
                       title='Alterar fonte'>
                       draw
                     </span>
-                    <span className='material-symbols-outlined px-2'
-                      style={{ fontSize: '24px', cursor: 'pointer' }}
-                      title='Download'>
-                      file_save
-                    </span>
-                    <span className='material-symbols-outlined px-2'
-                      style={{ fontSize: '24px', cursor: 'pointer' }}
-                      title='Presentear'>
-                      featured_seasonal_and_gifts
-                    </span>
+                   
                   </div>
                 </div>
 
