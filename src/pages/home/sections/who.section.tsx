@@ -1,9 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { image_who } from "../../../assets/img"
-import paths from "../../../routes/paths";
-
 const SectionWho =() =>{
-  const navigate = useNavigate();
+
     return (
       <>
         <div className="row align-items-center text-justify mt-5 mb-5">

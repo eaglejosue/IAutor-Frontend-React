@@ -11,8 +11,7 @@ import EmptyHomeLogged from './sections/empty-logged.section';
 import BooksHistory from './sections/books-history-section';
 import { Modal as ModalResponsive } from 'react-responsive-modal';
 import './home-logged.scss'
-import BookViewer from '../new-history/book-viewer';
-import { PlanModel } from '../../common/models/plan.model';
+
 
 const HomeLogged = () => {
   const user = AuthenticatedUserModel.fromLocalStorage();
@@ -20,9 +19,7 @@ const HomeLogged = () => {
   const [book, setBook] = useState<BookModel | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
-  const [plan, setPlan] = useState<PlanModel>(new PlanModel())
-
-  
+    
   useEffect(() => {
     if (!user) return
 
