@@ -10,9 +10,10 @@ export class PlanModel extends BaseModel {
   finalValidityPeriod!: Date;
   caractersLimitFactor!: number;
   description!: string;
+
   //used on Plan Crud
   chapterQuestions?: [ChapterIdQuestionId]
-  planItems?:[ItensPlanHome]
+  planItems?:[PlanItens]
   //used on front
   chapters?: [ChapterModel];
 
@@ -40,7 +41,8 @@ export interface ChapterIdQuestionId {
   chapterId: number | undefined;
   questionId: number;
 }
-export interface ItensPlanHome {
+
+export interface PlanItens {
   description: string;
 }
 

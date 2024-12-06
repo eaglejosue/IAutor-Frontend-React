@@ -16,7 +16,7 @@ import ChapterTable, { ChapterMode } from "../chapters/chapters.table";
 import QuestionTable, { QuestionMode } from "../questions/question.table";
 import SearchInput from "../../../components/forms/searchInput/searchInput";
 import CustomButton from "../../../components/forms/customButton/customButton";
-import { PlanModel, ChapterIdQuestionId, ItensPlanHome } from "../../../common/models/plan.model";
+import { PlanModel, ChapterIdQuestionId, PlanItens } from "../../../common/models/plan.model";
 import { toast } from 'react-toastify';
 import { PlanService } from "../../../common/http/api/planService";
 import { ChapterQuestionsInterface } from "../../../common/models/interfaces/chapter-questions.interface";
@@ -43,7 +43,7 @@ const PlanForm = (props: PlanFormProps) => {
   const _planService = new PlanService();
   const[openModalItemPlano,setOpenModalItensPlano] = useState(false);
   const [itemPlan,setItemPlan] = useState('');
-  const [itensPlan,setItensPlan] = useState<ItensPlanHome[]>([]);
+  const [itensPlan,setItensPlan] = useState<PlanItens[]>([]);
 
   const {
     setValue,
@@ -70,11 +70,11 @@ const PlanForm = (props: PlanFormProps) => {
       setValue('caractersLimitFactor', props.planEdit?.caractersLimitFactor);
       setValue('planChapters', props.planEdit?.planChapters);
       setValue('description', props.planEdit?.description);
-    
+
       setIsLoading(true);
       _planService
         .getPlanChaptersByPlanId(props.planEdit.id)
-        
+
         .then((response: any) => {
           //console.log(response)
           if (response?.length) {
@@ -131,9 +131,9 @@ const PlanForm = (props: PlanFormProps) => {
       maxQtdCallIASugestions:data.qtdMaxCallIASugestions,
       planItems:itensPlan
     });
- 
 
-   
+
+
     //@ts-ignore
     var arr: [ChapterIdQuestionId] = [];
     plan.chapterQuestions = arr;
@@ -254,7 +254,7 @@ const PlanForm = (props: PlanFormProps) => {
 
   //remover pergunta capitulo
   const handlerRemoveItemQuestion = (pergunta: QuestionModel, chapter: ChapterModel) => {
-    
+
 
     let oldQuestions = [...chapterQuestions]
     //@ts-ignore
@@ -316,7 +316,7 @@ const PlanForm = (props: PlanFormProps) => {
   }
   const handlerAddItemPlan=()=>{
     if(!isBlank(itemPlan)){
-      
+
       setItensPlan((prev)=>[...prev,{description:itemPlan} ])
       setItemPlan('')
 
@@ -328,7 +328,7 @@ const PlanForm = (props: PlanFormProps) => {
     }
   }
   const handlerRemoveItemPlan =(item:any)=>{
-    
+
     var old  = [...itensPlan];
     old.splice(itensPlan.indexOf(item),1)
     setItensPlan(old)
@@ -499,7 +499,7 @@ const PlanForm = (props: PlanFormProps) => {
             }
           />
 
-            <CustomTextArea 
+            <CustomTextArea
               type="text"
               rows={4}
               label="Descrição do plano"
@@ -520,7 +520,7 @@ const PlanForm = (props: PlanFormProps) => {
          <div className="col-12 text-end"> <small><span>{watch("description")?.length??0 }/500</span></small></div>
 
           <div className="col-8 my-3">
-           
+
             <Button
               className="btn btn-primary rounded-5 mb-1 "
               size="sm"
@@ -807,14 +807,14 @@ const PlanForm = (props: PlanFormProps) => {
                           <tr key={(i).toString()}>
                           <td>{(1+i).toString()}</td>
                           <td>{r.description}</td>
-                          <td> <FontAwesomeIcon icon={faTrash} onClick={()=>handlerRemoveItemPlan(r)} 
+                          <td> <FontAwesomeIcon icon={faTrash} onClick={()=>handlerRemoveItemPlan(r)}
                                     className="mx-2 text-primary" style={{cursor:'pointer'}} /></td>
                         </tr>
                         )
                       })
                     }
-                   
-                  
+
+
                   </tbody>
                 </Table>
             </div>

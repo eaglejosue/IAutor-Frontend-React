@@ -5,14 +5,13 @@ import paths from '../../../routes/paths';
 import { PlanFilter } from "../../../common/models/filters/plan.filter";
 import { useEffect, useState } from "react";
 import { PlanService } from "../../../common/http/api/planService";
-import { ItensPlanHome, PlanModel } from "../../../common/models/plan.model";
+import { PlanItens, PlanModel } from "../../../common/models/plan.model";
 
 const SectionPlan = () => {
   const navigate = useNavigate();
 
   const _planService = new PlanService();
   const [plans, setPlans] = useState<PlanModel[]>([]);
-  
 
   useEffect(()=>{
     //@ts-ignore
@@ -38,10 +37,10 @@ const SectionPlan = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-      
+
       });
   };
-  
+
 
   return (
     <div className="mb-5">
@@ -78,14 +77,14 @@ const SectionPlan = () => {
                       <hr />
                       <ul className="mt-5 mb-4 f-14">
                         {
-                          r.planItems?.map((r:ItensPlanHome,a:number)=>{
+                          r.planItems?.map((r:PlanItens,a:number)=>{
                             return(
                               <li key={a.toString()} className="fw-bold">{r.description}</li>
                             )
                           })
                         }
-                        
-                       
+
+
                       </ul>
 
                       <div className="d-grid gap-2 mb-3">
@@ -106,10 +105,10 @@ const SectionPlan = () => {
               );
             })
           }
-         
+
 
       </div>
-    
+
     </div>
   );
 }
