@@ -55,7 +55,7 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
   }, []);
 
   const getUserAnwer = () => {
-    if (props.question?.questionUserAnswers?.length) return;
+    if (!props.question?.questionUserAnswers?.length) return;
 
     setIsloading(true)
     _questionService
