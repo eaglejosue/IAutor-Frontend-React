@@ -11,12 +11,21 @@ import EmptyHomeLogged from './sections/empty-logged.section';
 import BooksHistory from './sections/books-history-section';
 import { Modal as ModalResponsive } from 'react-responsive-modal';
 import './home-logged.scss'
+import BookViewer from '../new-history/book-viewer';
+import { PlanService } from '../../common/http/api/planService';
+import { PlanModel } from '../../common/models/plan.model';
+import { ChapterModel } from '../../common/models/chapter.model';
+import { QuestionUserAnswerModel } from '../../common/models/question-user-answer.model';
 
 
 const HomeLogged = () => {
   const user = AuthenticatedUserModel.fromLocalStorage();
   const _bookService = new BookService();
-  const [book, setBook] = useState<BookModel | null>(null);
+  const _planService = new PlanService();
+  const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Alterar Título da História' }));
+  const [plan, setPlan] = useState<PlanModel>(new PlanModel())
+  const [chapter, setChapter] = useState(new ChapterModel());
+  const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
     
@@ -29,6 +38,8 @@ const HomeLogged = () => {
       .then((response: any) => {
         if (response) {
           setBook(response);
+          setQuestionUserAnswers(response.questionUserAnswers);
+          getPlanChaptersQuestions(response.planId, user?.lastBookId);
         }
       })
       .catch((e: any) => {
@@ -46,6 +57,26 @@ const HomeLogged = () => {
   const handlerSelect =()=>{
     setIsBookPreviewModalOpen(true)
   }
+
+  const getPlanChaptersQuestions = async (planId: number, bookId: number) => {
+
+    await _planService
+      .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
+      .then((response: any) => {
+        setPlan(response);
+        setChapter(response.chapters[0]);
+      })
+      .catch((e: any) => {
+        let message = "Error ao obter plano, capitulos e perguntas.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
+        if (e.response?.data?.detail) message = e.response?.data?.detail;
+        console.log("Erro: ", message, e);
+      })
+      .finally(() => {
+        setIsLoading(false)
+      });
+  };
   const closeIcon = (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask id="mask0_693_22769" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
@@ -138,7 +169,12 @@ const HomeLogged = () => {
           classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
           onClose={() => setIsBookPreviewModalOpen(false)}
         >
-           
+       
+       
+       <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
+
+
+
         </ModalResponsive>
 </>
     
