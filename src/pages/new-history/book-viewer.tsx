@@ -27,13 +27,18 @@ const BookViewer = (props: BookViewerProps) => {
   const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(1);
-  console.log(props.chapter)
-  
+    
   const increase = async () => {
     
+    console.log('antes',left,right)
     setRight(right < bookViewerAr.length-1? right+2:bookViewerAr.length );
     setLeft(left < bookViewerAr.length-1? left+2:bookViewerAr.length-1);
+    
   };
+  useEffect(()=>{
+    console.log('depois',left,right)
+    console.log(bookViewerAr)
+  },[left,right])
 
   const decrease = async () => {
     setRight(left==0?1:right-2);
@@ -51,7 +56,7 @@ const BookViewer = (props: BookViewerProps) => {
           .sort((n1, n2) => n1.questionId - n2.questionId)
           .map((g: QuestionUserAnswerModel) => {
             let subject = r.questions?.find(f => f.id == g.questionId)?.subject;
-
+            if(subject){
             let booksVw: BookViewerNavigate = {
               idChapter: r.chapterNumber,
               chapter: r.title,
@@ -62,6 +67,7 @@ const BookViewer = (props: BookViewerProps) => {
               idAnserQuestionUser: g.id
             };
             arBooks.push(booksVw);
+          }
           });
       });
 
@@ -120,16 +126,17 @@ const BookViewer = (props: BookViewerProps) => {
 
         </div>
 
-        <div className="col-1  align-self-center">
+       {right< bookViewerAr.length-1 &&   <div className="col-1  align-self-center">
           <img
             alt="Right"
             style={{ cursor: "pointer" }}
+            
             onClick={() => {
               increase();
             }}
             src={arrowRight}
           />
-        </div>
+        </div>}
 
       </div>
 

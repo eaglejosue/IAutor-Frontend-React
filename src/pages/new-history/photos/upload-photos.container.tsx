@@ -12,6 +12,7 @@ export interface UploadPhotosContainerProps{
     plan: PlanModel;
     question:QuestionModel;
     closeModal():void;
+    
 }
 const UploadPhotosContainer =(props:UploadPhotosContainerProps) =>{
 
