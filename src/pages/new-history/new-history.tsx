@@ -781,17 +781,17 @@ const NewHistory = () => {
                       title='Inserir/Alterar foto'>
                       add_photo_alternate
                     </span>
-                    <span className='material-symbols-outlined px-2'
+                    {/* <span className='material-symbols-outlined px-2'
                       style={{ fontSize: '24px', cursor: 'pointer' }}
                       title='Alterar fonte'>
                       draw
-                    </span>
+                    </span> */}
                     {isLoadingPDF ?
                       <span className="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span> :
                       <span className='material-symbols-outlined px-2'
                         style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
                         onClick={bookPDF}
-                        title='Download'>
+                        title='Visualizar PDF'>
                         file_save
                       </span>
                     }
