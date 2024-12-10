@@ -86,6 +86,7 @@ const NewHistory = () => {
   const [answerChanged, setAnswerChanged] = useState<boolean>(false);
   const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
   const [IAText, setIAText] = useState('');
+  const [first,setFirst] = useState(false);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
@@ -278,7 +279,7 @@ const NewHistory = () => {
 
   const handleChapterClick = (id: number, fromBeforeClick: boolean = false) => {
     setAnswerChanged(false);
-
+    
     const chapterC = plan.chapters!.find(f => f.id == id);
     setChapter(chapterC!);
 
@@ -431,6 +432,15 @@ const NewHistory = () => {
       });
   }
 
+  useEffect(()=>{
+    if(first && !isPhotoUploadModalOpen){
+      getBook(parseInt(param.id!))
+      setTimeout(() => {
+        handleChapterClick(chapter.id,false)
+      }, 1000);
+    }
+    setFirst(true)
+  },[isPhotoUploadModalOpen])
   return (
     <div className='d-flex'
       style={{ height: '100vh' }}
@@ -816,7 +826,7 @@ const NewHistory = () => {
                         <b>{question.subject}</b>
                       </div>
 
-                      {question.questionUserAnswers && question.questionUserAnswers[0].imagePhotoUrl &&
+                      {question.questionUserAnswers && question.questionUserAnswers[0]?.imagePhotoUrl &&
                         <div id='img' className='d-flex position-absolute text-center '
                           style={{ marginTop: '12vh' }}
                         >
@@ -830,9 +840,9 @@ const NewHistory = () => {
                               className="rounded-circle bg-light d-flex justify-content-center align-items-center"
                               style={{ width: '220px', position: 'relative' }}
                             >
-                              {question.questionUserAnswers[0].imagePhotoUrl ? (
+                              {question.questionUserAnswers[0]?.imagePhotoUrl ? (
                                 <img
-                                  src={question.questionUserAnswers[0].imagePhotoUrl}
+                                  src={question.questionUserAnswers[0]?.imagePhotoUrl}
                                   alt="Participante"
                                   className="img-fluid img-thumbnail "
                                   style={{ maxHeight: '155px', objectFit: 'cover' }}
@@ -865,10 +875,10 @@ const NewHistory = () => {
                       <div className='d-flex position-absolute f-13'
                         style={{
                           fontFamily: 'Times New Roman', lineHeight: '16px',
-                          marginTop: (question.questionUserAnswers && question.questionUserAnswers[0].imagePhotoUrl == null) ? '12vh' : '31vh', marginLeft: '9%', marginRight: '9%'
+                          marginTop: (question.questionUserAnswers && question.questionUserAnswers[0]?.imagePhotoUrl == null) ? '12vh' : '31vh', marginLeft: '9%', marginRight: '9%'
                         }}
                       >
-                        {answer.substring(0, (question.questionUserAnswers && question.questionUserAnswers[0].imagePhotoUrl == null) ? 1400 : 900)}
+                        {answer.substring(0, (question.questionUserAnswers && question.questionUserAnswers[0]?.imagePhotoUrl == null) ? 1400 : 900)}
                       </div>
 
                     </>
@@ -1075,11 +1085,12 @@ const NewHistory = () => {
           <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
         </ModalResponsive>
 
-        <Modal show={isPhotoUploadModalOpen}  onHide={() => setPhotoUploadModalOpen(false)}
+        <Modal show={isPhotoUploadModalOpen}  onHide={() => {setPhotoUploadModalOpen(false)}}
          size='lg' backdrop="static" keyboard={false}>
           <ModalHeader closeButton><span className='text-primary'><strong>Inserir/Alterar foto - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
           <Modal.Body>
-            <UploadPhotosContainer closeModal={() => setPhotoUploadModalOpen(false)} book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question} />
+            <UploadPhotosContainer closeModal={() => setPhotoUploadModalOpen(false)}
+             book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question} />
           </Modal.Body>
         </Modal>
 
