@@ -2,7 +2,7 @@ export class BaseModel {
   id!: number;
   isActive!: boolean;
   createdAt!: string;
-  updatedAt?: string;
+  updatedAt?: Date;
   updatedBy?: string;
   deletedAt?: string;
 

@@ -435,12 +435,13 @@ const NewHistory = () => {
   useEffect(()=>{
     if(first && !isPhotoUploadModalOpen){
       getBook(parseInt(param.id!))
-      setTimeout(() => {
+     /* setTimeout(() => {
         handleChapterClick(chapter.id,false)
-      }, 1000);
+      }, 1000);*/
     }
     setFirst(true)
   },[isPhotoUploadModalOpen])
+
   return (
     <div className='d-flex'
       style={{ height: '100vh' }}

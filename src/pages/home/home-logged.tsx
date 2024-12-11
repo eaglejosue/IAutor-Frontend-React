@@ -113,7 +113,7 @@ const HomeLogged = () => {
               ) : (
                 book == null ?
                   <EmptyHomeLogged user={user} /> :
-                  <BooksHistory book={book} user={user} handlerSelect={handlerSelect} />
+                  <BooksHistory plan={plan} book={book} user={user} handlerSelect={handlerSelect} />
               )
               }
             </div>
