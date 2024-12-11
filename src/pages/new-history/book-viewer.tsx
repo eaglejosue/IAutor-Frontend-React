@@ -27,18 +27,17 @@ const BookViewer = (props: BookViewerProps) => {
   const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(1);
-    
+  console.log('book',props.book)
+  console.log('questionAnsewers',props.book)
+  console.log('plan',props.plan)
+  console.log('chapter',props.chapter)
+  
   const increase = async () => {
     
-    console.log('antes',left,right)
     setRight(right < bookViewerAr.length-1? right+2:bookViewerAr.length );
     setLeft(left < bookViewerAr.length-1? left+2:bookViewerAr.length-1);
     
   };
-  useEffect(()=>{
-    console.log('depois',left,right)
-    console.log(bookViewerAr)
-  },[left,right])
 
   const decrease = async () => {
     setRight(left==0?1:right-2);

@@ -15,8 +15,10 @@ export class BookFilter extends BaseModel {
   paymentsApproved?: boolean;
   includePayments?: boolean;
   includeUserVideoLogs?: boolean;
+  includeUserBookPlan?:boolean;
   listToCrud?: boolean;
   listToWatch?: boolean;
+  userId?:number;
 
   constructor(j?: any) {
     super(j);
@@ -37,6 +39,7 @@ export class BookFilter extends BaseModel {
       this.includeUserVideoLogs = j.includeUserVideoLogs;
       this.listToCrud = j.listToCrud;
       this.listToWatch = j.listToWatch;
+      this.userId = j.userId;
     }
   }
 }

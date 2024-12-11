@@ -1,5 +1,6 @@
 import { BaseModel } from "./base.model";
 import { OrderModel } from "./order.model";
+import { PlanModel } from "./plan.model";
 import { UserBookLogModel } from "./user-book-log.model";
 
 export class BookModel extends BaseModel {
@@ -15,7 +16,7 @@ export class BookModel extends BaseModel {
   promotionExpirationDate?: string;
   planId!: number;
   userId!: number;
-
+  plan!: PlanModel;
   orders?: OrderModel[];
   userBookLogs?: UserBookLogModel[];
 
@@ -39,6 +40,7 @@ export class BookModel extends BaseModel {
 
       if (j.orders) this.orders = j.orders;
       if (j.userBookLogs) this.userBookLogs = j.userBookLogs;
+      if (j.plan) this.plan = j.plan;
 
       this.paidDateTime = j.paidDateTime;
     }
