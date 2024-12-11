@@ -279,7 +279,7 @@ const NewHistory = () => {
 
   const handleChapterClick = (id: number, fromBeforeClick: boolean = false) => {
     setAnswerChanged(false);
-    
+
     const chapterC = plan.chapters!.find(f => f.id == id);
     setChapter(chapterC!);
 
@@ -410,13 +410,17 @@ const NewHistory = () => {
   const bookPDF = async () => {
     setIsLoadingPDF(true);
     await _bookService
-      .bookPDF(book.id)
+      .getBookPDF(book.id)
       .then((response: any) => {
-        debugger;
-        const url = window.URL.createObjectURL(new Blob([response]));
+        // Decodifica o byteArray de Base64
+        const byteCharacters = atob(response.byteArray); // Decodifica Base64
+        const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
+        const byteArray = new Uint8Array(byteNumbers);
+        // Cria o Blob e URL
+        const url = window.URL.createObjectURL(new Blob([byteArray], { type: response.mimeType }));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', response.fileDownloadName);
+        link.setAttribute('download', response.fileName);
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -876,7 +880,7 @@ const NewHistory = () => {
                       <div className='d-flex position-absolute f-13'
                         style={{
                           fontFamily: 'Times New Roman', lineHeight: '16px',
-                          marginTop: (question.questionUserAnswers && question.questionUserAnswers[0]?.imagePhotoUrl == null) ? '12vh' : '31vh', marginLeft: '9%', marginRight: '9%'
+                          marginTop: (question.questionUserAnswers && question.questionUserAnswers[0]?.imagePhotoUrl == null) ? '12vh' : '36vh', marginLeft: '9%', marginRight: '9%'
                         }}
                       >
                         {answer.substring(0, (question.questionUserAnswers && question.questionUserAnswers[0]?.imagePhotoUrl == null) ? 1400 : 900)}
