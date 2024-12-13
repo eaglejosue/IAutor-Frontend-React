@@ -27,22 +27,21 @@ const BookViewer = (props: BookViewerProps) => {
   const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(1);
-    
+
   const increase = async () => {
-    
-    console.log('antes',left,right)
-    setRight(right < bookViewerAr.length-1? right+2:bookViewerAr.length );
-    setLeft(left < bookViewerAr.length-1? left+2:bookViewerAr.length-1);
-    
+    console.log('antes', left, right)
+    setRight(right < bookViewerAr.length - 1 ? right + 2 : bookViewerAr.length);
+    setLeft(left < bookViewerAr.length - 1 ? left + 2 : bookViewerAr.length - 1);
   };
-  useEffect(()=>{
-    console.log('depois',left,right)
+
+  useEffect(() => {
+    console.log('depois', left, right)
     console.log(bookViewerAr)
-  },[left,right])
+  }, [left, right])
 
   const decrease = async () => {
-    setRight(left==0?1:right-2);
-    setLeft(left==0?0:left-2);
+    setRight(left == 0 ? 1 : right - 2);
+    setLeft(left == 0 ? 0 : left - 2);
   };
 
   useEffect(() => {
@@ -56,18 +55,18 @@ const BookViewer = (props: BookViewerProps) => {
           .sort((n1, n2) => n1.questionId - n2.questionId)
           .map((g: QuestionUserAnswerModel) => {
             let subject = r.questions?.find(f => f.id == g.questionId)?.subject;
-            if(subject){
-            let booksVw: BookViewerNavigate = {
-              idChapter: r.chapterNumber,
-              chapter: r.title,
-              subject: subject,
-              answer: g.answer,
-              imageUrl: g.imagePhotoUrl,
-              captionPicture: g.imagePhotoLabel,
-              idAnserQuestionUser: g.id
-            };
-            arBooks.push(booksVw);
-          }
+            if (subject) {
+              let booksVw: BookViewerNavigate = {
+                idChapter: r.chapterNumber,
+                chapter: r.title,
+                subject: subject,
+                answer: g.answer,
+                imageUrl: g.imagePhotoUrl,
+                captionPicture: g.imagePhotoLabel,
+                idAnserQuestionUser: g.id
+              };
+              arBooks.push(booksVw);
+            }
           });
       });
 
@@ -102,35 +101,33 @@ const BookViewer = (props: BookViewerProps) => {
         <div className="col-5 page-left ">
           <div className="row p-3">
             <div className="col-12 text-center ">
-              <strong>Capítulo - {bookViewerAr[left]?.idChapter} - {bookViewerAr[left]?.chapter}</strong>
+              <strong>Capítulo - {bookViewerAr[left]?.idChapter}</strong>
             </div>
             <div className="col-12 text-center pt-2"><h3>{bookViewerAr[left]?.subject}</h3></div>
             {bookViewerAr[left]?.imageUrl && <div className="col-12 text-center pt-2"><img className="img-thumbnail" src={bookViewerAr[left]?.imageUrl}></img> </div>}
-             {bookViewerAr[left]?.imageUrl &&<div className="col-12 text-center pt-2"><small> {bookViewerAr[left]?.captionPicture} </small> </div>}
+            {bookViewerAr[left]?.imageUrl && <div className="col-12 text-center pt-2"><small> {bookViewerAr[left]?.captionPicture} </small> </div>}
             <div className="col-12  text-justify pt-2">{bookViewerAr[left]?.answer}</div>
-
           </div>
-
         </div>
 
         <div className="col-5 page-right">
           <div className="row p-3">
             <div className="col-12 text-center">
-              <strong>Capítulo - {bookViewerAr[right]?.idChapter} - {bookViewerAr[right]?.chapter}</strong>
+              <strong>Capítulo - {bookViewerAr[right]?.idChapter}</strong>
             </div>
             <div className="col-12 text-center pt-2"><h3>{bookViewerAr[right]?.subject}</h3></div>
             {bookViewerAr[right]?.imageUrl && <div className="col-12 text-center pt-2"><img className="img-thumbnail" src={bookViewerAr[right]?.imageUrl}></img> </div>}
-             {bookViewerAr[right]?.imageUrl && <div className="col-12 text-center pt-2"><small> {bookViewerAr[right]?.captionPicture} </small> </div>}
+            {bookViewerAr[right]?.imageUrl && <div className="col-12 text-center pt-2"><small> {bookViewerAr[right]?.captionPicture} </small> </div>}
             <div className="col-12 text-justify pt-2">{bookViewerAr[right]?.answer}</div>
           </div>
 
         </div>
 
-       {right< bookViewerAr.length-1 &&   <div className="col-1  align-self-center">
+        {right < bookViewerAr.length - 1 && <div className="col-1  align-self-center">
           <img
             alt="Right"
             style={{ cursor: "pointer" }}
-            
+
             onClick={() => {
               increase();
             }}
