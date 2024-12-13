@@ -11,3 +11,5 @@ export {default as bookuserbooks} from './book-user-books.svg'
 export {default as closeIcon} from './close-icon.svg'
 export {default as arrowLeft} from './arrow-left.svg'
 export {default as arrowRight} from './arrow-right.svg'
+
+export {default as myHistories} from './my-histories.svg'

@@ -7,13 +7,15 @@ import { BookModel } from "../../../common/models/book.model";
 import { AuthenticatedUserModel } from "../../../common/models/authenticated.model";
 import { useNavigate } from "react-router-dom";
 import paths from "../../../routes/paths";
+import { PlanModel } from "../../../common/models/plan.model";
 
 interface BooksHistoryProps{
   book: BookModel |null;
   user: AuthenticatedUserModel | null;
   handlerSelect():void;
+  plan:PlanModel |null;
 }
- const BooksHistory =({book,user,handlerSelect}:BooksHistoryProps)=>{
+ const BooksHistory =({book,user,handlerSelect,plan}:BooksHistoryProps)=>{
   const navigate = useNavigate();
   
   const CustomToggle = React.forwardRef(({ children, onClick }:any, ref) => (
@@ -95,7 +97,7 @@ interface BooksHistoryProps{
                             </div>
                         </td>
                         <td className="">
-                            <span className="border rounded-5  py-2 p-2">Degustação</span>
+                            <span className="border rounded-5  py-2 p-2">{plan?.title}</span>
                         </td>
                         <td>
                                 {
@@ -106,7 +108,7 @@ interface BooksHistoryProps{
                                 -
                         </td>
                         <td>
-                            <span className="border rounded-5  py-2 p-2">{getInitialName(user?.firstname,"miquelleto")}</span>
+                            <span className="border rounded-5  py-2 p-2">{getInitialName(user?.firstname,user?.lastname)}</span>
                         </td>
                         <td>
                             <Dropdown>
