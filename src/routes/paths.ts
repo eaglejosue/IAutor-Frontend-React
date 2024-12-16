@@ -20,5 +20,6 @@ export default {
   CHAPTERS: '/chapters',
   QUESTIONS:'/questions',
   PLANS:'/plans',
+  HOME_PLANS: "/#plans",
 
 } as Paths;

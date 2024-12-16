@@ -28,7 +28,7 @@ const BookViewer = (props: BookViewerProps) => {
   const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(1);
-
+  
   const increase = async () => {
     console.log('antes', left, right)
     setRight(right < bookViewerAr.length - 1 ? right + 2 : bookViewerAr.length);

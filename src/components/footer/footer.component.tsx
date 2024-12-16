@@ -65,7 +65,8 @@ const Footer = (p: FooterProps) => {
                 <a href="#plans" className="nav-link px-4 text-black">Ver Planos</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#contact" className="nav-link px-4 text-black">Fale Conosco</a>
+                <a href="mailto:faleconosco@iautor.com.br?subject=Contato site" className="nav-link px-4 text-black">Fale Conosco</a>
+                
               </li>
 
               
@@ -77,7 +78,7 @@ const Footer = (p: FooterProps) => {
               </li>
               <li className=' nav-item bg-primary d-flex justify-content-center align-items-center'
                 style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
-                <a href='#'>
+                <a href='https://www.instagram.com/iautoroficial/profilecard/?igsh=MWYwNjN6dDNxMXoy' target='_blank'>
                   <FontAwesomeIcon icon={faInstagram} style={{ color: 'white' }} />
                 </a>
               </li>
