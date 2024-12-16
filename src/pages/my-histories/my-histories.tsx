@@ -16,8 +16,11 @@ import { PlanModel } from '../../common/models/plan.model';
 import { ChapterModel } from '../../common/models/chapter.model';
 import { PlanService } from '../../common/http/api/planService';
 import { QuestionUserAnswerModel } from '../../common/models/question-user-answer.model';
+import { useNavigate } from 'react-router-dom';
+import paths from '../../routes/paths';
 
 const NewHistory = () => {
+  const navigate = useNavigate();
 
   const _bookService = new BookService();
   const _planService = new PlanService();
@@ -30,6 +33,7 @@ const NewHistory = () => {
   const [plan, setPlan] = useState<PlanModel>(new PlanModel())
   const [chapter, setChapter] = useState(new ChapterModel());
   const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
+
 
   useEffect(() => {
     if (!user) return
@@ -56,16 +60,10 @@ const NewHistory = () => {
   }, [])
 
   const handlerVisualizar =(book:BookModel)=>{
-
-
     setBook(book);
     setPlan(book.plan);
     getPlanChaptersQuestions(book.planId,book.id);
     getBookById(book.id)
-
-
-
-
   }
   const handlerSelect =(e:any)=>{
     console.log(e)
@@ -96,10 +94,8 @@ const NewHistory = () => {
     </svg>
   );
 
-
-
   const getPlanChaptersQuestions = async (planId: number, bookId: number) => {
-
+    setIsLoading(true);
     await _planService
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
@@ -113,13 +109,12 @@ const NewHistory = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
   };
 
   const getBookById =(id:number) =>{
-
-    setIsLoading(true)
+    setIsLoading(true);
     _bookService
       .getById(id)
       .then((response: any) => {
@@ -135,7 +130,7 @@ const NewHistory = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
   }
   interface ItemCardProps {
@@ -219,18 +214,19 @@ const NewHistory = () => {
         <main className="main ">
           <div className="container-fluid">
             <div className="row m-5">
-              <div className="col-8">
+              <div className="col-8 gx-0">
                 <h4>
                   <strong>Minhas histórias </strong>
                 </h4>
                 <p>
-                  <strong>{''.padStart(books?.length>9?0:1,'0') +  books?.length.toString()  }</strong>  {books?.length>1?'Histórias':'História'}  criadas até o momento
+                  <strong>{''.padStart(books?.length>9?0:1,'0') +  books?.length.toString()  }</strong>  História(s) criada(s) até o momento
                 </p>
               </div>
               <div className="col-2"></div>
               <div className="col-2">
                 <Button
                   variant=" btn-secondary"
+                  onClick={() =>{navigate(paths.HOME_PLANS);}}
                   className=" rounded-5  f-14  p-3"
                 >
                   <strong>Criar história</strong>
