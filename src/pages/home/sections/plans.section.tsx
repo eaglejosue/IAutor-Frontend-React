@@ -80,7 +80,7 @@ const SectionPlan = () => {
                       }
                     </ul>
                     <div className="row text-center">
-                      <div className="mb-2" style={{ position: 'absolute', bottom: '0px' }}>
+                      <div className="mb-4" style={{ position: 'absolute', bottom: '0px' }}>
                         <Button variant="secondary" className="rounded-5 f-14 px-5 p-3" size="lg"
                           onClick={() => { navigate(paths.NEW_HISTORY) }}
                         >

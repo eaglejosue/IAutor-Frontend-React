@@ -27,10 +27,6 @@ const BookViewer = (props: BookViewerProps) => {
   const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(1);
-  console.log('book',props.book)
-  console.log('questionAnsewers',props.book)
-  console.log('plan',props.plan)
-  console.log('chapter',props.chapter)
   
   const increase = async () => {
     
