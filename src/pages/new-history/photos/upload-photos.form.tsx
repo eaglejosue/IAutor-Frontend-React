@@ -17,10 +17,10 @@ import 'rsuite/Uploader/styles/index.css';
 import CustomTextArea from "../../../components/forms/customTextArea/customTextArea.component";
 
 export interface UploadPhotosFormProps {
-  questionAnsewers: QuestionUserAnswerModel[];
+  questionAnswers: QuestionUserAnswerModel[];
   plan: PlanModel;
   question: QuestionModel;
-  closeModal(): void;
+  closeModal(questionUserAnswer: QuestionUserAnswerModel): void;
 }
 
 export interface BookViewerNavigate {
@@ -86,9 +86,10 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
       ...userQuestionSelected,
       imagePhotoUrl: removePhoto ? '' : userQuestionSelected.imagePhotoUrl,
       imagePhotoLabel: watch("caption")
-    }
-    setInactivationModalOpen(false)
-    setIsloading(true)
+    };
+
+    setInactivationModalOpen(false);
+    setIsloading(true);
 
     await _questionService
       .updatePhotoQuestionUserAnswer(data)
@@ -103,7 +104,7 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
       })
       .finally(() => {
         setIsloading(false);
-        props.closeModal();
+        props.closeModal(data);
       });
   }
 

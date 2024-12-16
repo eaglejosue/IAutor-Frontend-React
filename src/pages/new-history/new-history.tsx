@@ -86,7 +86,6 @@ const NewHistory = () => {
   const [answerChanged, setAnswerChanged] = useState<boolean>(false);
   const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
   const [IAText, setIAText] = useState('');
-  const [first,setFirst] = useState(false);
 
   useEffect(() => {
     const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
@@ -405,7 +404,7 @@ const NewHistory = () => {
       .finally(() => {
         setIsLoadingSaveAnswer(false);
       });
-  }
+  };
 
   const bookPDF = async () => {
     setIsLoadingPDF(true);
@@ -413,7 +412,7 @@ const NewHistory = () => {
       .getBookPDF(book.id)
       .then((response: any) => {
         // Decodifica o byteArray de Base64
-        const byteCharacters = atob(response.byteArray); // Decodifica Base64
+        const byteCharacters = atob(response.byteArray);
         const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
         const byteArray = new Uint8Array(byteNumbers);
         // Cria o Blob e URL
@@ -434,17 +433,19 @@ const NewHistory = () => {
       .finally(() => {
         setIsLoadingPDF(false);
       });
-  }
+  };
 
-  useEffect(()=>{
-    if(first && !isPhotoUploadModalOpen){
-      getBook(parseInt(param.id!))
-     /* setTimeout(() => {
-        handleChapterClick(chapter.id,false)
-      }, 1000);*/
-    }
-    setFirst(true)
-  },[isPhotoUploadModalOpen])
+  const handleClosePhotoUploadModal = (questionUserAnswer: QuestionUserAnswerModel) => {
+    const questionUserAnswersTemp = questionUserAnswers.filter(f => f.id != questionUserAnswer.id);
+    setQuestionUserAnswers([...questionUserAnswersTemp, questionUserAnswer]);
+    let questionTemp = new QuestionModel({...question, questionUserAnswers: [questionUserAnswer]});
+    setQuestion(questionTemp);
+    setPhotoUploadModalOpen(false);
+  };
+
+  const handleFinalizeClick = () => {
+
+  };
 
   return (
     <div className='d-flex'
@@ -510,8 +511,10 @@ const NewHistory = () => {
                 <div className='col-auto f-12'>
                   <FontAwesomeIcon icon={faChevronRight} style={{ color: '#7F7F8B' }} />
                 </div>
-                <div className='col-auto'>
-                  <b className='bg-disabled text-icon rounded-5 f-12 px-4 py-1'>
+                <div className='col-auto'
+                  onClick={() => { handleFinalizeClick() }}
+                >
+                  <b className='btn bg-black text-white rounded-5 f-12 px-4 py-1'>
                     Finalizar
                   </b>
                 </div>
@@ -749,7 +752,8 @@ const NewHistory = () => {
                     <b className='f-16'>Voltar</b>
                   </div>
 
-                  <div className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5 ${isLastQuestion ? ' disabled' : ''}`}
+                  <div className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5
+                    ${isLastQuestion ? ' disabled' : ''}`}
                     style={{ border: '1px solid black', padding: '0.7rem' }}
                     onClick={() => { saveQuestionAnswer() }}
                   >
@@ -759,7 +763,7 @@ const NewHistory = () => {
                     }
                   </div>
 
-                  <div className='d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3 bg-black text-white'
+                  <div className='d-flex btn bg-black text-white align-items-center justify-content-center rounded-5 p-3'
                     style={{ height: '48px', minWidth: '140px' }}
                     onClick={() => { handleNextQuestionClick() }}
                   >
@@ -778,20 +782,20 @@ const NewHistory = () => {
                 <div className='d-flex bg-white justify-content-center px-4 py-3'
                   style={{ borderBottom: '3px solid #db3737' }}
                 >
-                  <div className='f-14'>Preview do Livro</div>
+                  <div className='f-14'>Preview</div>
                 </div>
 
                 <div className='d-flex justify-content-center align-items-center bg-white shadow rounded-3 mx-5 my-4 p-4'>
                   <div className='d-flex f-14'>Ferramentas de Edição</div>
                   <div className='d-flex text-icon ps-4'>
-                    <span className='material-symbols-outlined px-2'
-                      style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
+                    <span className='material-symbols-outlined text-primary px-2'
+                      style={{ fontSize: '24px', cursor: 'pointer' }}
                       onClick={() => setIsBookPreviewModalOpen(true)}
                       title='Visualizar livro'>
                       auto_stories
                     </span>
-                    <span className='material-symbols-outlined px-2'
-                      style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
+                    <span className='material-symbols-outlined text-primary px-2'
+                      style={{ fontSize: '24px', cursor: 'pointer' }}
                       onClick={() => setPhotoUploadModalOpen(true)}
                       title='Inserir/Alterar foto'>
                       add_photo_alternate
@@ -802,9 +806,9 @@ const NewHistory = () => {
                       draw
                     </span> */}
                     {isLoadingPDF ?
-                      <span className="spinner-border spinner-border-sm text-primary" role="status" aria-hidden="true"></span> :
-                      <span className='material-symbols-outlined px-2'
-                        style={{ fontSize: '24px', cursor: 'pointer', color: '#db3737' }}
+                      <span className="spinner-border spinner-border-sm text-primary mt-1 mx-2" role="status" aria-hidden="true"></span> :
+                      <span className='material-symbols-outlined text-primary px-2'
+                        style={{ fontSize: '24px', cursor: 'pointer' }}
                         onClick={bookPDF}
                         title='Visualizar PDF'>
                         file_save
@@ -1090,11 +1094,11 @@ const NewHistory = () => {
           <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
         </ModalResponsive>
 
-        <Modal show={isPhotoUploadModalOpen}  onHide={() => {setPhotoUploadModalOpen(false)}}
+        <Modal show={isPhotoUploadModalOpen} onHide={() => {setPhotoUploadModalOpen(false)}}
          size='lg' backdrop="static" keyboard={false}>
           <ModalHeader closeButton><span className='text-primary'><strong>Inserir/Alterar foto - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
           <Modal.Body>
-            <UploadPhotosContainer closeModal={() => setPhotoUploadModalOpen(false)}
+            <UploadPhotosContainer closeModal={(e) => handleClosePhotoUploadModal(e)}
              book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question} />
           </Modal.Body>
         </Modal>
