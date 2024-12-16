@@ -31,7 +31,6 @@ const NewHistory = () => {
   const [chapter, setChapter] = useState(new ChapterModel());
   const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
 
-  
   useEffect(() => {
     if (!user) return
 
@@ -57,16 +56,16 @@ const NewHistory = () => {
   }, [])
 
   const handlerVisualizar =(book:BookModel)=>{
-    
-    
+
+
     setBook(book);
     setPlan(book.plan);
     getPlanChaptersQuestions(book.planId,book.id);
     getBookById(book.id)
-   
-    
-   
-   
+
+
+
+
   }
   const handlerSelect =(e:any)=>{
     console.log(e)
@@ -100,7 +99,7 @@ const NewHistory = () => {
 
 
   const getPlanChaptersQuestions = async (planId: number, bookId: number) => {
-    
+
     await _planService
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
@@ -169,7 +168,7 @@ const NewHistory = () => {
                       >
                         Visualizar
                       </Dropdown.Item>
-                     
+
                       <Dropdown.Item onClick={() => handlerSelect("Baixar")}>
                         Visualizar PDF
                       </Dropdown.Item>
@@ -257,23 +256,23 @@ const NewHistory = () => {
                     books?.map((r:BookModel)=>{
                       return(ItemCard({book:r}))
                     })
-                  
+
                 )
               }
-              
+
             </div>
           </div>
         </main>
       </div>
-      
+
     <ModalResponsive open={isBookPreviewModalOpen} closeIcon={closeIcon} center
           classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
-          onClose={() => setIsBookPreviewModalOpen(false)}>      
+          onClose={() => setIsBookPreviewModalOpen(false)}>
             <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
         </ModalResponsive>
     </div>
 
-    
+
   );
 };
 

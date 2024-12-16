@@ -22,6 +22,7 @@ import { QuestionService } from '../../common/http/api/questionService';
 import { IAService } from '../../common/http/api/iaService';
 
 import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
+import { BookFilter } from '../../common/models/filters/book.filter';
 import { BookModel } from '../../common/models/book.model';
 import { PlanModel } from '../../common/models/plan.model';
 import { ChapterModel } from '../../common/models/chapter.model';
@@ -146,13 +147,19 @@ const NewHistory = () => {
 
   const getBook = (id: number) => {
     setIsLoading1(true);
+    const user = AuthenticatedUserModel.fromLocalStorage()!;
     _bookService
-      .getById(id)
+      .getAll(new BookFilter({id, userId: user.id}))
       .then((response: any) => {
-        setBook(response);
-        setTitle(response.title);
-        setQuestionUserAnswers(response.questionUserAnswers);
-        getPlanChaptersQuestions(response.planId, id);
+        if (!response.length) {
+          navigate(paths.HOME_LOGGED);
+          return;
+        }
+
+        setBook(response[0]);
+        setTitle(response[0].title);
+        setQuestionUserAnswers(response[0]?.questionUserAnswers ?? [new QuestionUserAnswerModel()]);
+        getPlanChaptersQuestions(response[0].planId, id);
       })
       .catch((e: any) => {
         let message = "Error ao obter livro.";
@@ -209,7 +216,7 @@ const NewHistory = () => {
   };
 
   const handleQuestionUserAnswer = (questionId: number, chapterId: number) => {
-    const questionUserAnswer = questionUserAnswers.find(f => f.questionId == questionId && f.chapterId == chapterId);
+    const questionUserAnswer = questionUserAnswers?.find(f => f.questionId == questionId && f.chapterId == chapterId);
     setAnswer(questionUserAnswer?.answer ?? '');
     setQtdCallIASugestionsUsed(questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
   };
@@ -392,7 +399,7 @@ const NewHistory = () => {
     await _questionService
       .upsertQuestionUserAnswer(newQuestionUserAnswerModel)
       .then(() => {
-        const questionUserAnswersFiltered = questionUserAnswers.filter(f => f.questionId != question.id);
+        const questionUserAnswersFiltered = questionUserAnswers?.filter(f => f.questionId != question.id);
         setQuestionUserAnswers([...questionUserAnswersFiltered, newQuestionUserAnswerModel]);
       })
       .catch((e) => {
@@ -436,7 +443,7 @@ const NewHistory = () => {
   };
 
   const handleClosePhotoUploadModal = (questionUserAnswer: QuestionUserAnswerModel) => {
-    const questionUserAnswersTemp = questionUserAnswers.filter(f => f.id != questionUserAnswer.id);
+    const questionUserAnswersTemp = questionUserAnswers?.filter(f => f.id != questionUserAnswer.id);
     setQuestionUserAnswers([...questionUserAnswersTemp, questionUserAnswer]);
     let questionTemp = new QuestionModel({...question, questionUserAnswers: [questionUserAnswer]});
     setQuestion(questionTemp);
@@ -512,11 +519,13 @@ const NewHistory = () => {
                   <FontAwesomeIcon icon={faChevronRight} style={{ color: '#7F7F8B' }} />
                 </div>
                 <div className='col-auto'
-                  onClick={() => { handleFinalizeClick() }}
                 >
-                  <b className='btn bg-black text-white rounded-5 f-12 px-4 py-1'>
+                  <a className='btn bg-secondary text-white rounded-5 f-12 px-4 py-1'
+                    style={{ fontWeight: 'bold' }}
+                    onClick={() => { handleFinalizeClick() }}
+                  >
                     Finalizar
-                  </b>
+                  </a>
                 </div>
               </div>
             </div>
