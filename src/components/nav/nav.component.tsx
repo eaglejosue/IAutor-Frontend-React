@@ -17,12 +17,10 @@ const Nav = () => {
   return (
     <header className='d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3   '>
       <div className='col-md-auto mb-2 mb-md-0'>
-        <a href='#who'>
-          <img src={Logo} alt="Logo" className="p-4"
-            height={isExtraSmallScreen || isSmallScreen ? "80" : "auto"}
-            style={{ cursor: 'pointer' }}
-          />
-        </a>
+      <a href='#who'><img src={Logo} alt="Logo" className="p-4"
+          height={isExtraSmallScreen || isSmallScreen ? "80" : "auto"}
+          style={{ cursor: 'pointer' }}
+        /></a>
       </div>
       <div className='col-md'>
         <a href='#plans' className='btn btn-outline-secondary rounded-5 f-14 px-4 py-2'>

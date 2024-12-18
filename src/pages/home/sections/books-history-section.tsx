@@ -54,6 +54,8 @@ interface BooksHistoryProps{
             <div className="col-2">
               <Button
                 variant=" btn-secondary"
+                onClick={()=>navigate(paths.PRICING_PLANS)}
+                
                 className=" rounded-5  f-14  p-3"
               >
                 <strong>Criar história</strong>

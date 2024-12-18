@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import { Modal as ModalResponsive } from 'react-responsive-modal';
-import 'react-responsive-modal/styles.css';
+
 
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';

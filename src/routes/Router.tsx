@@ -23,6 +23,7 @@ const Users = lazy(() => import("../pages/admin/users/users"));
 const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
 const Questions = lazy(() =>  import("../pages/admin/questions/questions"));
 const Plans = lazy(()=>import("../pages/admin/plans/plans"));
+const PricingPlans = lazy(()=>import("../pages/pricing/pricing-plans"));
 
 interface Routes {
   path: string;
@@ -66,6 +67,8 @@ const routes: Routes[] = [
   { path: paths.CHAPTERS, element: getRouteElement(Chapters, true, true) },
   { path: paths.QUESTIONS, element: getRouteElement(Questions, true, true) },
   { path: paths.PLANS, element: getRouteElement(Plans, true, true) },
+  { path: paths.PRICING_PLANS, element: getRouteElement(PricingPlans, true, true) },
+  
 ];
 
 export default createBrowserRouter(routes);
