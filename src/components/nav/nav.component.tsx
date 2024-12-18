@@ -19,7 +19,6 @@ const Nav = () => {
       <div className='col-md-auto mb-2 mb-md-0'>
       <a href='#who'><img src={Logo} alt="Logo" className="p-4"
           height={isExtraSmallScreen || isSmallScreen ? "80" : "auto"}
-          onClick={() => navigate(userIsLogged ? paths.HOME : paths.HOME_LOGGED)}
           style={{ cursor: 'pointer' }}
         /></a>
       </div>
