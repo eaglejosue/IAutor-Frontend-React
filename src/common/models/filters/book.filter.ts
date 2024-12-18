@@ -5,19 +5,16 @@ export class BookFilter extends BaseModel {
   releaseDate?: string;
   cloudinaryPublicId? : string;
   price?: string;
-  expirationDate?: string;
+  saleExpirationDate?: string;
   promotionPrice?: string;
   promotionExpirationDate?: string;
-  ownerId?: number;
-  includeOwnerVideos?: boolean;
-  trailerId?: number;
-  includeTrailers?: boolean;
   paymentsApproved?: boolean;
   includePayments?: boolean;
-  includeUserVideoLogs?: boolean;
+  includeUserBookLogs?: boolean;
   includeUserBookPlan?:boolean;
   listToCrud?: boolean;
-  listToWatch?: boolean;
+  listToDownload?: boolean;
+  planId?: number;
   userId?:number;
 
   constructor(j?: any) {
@@ -27,18 +24,16 @@ export class BookFilter extends BaseModel {
       this.releaseDate = j.releaseDate;
       this.cloudinaryPublicId = j.cloudinaryPublicId;
       this.price = j.price;
-      this.expirationDate = j.expirationDate;
+      this.saleExpirationDate = j.saleExpirationDate;
       this.promotionPrice = j.promotionPrice;
       this.promotionExpirationDate = j.promotionExpirationDate;
-      this.ownerId = j.ownerId;
-      this.includeOwnerVideos = j.includeOwnerVideos;
-      this.trailerId = j.trailerId;
-      this.includeTrailers = j.includeTrailers;
       this.paymentsApproved = j.paymentsApproved;
       this.includePayments = j.includePayments;
-      this.includeUserVideoLogs = j.includeUserVideoLogs;
+      this.includeUserBookLogs = j.includeUserBookLogs;
+      this.includeUserBookPlan = j.includeUserBookPlan;
       this.listToCrud = j.listToCrud;
-      this.listToWatch = j.listToWatch;
+      this.listToDownload = j.listToDownload;
+      this.planId = j.planId;
       this.userId = j.userId;
     }
   }

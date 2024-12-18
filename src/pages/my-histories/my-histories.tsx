@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 import paths from '../../routes/paths';
 
 const NewHistory = () => {
+  const navigate = useNavigate();
 
   const _bookService = new BookService();
   const _planService = new PlanService();
@@ -32,8 +33,8 @@ const NewHistory = () => {
   const [plan, setPlan] = useState<PlanModel>(new PlanModel())
   const [chapter, setChapter] = useState(new ChapterModel());
   const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
-  const navigate = useNavigate();
-  
+
+
   useEffect(() => {
     if (!user) return
 
@@ -59,12 +60,10 @@ const NewHistory = () => {
   }, [])
 
   const handlerVisualizar =(book:BookModel)=>{
-    
     setBook(book);
     setPlan(book.plan);
     getPlanChaptersQuestions(book.planId,book.id);
     getBookById(book.id)
-
   }
   const handlerSelect =(e:any)=>{
     console.log(e)
@@ -95,10 +94,8 @@ const NewHistory = () => {
     </svg>
   );
 
-
-
   const getPlanChaptersQuestions = async (planId: number, bookId: number) => {
-    
+    setIsLoading(true);
     await _planService
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
@@ -112,13 +109,12 @@ const NewHistory = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
   };
 
   const getBookById =(id:number) =>{
-
-    setIsLoading(true)
+    setIsLoading(true);
     _bookService
       .getById(id)
       .then((response: any) => {
@@ -134,7 +130,7 @@ const NewHistory = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
   }
   interface ItemCardProps {
@@ -167,7 +163,7 @@ const NewHistory = () => {
                       >
                         Visualizar
                       </Dropdown.Item>
-                     
+
                       <Dropdown.Item onClick={() => handlerSelect("Baixar")}>
                         Visualizar PDF
                       </Dropdown.Item>
@@ -256,23 +252,23 @@ const NewHistory = () => {
                     books?.map((r:BookModel)=>{
                       return(ItemCard({book:r}))
                     })
-                  
+
                 )
               }
-              
+
             </div>
           </div>
         </main>
       </div>
-      
+
     <ModalResponsive open={isBookPreviewModalOpen} closeIcon={closeIcon} center
           classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
-          onClose={() => setIsBookPreviewModalOpen(false)}>      
+          onClose={() => setIsBookPreviewModalOpen(false)}>
             <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
         </ModalResponsive>
     </div>
 
-    
+
   );
 };
 
