@@ -45,6 +45,7 @@ const BookViewer = (props: BookViewerProps) => {
   };
 
   useEffect(() => {
+    debugger;
     let arBooks: BookViewerNavigate[] = [];
 
     props.plan.chapters

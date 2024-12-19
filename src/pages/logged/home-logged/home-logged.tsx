@@ -9,6 +9,7 @@ import { PlanService } from '../../../common/http/api/planService';
 import { PlanModel } from '../../../common/models/plan.model';
 import { ChapterModel } from '../../../common/models/chapter.model';
 import { QuestionUserAnswerModel } from '../../../common/models/question-user-answer.model';
+import { QuestionModel } from '../../../common/models/question.model';
 
 import Sidebar from '../../../components/nav/sidebar.component';
 import NavUserOptions from '../../../components/nav/nav-user-options.component';
@@ -62,9 +63,8 @@ const HomeLogged = () => {
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
         setPlan(response);
-
         const allQuestionUserAnswers = response.chapters!.flatMap((c: ChapterModel) =>
-          c.questions!.flatMap(q => q.questionUserAnswers)
+          c.questions!.flatMap((q: QuestionModel) => q.questionUserAnswers)
         );
         setQuestionUserAnswers(allQuestionUserAnswers ?? [new QuestionUserAnswerModel()]);
       })

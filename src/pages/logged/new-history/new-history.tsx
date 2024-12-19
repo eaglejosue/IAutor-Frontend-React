@@ -203,7 +203,7 @@ const NewHistory = () => {
         setQtdCallIASugestionsUsed(questionRes.questionUserAnswers[0]?.qtdCallIASugestionsUsed ?? 0);
 
         const allQuestionUserAnswers = response.chapters!.flatMap((c: ChapterModel) =>
-          c.questions!.flatMap(q => q.questionUserAnswers)
+          c.questions!.flatMap((q: QuestionModel) => q.questionUserAnswers)
         );
         setQuestionUserAnswers(allQuestionUserAnswers ?? [new QuestionUserAnswerModel()]);
       })

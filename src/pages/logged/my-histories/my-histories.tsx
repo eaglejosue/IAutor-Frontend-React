@@ -52,11 +52,11 @@ const NewHistory = () => {
         }
       })
       .catch((e: any) => {
-        let message = "Error ao obter livros.";
+        let message = 'Error ao obter livros.';
         if (e.response?.data?.length > 0 && e.response.data[0].message)
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
+        console.log('Erro: ', message, e);
       })
       .finally(() => {
         setIsLoading(false)
@@ -68,12 +68,14 @@ const NewHistory = () => {
     setPlan(book.plan);
     getPlanChaptersQuestions(book.planId, book.id);
   }
+
   const handlerSelect = (e: any) => {
     console.log(e)
   }
+
   const CustomToggle = React.forwardRef(({ children, onClick }: any, ref) => (
     <a
-      href=""
+      href=''
       style={{ textDecoration: 'none' }}
       //@ts-ignore
       ref={ref}
@@ -83,16 +85,17 @@ const NewHistory = () => {
       }}
     >
       {children}
-      <p className="threedots" />
+      <p className='threedots' />
     </a>
   ));
+
   const closeIcon = (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <mask id="mask0_693_22769" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
-        <rect width="24" height="24" fill="#D9D9D9" />
+    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <mask id='mask0_693_22769' maskUnits='userSpaceOnUse' x='0' y='0' width='24' height='24'>
+        <rect width='24' height='24' fill='#D9D9D9' />
       </mask>
-      <g mask="url(#mask0_693_22769)">
-        <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="white" />
+      <g mask='url(#mask0_693_22769)'>
+        <path d='M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z' fill='white' />
       </g>
     </svg>
   );
@@ -106,13 +109,14 @@ const NewHistory = () => {
           c.questions!.flatMap((q: QuestionModel) => q.questionUserAnswers)
         );
         setQuestionUserAnswers(allQuestionUserAnswers ?? [new QuestionUserAnswerModel()]);
+        setIsBookPreviewModalOpen(true);
       })
       .catch((e: any) => {
-        let message = "Error ao obter plano, capitulos e perguntas.";
+        let message = 'Error ao obter plano, capitulos e perguntas.';
         if (e.response?.data?.length > 0 && e.response.data[0].message)
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
+        console.log('Erro: ', message, e);
       })
       .finally(() => {
         setIsLoading(false);
@@ -122,57 +126,61 @@ const NewHistory = () => {
   interface ItemCardProps {
     book: BookModel;
   }
-  const ItemCard: FunctionComponent<ItemCardProps> = (props) => {
+
+  const ItemCards: FunctionComponent<ItemCardProps> = (props) => {
     return (
       <>
-        <div className="col-3">
-          <Card className="border-card">
+        <div className='col-3'>
+          <Card className='border-card'>
             <Card.Body>
-              <div className="row m-2">
-                <div className="col-8">
-                  <span className="border rounded-5 text-secondary  py-2 p-2">
+              <div className='row m-2'>
+                <div className='col-8'>
+                  <span className='border rounded-5 text-secondary  py-2 p-2'>
                     {props.book?.plan?.title}
                   </span>
                 </div>
-                <div className="col-4 text-end " style={{ marginTop: "-15px" }}>
+                <div className='col-4 text-end ' style={{ marginTop: '-15px' }}>
                   <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} />
-                    <Dropdown.Menu title="">
-                      <Dropdown.Item
+                    <Dropdown.Menu>
+                      <Dropdown.Item title='Editar'
                         disabled={true}
-                        onClick={() => handlerSelect("Editar")}
+                        onClick={() => handlerSelect('Editar')}
                       >
                         Editar
                       </Dropdown.Item>
                       <Dropdown.Item
+                        disabled={true}
                         onClick={() => handlerVisualizar(props.book)}
                       >
                         Visualizar
                       </Dropdown.Item>
-
-                      <Dropdown.Item onClick={() => handlerSelect("Baixar")}>
+                      <Dropdown.Item
+                        disabled={true}
+                        onClick={() => handlerSelect('Baixar')}
+                      >
                         Visualizar PDF
                       </Dropdown.Item>
                       <Dropdown.Item
                         disabled={true}
-                        onClick={() => handlerSelect("Deletar")}
+                        onClick={() => handlerSelect('Deletar')}
                       >
                         Deletar
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
-                <div className="col-12">
+                <div className='col-12'>
                   <br></br>
                   <br></br>
                 </div>
-                <div className="col-12 colIcon  mt-3">
-                  <img src={myHistories} alt="My-histories"></img>
+                <div className='col-12 colIcon  mt-3'>
+                  <img src={myHistories} alt='My-histories'></img>
                 </div>
-                <div className="col-12  mt-3 ">
+                <div className='col-12  mt-3 '>
                   {props.book.title}
                 </div>
-                <div className="col-12   ">
+                <div className='col-12   '>
                   <small>{props.book?.updatedAt != null ? `Última edição há ${differenceInDays(new Date(), props.book?.updatedAt)} dias` : ''}</small>
                 </div>
               </div>
@@ -184,23 +192,23 @@ const NewHistory = () => {
   };
 
   return (
-    <div className="d-flex" style={{ height: "100vh" }}>
-      <Sidebar navItem="my-histories" />
-      <div className="flex-grow-1">
-        <header className="bg-white border-bottom p-3">
-          <div className="row align-items-center justify-content-beetwen">
-            <div className="col-auto fw-bold f-18 pe-0">IAutor /</div>
-            <div className="col-auto f-18 ps-1">Minhas Histórias</div>
-            <div className="col">
+    <div className='d-flex' style={{ height: '100vh' }}>
+      <Sidebar navItem='my-histories' />
+      <div className='flex-grow-1'>
+        <header className='bg-white border-bottom p-3'>
+          <div className='row align-items-center justify-content-beetwen'>
+            <div className='col-auto fw-bold f-18 pe-0'>IAutor /</div>
+            <div className='col-auto f-18 ps-1'>Minhas Histórias</div>
+            <div className='col'>
               <NavUserOptions />
             </div>
           </div>
         </header>
 
-        <main className="main ">
-          <div className="container-fluid">
-            <div className="row m-5">
-              <div className="col-8 gx-0">
+        <main className='main '>
+          <div className='container-fluid'>
+            <div className='row m-5'>
+              <div className='col-8 gx-0'>
                 <h4>
                   <strong>Minhas histórias </strong>
                 </h4>
@@ -208,37 +216,38 @@ const NewHistory = () => {
                   <strong>{''.padStart(books?.length > 9 ? 0 : 1, '0') + books?.length.toString()}</strong>  História(s) criada(s) até o momento
                 </p>
               </div>
-              <div className="col-2"></div>
-              <div className="col-2">
+              <div className='col-2'></div>
+              <div className='col-2'>
                 <Button
-                  variant=" btn-secondary"
+                  variant=' btn-secondary'
                   onClick={() => { navigate(paths.PRICING_PLANS); }}
-                  className=" rounded-5  f-14  p-3"
+                  className=' rounded-5  f-14  p-3'
                 >
                   <strong>Criar história</strong>
                 </Button>
               </div>
             </div>
-            <div className="row m-5">
-              <div className="col-1 gx-0 text-primary">
+            <div className='row m-5'>
+              <div className='col-1 gx-0 text-primary'>
                 <strong>Histórias</strong>
                 <hr></hr>
               </div>
-              <div className="col-11 gx-0">
+              <div className='col-11 gx-0'>
                 &nbsp;
                 <hr></hr>
               </div>
             </div>
-            <div className="row m-5">
+            <div className='row m-5'>
               {
-                isLoading ? (<div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
-                  <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
-                </div>) : (
-
-                  books?.map((r: BookModel) => {
-                    return (ItemCard({ book: r }))
+                isLoading ?
+                  (
+                    <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
+                      <div className='spinner-border text-primary' style={{ width: '3rem', height: '3rem' }} role='status' />
+                    </div>
+                  ) : (
+                  books?.map((b: BookModel) => {
+                    return (ItemCards({ book: b }))
                   })
-
                 )
               }
 
@@ -254,8 +263,6 @@ const NewHistory = () => {
         <BookViewer book={book} plan={plan} questionUserAnswers={questionUserAnswers} />
       </ModalResponsive>
     </div>
-
-
   );
 };
 
