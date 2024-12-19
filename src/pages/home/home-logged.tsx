@@ -24,7 +24,6 @@ const HomeLogged = () => {
   const _planService = new PlanService();
   const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Alterar Título da História' }));
   const [plan, setPlan] = useState<PlanModel>(new PlanModel())
-  const [chapter, setChapter] = useState(new ChapterModel());
   const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
@@ -38,7 +37,6 @@ const HomeLogged = () => {
       .then((response: any) => {
         if (response) {
           setBook(response);
-          setQuestionUserAnswers(response.questionUserAnswers);
           getPlanChaptersQuestions(response.planId, user?.lastBookId);
         }
       })
@@ -64,7 +62,11 @@ const HomeLogged = () => {
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
         setPlan(response);
-        setChapter(response.chapters[0]);
+
+        const allQuestionUserAnswers = response.chapters!.flatMap((c: ChapterModel) =>
+          c.questions!.flatMap(q => q.questionUserAnswers)
+        );
+        setQuestionUserAnswers(allQuestionUserAnswers ?? [new QuestionUserAnswerModel()]);
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
@@ -173,7 +175,7 @@ const HomeLogged = () => {
         classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
         onClose={() => setIsBookPreviewModalOpen(false)}
       >
-        <BookViewer book={book} plan={plan} chapter={chapter} questionUserAnswers={questionUserAnswers} />
+        <BookViewer book={book} plan={plan} questionUserAnswers={questionUserAnswers} />
       </ModalResponsive>
     </>
   );

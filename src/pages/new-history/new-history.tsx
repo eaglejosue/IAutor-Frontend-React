@@ -1147,7 +1147,7 @@ const NewHistory = () => {
           classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
           onClose={() => setIsBookPreviewModalOpen(false)}
         >
-          <BookViewer book={book} plan={plan} chapter={chapter} questionUserAnswers={questionUserAnswers} />
+          <BookViewer book={book} plan={plan} questionUserAnswers={questionUserAnswers} />
         </ModalResponsive>
 
         <Modal show={isPhotoUploadModalOpen} onHide={() => {setIsPhotoUploadModalOpen(false)}} size='lg' backdrop="static" keyboard={false}>

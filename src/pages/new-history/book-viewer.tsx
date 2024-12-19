@@ -11,7 +11,6 @@ export interface BookViewerProps {
   book: BookModel;
   questionUserAnswers: QuestionUserAnswerModel[];
   plan: PlanModel;
-  chapter: ChapterModel;
 }
 
 interface BookViewerNavigate {

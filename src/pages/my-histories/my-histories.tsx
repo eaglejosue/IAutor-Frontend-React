@@ -2,7 +2,7 @@ import { useState, useEffect, FunctionComponent } from 'react';
 
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
-import { differenceInDays  } from 'date-fns';
+import { differenceInDays } from 'date-fns';
 import { Button, Card, Dropdown } from 'react-bootstrap';
 import './my-histories.scss'
 import { myHistories } from '../../assets/svg';
@@ -26,12 +26,11 @@ const NewHistory = () => {
   const _planService = new PlanService();
   const user = AuthenticatedUserModel.fromLocalStorage();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [books,setBooks] = useState<BookModel[]>([]);
+  const [books, setBooks] = useState<BookModel[]>([]);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
 
   const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Alterar Título da História' }));
   const [plan, setPlan] = useState<PlanModel>(new PlanModel())
-  const [chapter, setChapter] = useState(new ChapterModel());
   const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
 
 
@@ -40,8 +39,8 @@ const NewHistory = () => {
 
     setIsLoading(true)
     _bookService
-     //@ts-ignore
-      .getAll({userId:user.id,includeUserBookPlan:true})
+      //@ts-ignore
+      .getAll({ userId: user.id, includeUserBookPlan: true })
       .then((response: any) => {
         if (response) {
           setBooks(response);
@@ -59,19 +58,18 @@ const NewHistory = () => {
       });
   }, [])
 
-  const handlerVisualizar =(book:BookModel)=>{
+  const handlerVisualizar = (book: BookModel) => {
     setBook(book);
     setPlan(book.plan);
-    getPlanChaptersQuestions(book.planId,book.id);
-    getBookById(book.id)
+    getPlanChaptersQuestions(book.planId, book.id);
   }
-  const handlerSelect =(e:any)=>{
+  const handlerSelect = (e: any) => {
     console.log(e)
   }
-  const CustomToggle = React.forwardRef(({ children, onClick }:any, ref) => (
+  const CustomToggle = React.forwardRef(({ children, onClick }: any, ref) => (
     <a
       href=""
-      style={{textDecoration:'none'}}
+      style={{ textDecoration: 'none' }}
       //@ts-ignore
       ref={ref}
       onClick={e => {
@@ -83,7 +81,7 @@ const NewHistory = () => {
       <p className="threedots" />
     </a>
   ));
-    const closeIcon = (
+  const closeIcon = (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <mask id="mask0_693_22769" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
         <rect width="24" height="24" fill="#D9D9D9" />
@@ -99,7 +97,10 @@ const NewHistory = () => {
     await _planService
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
-        setChapter(response.chapters[0]);
+        const allQuestionUserAnswers = response.chapters!.flatMap((c: ChapterModel) =>
+          c.questions!.flatMap(q => q.questionUserAnswers)
+        );
+        setQuestionUserAnswers(allQuestionUserAnswers ?? [new QuestionUserAnswerModel()]);
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
@@ -113,26 +114,6 @@ const NewHistory = () => {
       });
   };
 
-  const getBookById =(id:number) =>{
-    setIsLoading(true);
-    _bookService
-      .getById(id)
-      .then((response: any) => {
-        if (response) {
-          setQuestionUserAnswers(response.questionUserAnswers);
-        }
-      })
-      .catch((e: any) => {
-        let message = "Error ao obter plano.";
-        if (e.response?.data?.length > 0 && e.response.data[0].message)
-          message = e.response.data[0].message;
-        if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
   interface ItemCardProps {
     book: BookModel;
   }
@@ -187,7 +168,7 @@ const NewHistory = () => {
                   {props.book.title}
                 </div>
                 <div className="col-12   ">
-                  <small>{props.book?.updatedAt !=null?  `Última edição há ${differenceInDays(new Date(), props.book?.updatedAt)} dias`: ''}</small>
+                  <small>{props.book?.updatedAt != null ? `Última edição há ${differenceInDays(new Date(), props.book?.updatedAt)} dias` : ''}</small>
                 </div>
               </div>
             </Card.Body>
@@ -219,14 +200,14 @@ const NewHistory = () => {
                   <strong>Minhas histórias </strong>
                 </h4>
                 <p>
-                  <strong>{''.padStart(books?.length>9?0:1,'0') +  books?.length.toString()  }</strong>  História(s) criada(s) até o momento
+                  <strong>{''.padStart(books?.length > 9 ? 0 : 1, '0') + books?.length.toString()}</strong>  História(s) criada(s) até o momento
                 </p>
               </div>
               <div className="col-2"></div>
               <div className="col-2">
                 <Button
                   variant=" btn-secondary"
-                  onClick={() =>{navigate(paths.PRICING_PLANS);}}
+                  onClick={() => { navigate(paths.PRICING_PLANS); }}
                   className=" rounded-5  f-14  p-3"
                 >
                   <strong>Criar história</strong>
@@ -245,13 +226,13 @@ const NewHistory = () => {
             </div>
             <div className="row m-5">
               {
-                isLoading?(  <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
+                isLoading ? (<div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
                   <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
-                </div>):(
+                </div>) : (
 
-                    books?.map((r:BookModel)=>{
-                      return(ItemCard({book:r}))
-                    })
+                  books?.map((r: BookModel) => {
+                    return (ItemCard({ book: r }))
+                  })
 
                 )
               }
@@ -261,11 +242,11 @@ const NewHistory = () => {
         </main>
       </div>
 
-    <ModalResponsive open={isBookPreviewModalOpen} closeIcon={closeIcon} center
-          classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
-          onClose={() => setIsBookPreviewModalOpen(false)}>
-            <BookViewer book={book} plan={plan} chapter={chapter} questionUserAnswers={questionUserAnswers} />
-        </ModalResponsive>
+      <ModalResponsive open={isBookPreviewModalOpen} closeIcon={closeIcon} center
+        classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
+        onClose={() => setIsBookPreviewModalOpen(false)}>
+        <BookViewer book={book} plan={plan} questionUserAnswers={questionUserAnswers} />
+      </ModalResponsive>
     </div>
 
 
