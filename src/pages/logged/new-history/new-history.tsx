@@ -566,7 +566,7 @@ const NewHistory = () => {
                 <div className='col-auto'>
                   <a className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2'
                     style={{ fontWeight: 'bold' }}
-                    //onClick={() => navigate(paths.HOME_LOGGED)}
+                    onClick={() => navigate(paths.PRICING_PLANS)}
                   >
                     Ver Planos
                   </a>
@@ -655,10 +655,11 @@ const NewHistory = () => {
                   <div className='d-flex text-center f-14 px-4'>
                     Formate a escrita, edite a capa e crie histórias com mais detalhes e momentos.
                   </div>
-                  {plan && plan.title && plan.title.toLowerCase().includes('degust') &&
+                  {plan && plan.title && plan.price == 0 &&
                     <div className='d-flex justify-content-center p-4'>
                       <div className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
                         style={{ fontWeight: 'bold' }}
+                        onClick={() => navigate(paths.PRICING_PLANS)}
                       >
                         Ver Planos
                       </div>
