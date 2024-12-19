@@ -80,7 +80,7 @@ const SectionPlan = () => {
                       <div className='d-flex border-top justify-content-center pt-3'>
                         <div className={`btn ${i == 1 ? 'bg-white text-black' : 'bg-secondary text-white'} rounded-5 f-13 py-3 mb-4 w-70`}
                           style={{ fontWeight: 'bold', position: 'absolute', bottom: '0px' }}
-                          onClick={() => { navigate(paths.NEW_HISTORY); }}
+                          onClick={() => { navigate(paths.MY_HISTORIES); }}
                         >
                           Experimentar agora
                         </div>

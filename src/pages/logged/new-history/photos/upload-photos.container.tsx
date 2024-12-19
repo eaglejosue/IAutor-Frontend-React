@@ -1,7 +1,7 @@
-import { BookModel } from "../../../common/models/book.model"
-import { PlanModel } from "../../../common/models/plan.model"
-import { QuestionUserAnswerModel } from "../../../common/models/question-user-answer.model"
-import { QuestionModel } from "../../../common/models/question.model"
+import { BookModel } from "../../../../common/models/book.model"
+import { PlanModel } from "../../../../common/models/plan.model"
+import { QuestionUserAnswerModel } from "../../../../common/models/question-user-answer.model"
+import { QuestionModel } from "../../../../common/models/question.model"
 
 import UploadPhotosForm from "./upload-photos.form"
 import './upload-photos.scss'

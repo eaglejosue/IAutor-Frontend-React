@@ -3,17 +3,17 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
-import { UserService } from '../../common/http/api/userService';
-import { UserModel } from '../../common/models/user.model';
-import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
-import { CpfValidator } from '../../common/validation/cpfValidator';
-import { BirthDateValidator } from '../../common/validation/birthDateValidator';
-import CustomInput from '../../components/forms/customInput/customInput';
-import ChangePasswordForm from '../../components/changePasswordForm/changePasswordForm.component';
-import Sidebar from '../../components/nav/sidebar.component';
-import NavUserOptions from '../../components/nav/nav-user-options.component';
+import { UserService } from '../../../common/http/api/userService';
+import { UserModel } from '../../../common/models/user.model';
+import { AuthenticatedUserModel } from '../../../common/models/authenticated.model';
+import { CpfValidator } from '../../../common/validation/cpfValidator';
+import { BirthDateValidator } from '../../../common/validation/birthDateValidator';
+import CustomInput from '../../../components/forms/customInput/customInput';
+import ChangePasswordForm from '../../../components/changePasswordForm/changePasswordForm.component';
+import Sidebar from '../../../components/nav/sidebar.component';
+import NavUserOptions from '../../../components/nav/nav-user-options.component';
 
-import horizontalImgs from '../../assets/horizontal-imgs';
+import horizontalImgs from '../../../assets/horizontal-imgs';
 
 const MyAccount = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');

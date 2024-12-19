@@ -1,23 +1,26 @@
-import { useState, useEffect, FunctionComponent } from 'react';
-
-import Sidebar from '../../components/nav/sidebar.component';
-import NavUserOptions from '../../components/nav/nav-user-options.component';
-import { differenceInDays } from 'date-fns';
-import { Button, Card, Dropdown } from 'react-bootstrap';
-import './my-histories.scss'
-import { myHistories } from '../../assets/svg';
 import React from 'react';
-import { BookService } from '../../common/http/api/bookService';
-import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
-import { BookModel } from '../../common/models/book.model';
-import { Modal as ModalResponsive } from 'react-responsive-modal';
-import BookViewer from '../new-history/book-viewer';
-import { PlanModel } from '../../common/models/plan.model';
-import { ChapterModel } from '../../common/models/chapter.model';
-import { PlanService } from '../../common/http/api/planService';
-import { QuestionUserAnswerModel } from '../../common/models/question-user-answer.model';
+import { useState, useEffect, FunctionComponent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import paths from '../../routes/paths';
+import { Button, Card, Dropdown } from 'react-bootstrap';
+import { Modal as ModalResponsive } from 'react-responsive-modal';
+import { differenceInDays } from 'date-fns';
+
+import { myHistories } from '../../../assets/svg';
+import { BookService } from '../../../common/http/api/bookService';
+import { AuthenticatedUserModel } from '../../../common/models/authenticated.model';
+import { BookModel } from '../../../common/models/book.model';
+import { PlanModel } from '../../../common/models/plan.model';
+import { ChapterModel } from '../../../common/models/chapter.model';
+import { PlanService } from '../../../common/http/api/planService';
+import { QuestionUserAnswerModel } from '../../../common/models/question-user-answer.model';
+import { QuestionModel } from '../../../common/models/question.model';
+
+import Sidebar from '../../../components/nav/sidebar.component';
+import NavUserOptions from '../../../components/nav/nav-user-options.component';
+import BookViewer from '../../../components/book-viewer/book-viewer';
+
+import paths from '../../../routes/paths';
+import './my-histories.scss'
 
 const NewHistory = () => {
   const navigate = useNavigate();
@@ -33,9 +36,11 @@ const NewHistory = () => {
   const [plan, setPlan] = useState<PlanModel>(new PlanModel())
   const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
 
-
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      navigate(paths.LOGIN);
+      return
+    }
 
     setIsLoading(true)
     _bookService
@@ -98,7 +103,7 @@ const NewHistory = () => {
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
         const allQuestionUserAnswers = response.chapters!.flatMap((c: ChapterModel) =>
-          c.questions!.flatMap(q => q.questionUserAnswers)
+          c.questions!.flatMap((q: QuestionModel) => q.questionUserAnswers)
         );
         setQuestionUserAnswers(allQuestionUserAnswers ?? [new QuestionUserAnswerModel()]);
       })
@@ -244,7 +249,8 @@ const NewHistory = () => {
 
       <ModalResponsive open={isBookPreviewModalOpen} closeIcon={closeIcon} center
         classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
-        onClose={() => setIsBookPreviewModalOpen(false)}>
+        onClose={() => setIsBookPreviewModalOpen(false)}
+      >
         <BookViewer book={book} plan={plan} questionUserAnswers={questionUserAnswers} />
       </ModalResponsive>
     </div>

@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
 
-import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
+import { AuthenticatedUserModel } from '../../../common/models/authenticated.model';
 import { Button } from 'react-bootstrap';
-import { BookService } from '../../common/http/api/bookService';
-import { BookModel } from '../../common/models/book.model';
+import { BookService } from '../../../common/http/api/bookService';
+import { BookModel } from '../../../common/models/book.model';
 import { Modal as ModalResponsive } from 'react-responsive-modal';
-import { PlanService } from '../../common/http/api/planService';
-import { PlanModel } from '../../common/models/plan.model';
-import { ChapterModel } from '../../common/models/chapter.model';
-import { QuestionUserAnswerModel } from '../../common/models/question-user-answer.model';
+import { PlanService } from '../../../common/http/api/planService';
+import { PlanModel } from '../../../common/models/plan.model';
+import { ChapterModel } from '../../../common/models/chapter.model';
+import { QuestionUserAnswerModel } from '../../../common/models/question-user-answer.model';
 
-import Sidebar from '../../components/nav/sidebar.component';
-import NavUserOptions from '../../components/nav/nav-user-options.component';
-import EmptyHomeLogged from './sections/empty-logged.section';
-import BooksHistory from './sections/books-history-section';
-import BookViewer from '../new-history/book-viewer';
+import Sidebar from '../../../components/nav/sidebar.component';
+import NavUserOptions from '../../../components/nav/nav-user-options.component';
+import EmptyHomeLogged from '../../home/sections/empty-logged.section';
+import BooksHistory from '../../home/sections/books-history-section';
+import BookViewer from '../../../components/book-viewer/book-viewer';
 
 import './home-logged.scss'
 

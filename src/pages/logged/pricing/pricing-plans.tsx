@@ -8,7 +8,7 @@ import { PlanFilter } from '../../../common/models/filters/plan.filter';
 import { PlanService } from '../../../common/http/api/planService';
 
 import paths from '../../../routes/paths';
-import '../home.scss'
+import '../../home/home.scss'
 
 const PricingPlans = ()=>{
   const navigate = useNavigate();
@@ -102,7 +102,7 @@ const PricingPlans = ()=>{
                                 <div className='d-flex justify-content-center pt-3'>
                                   <div className={`btn ${i == 1 ? 'bg-white text-black' : 'bg-secondary text-white'} rounded-5 f-13 py-3 mb-4 w-70`}
                                     style={{ fontWeight: 'bold', position: 'absolute', bottom: '0px' }}
-                                    onClick={() => { navigate(paths.NEW_HISTORY); }}
+                                    onClick={() => { navigate(paths.MY_HISTORIES); }}
                                   >
                                     Comprar agora
                                   </div>

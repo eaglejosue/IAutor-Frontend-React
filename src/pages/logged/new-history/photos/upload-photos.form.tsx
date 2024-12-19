@@ -5,16 +5,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCameraRetro, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Modal } from "react-bootstrap";
 
-import { QuestionModel } from "../../../common/models/question.model";
-import { QuestionUserAnswerModel } from "../../../common/models/question-user-answer.model";
-import { PlanModel } from "../../../common/models/plan.model";
-import { QuestionService } from "../../../common/http/api/questionService";
-import { AuthenticatedUserModel } from "../../../common/models/authenticated.model";
+import { QuestionModel } from "../../../../common/models/question.model";
+import { QuestionUserAnswerModel } from "../../../../common/models/question-user-answer.model";
+import { PlanModel } from "../../../../common/models/plan.model";
+import { QuestionService } from "../../../../common/http/api/questionService";
+import { AuthenticatedUserModel } from "../../../../common/models/authenticated.model";
 
 import { Loader, Uploader } from 'rsuite';
 import 'rsuite/Uploader/styles/index.css';
 
-import CustomTextArea from "../../../components/forms/customTextArea/customTextArea.component";
+import CustomTextArea from "../../../../components/forms/customTextArea/customTextArea.component";
 
 export interface UploadPhotosFormProps {
   questionAnswers: QuestionUserAnswerModel[];

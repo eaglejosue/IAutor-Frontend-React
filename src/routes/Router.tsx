@@ -8,22 +8,25 @@ import paths from './paths';
 import PageLoading from '../components/pageLoading/pageLoading.component';
 import Footer from '../components/footer/footer.component';
 
-const PageNotFound = lazy(() => import('../pages/page-not-found/page-not-found'));
 const Home = lazy(() => import('../pages/home/home'));
 const Login = lazy(() => import('../pages/login/login'));
 const SigIn = lazy(() => import('../pages/sigin/sigin'));
 const EsqueceuSenha = lazy(() => import('../pages/forgot-password/forgot-password'));
 const TrocarSenha = lazy(() => import('../pages/reset-password/reset-password'));
-const MyAccount = lazy(() => import("../pages/my-account/my-account"));
-const HomeLogged = lazy(() => import('../pages/home/home-logged'));
-const NewHistory = lazy(() => import("../pages/new-history/new-history"));
-const MyHistories = lazy(() => import("../pages/my-histories/my-histories"));
+const PageNotFound = lazy(() => import('../pages/page-not-found/page-not-found'));
+
 const Terms = lazy(() => import("../pages/admin/terms/terms"));
 const Users = lazy(() => import("../pages/admin/users/users"));
 const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
 const Questions = lazy(() =>  import("../pages/admin/questions/questions"));
 const Plans = lazy(()=>import("../pages/admin/plans/plans"));
-const PricingPlans = lazy(()=>import("../pages/home/pricing/pricing-plans"));
+
+const MyAccount = lazy(() => import("../pages/logged/my-account/my-account"));
+const HomeLogged = lazy(() => import('../pages/logged/home-logged/home-logged'));
+const NewHistory = lazy(() => import("../pages/logged/new-history/new-history"));
+const MyHistories = lazy(() => import("../pages/logged/my-histories/my-histories"));
+const PricingPlans = lazy(()=>import("../pages/logged/pricing/pricing-plans"));
+
 
 interface Routes {
   path: string;

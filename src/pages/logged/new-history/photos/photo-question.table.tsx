@@ -1,5 +1,5 @@
 import { Table } from 'antd';
-import { QuestionModel } from '../../../common/models/question.model';
+import { QuestionModel } from '../../../../common/models/question.model';
 import { useState } from 'react';
 import { BookViewerNavigate } from './upload-photos.form';
 
@@ -8,7 +8,7 @@ interface PhotoQuestionTableProps {
     isLoading: boolean,
     handlerCheckQuestion:(capitulo:QuestionModel,checked:boolean)=>void
   }
-  
+
 const PhotoQuestionTable =(props:PhotoQuestionTableProps)=>{
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +43,7 @@ const PhotoQuestionTable =(props:PhotoQuestionTableProps)=>{
             className='custom-table'
             rowKey="id"
             dataSource={props.data}
-            
+
             columns={columns}
             locale={{ emptyText: 'Nenhum dado disponível.' }}
             loading={props.isLoading}

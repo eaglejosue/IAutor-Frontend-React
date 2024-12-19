@@ -8,36 +8,36 @@ import { toast } from 'react-toastify';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Modal as ModalResponsive } from 'react-responsive-modal';
 
-import Sidebar from '../../components/nav/sidebar.component';
-import NavUserOptions from '../../components/nav/nav-user-options.component';
-import BookViewer from './book-viewer';
+import Sidebar from '../../../components/nav/sidebar.component';
+import NavUserOptions from '../../../components/nav/nav-user-options.component';
+import BookViewer from '../../../components/book-viewer/book-viewer';
 import UploadPhotosContainer from './photos/upload-photos.container';
 
-import { UserService } from '../../common/http/api/userService';
-import { BookService } from '../../common/http/api/bookService';
-import { PlanService } from '../../common/http/api/planService';
-import { QuestionService } from '../../common/http/api/questionService';
-import { IAService } from '../../common/http/api/iaService';
+import { UserService } from '../../../common/http/api/userService';
+import { BookService } from '../../../common/http/api/bookService';
+import { PlanService } from '../../../common/http/api/planService';
+import { QuestionService } from '../../../common/http/api/questionService';
+import { IAService } from '../../../common/http/api/iaService';
 
-import { AuthenticatedUserModel } from '../../common/models/authenticated.model';
-import { BookFilter } from '../../common/models/filters/book.filter';
-import { BookModel } from '../../common/models/book.model';
-import { PlanModel } from '../../common/models/plan.model';
-import { ChapterModel } from '../../common/models/chapter.model';
-import { QuestionModel } from '../../common/models/question.model';
-import { QuestionUserAnswerModel } from '../../common/models/question-user-answer.model';
+import { AuthenticatedUserModel } from '../../../common/models/authenticated.model';
+import { BookFilter } from '../../../common/models/filters/book.filter';
+import { BookModel } from '../../../common/models/book.model';
+import { PlanModel } from '../../../common/models/plan.model';
+import { ChapterModel } from '../../../common/models/chapter.model';
+import { QuestionModel } from '../../../common/models/question.model';
+import { QuestionUserAnswerModel } from '../../../common/models/question-user-answer.model';
 
-import paths from '../../routes/paths';
-import horizontalImgs from '../../assets/horizontal-imgs';
-import previewCapaLivro from '../../assets/img/preview-capa-livro.png';
-import previewCapaLivroBranca from '../../assets/img/Preview-capa-livro-branca.png';
-import artificialInteligence from '../../assets/svg/artificial-inteligence.svg';
-import openBook from '../../assets/svg/open-book.svg';
-import life from '../../assets/svg/life.svg';
-import clownWithHat from '../../assets/svg/face-of-clown-with-hat.svg';
-import theater from '../../assets/svg/theater.svg';
-import hearts from '../../assets/svg/hearts.svg';
-import WomanIsTyping from '../../assets/img/woman-is-typing-laptop-with-lamp-her.png';
+import paths from '../../../routes/paths';
+import horizontalImgs from '../../../assets/horizontal-imgs';
+import previewCapaLivro from '../../../assets/img/preview-capa-livro.png';
+import previewCapaLivroBranca from '../../../assets/img/Preview-capa-livro-branca.png';
+import artificialInteligence from '../../../assets/svg/artificial-inteligence.svg';
+import openBook from '../../../assets/svg/open-book.svg';
+import life from '../../../assets/svg/life.svg';
+import clownWithHat from '../../../assets/svg/face-of-clown-with-hat.svg';
+import theater from '../../../assets/svg/theater.svg';
+import hearts from '../../../assets/svg/hearts.svg';
+import WomanIsTyping from '../../../assets/img/woman-is-typing-laptop-with-lamp-her.png';
 
 const NewHistory = () => {
 
