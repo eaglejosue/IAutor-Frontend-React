@@ -264,7 +264,7 @@ const NewHistory = () => {
     <ModalResponsive open={isBookPreviewModalOpen} closeIcon={closeIcon} center
           classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
           onClose={() => setIsBookPreviewModalOpen(false)}>
-            <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
+            <BookViewer book={book} plan={plan} chapter={chapter} questionUserAnswers={questionUserAnswers} />
         </ModalResponsive>
     </div>
 

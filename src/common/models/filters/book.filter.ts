@@ -12,6 +12,7 @@ export class BookFilter extends BaseModel {
   includePayments?: boolean;
   includeUserBookLogs?: boolean;
   includeUserBookPlan?:boolean;
+  includeQuestionUserAnswers?:boolean;
   listToCrud?: boolean;
   listToDownload?: boolean;
   planId?: number;
@@ -31,6 +32,7 @@ export class BookFilter extends BaseModel {
       this.includePayments = j.includePayments;
       this.includeUserBookLogs = j.includeUserBookLogs;
       this.includeUserBookPlan = j.includeUserBookPlan;
+      this.includeQuestionUserAnswers = j.includeQuestionUserAnswers;
       this.listToCrud = j.listToCrud;
       this.listToDownload = j.listToDownload;
       this.planId = j.planId;

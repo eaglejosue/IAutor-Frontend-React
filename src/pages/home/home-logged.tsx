@@ -32,7 +32,7 @@ const HomeLogged = () => {
   useEffect(() => {
     if (!user) return
 
-    setIsLoading(true)
+    setIsLoading(true);
     _bookService
       .getById(user?.lastBookId)
       .then((response: any) => {
@@ -50,16 +50,16 @@ const HomeLogged = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
   }, [])
 
   const handlerSelect = () => {
-    setIsBookPreviewModalOpen(true)
+    setIsBookPreviewModalOpen(true);
   }
 
   const getPlanChaptersQuestions = async (planId: number, bookId: number) => {
-
+    setIsLoading(true);
     await _planService
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
@@ -74,7 +74,7 @@ const HomeLogged = () => {
         console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
   };
 
@@ -173,7 +173,7 @@ const HomeLogged = () => {
         classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
         onClose={() => setIsBookPreviewModalOpen(false)}
       >
-        <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
+        <BookViewer book={book} plan={plan} chapter={chapter} questionUserAnswers={questionUserAnswers} />
       </ModalResponsive>
     </>
   );

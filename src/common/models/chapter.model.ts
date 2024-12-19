@@ -15,6 +15,8 @@ export class ChapterModel extends BaseModel {
       this.title = j.title;
       this.chapterNumber = j.chapterNumber;
       this.selected = j.selected;
+
+      this.questions = j.questions;
     }
   }
 }

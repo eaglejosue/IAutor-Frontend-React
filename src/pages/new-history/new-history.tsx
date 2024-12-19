@@ -6,9 +6,7 @@ import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { Modal, ModalHeader } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import Dropdown from 'react-bootstrap/Dropdown';
-
 import { Modal as ModalResponsive } from 'react-responsive-modal';
-
 
 import Sidebar from '../../components/nav/sidebar.component';
 import NavUserOptions from '../../components/nav/nav-user-options.component';
@@ -78,7 +76,8 @@ const NewHistory = () => {
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isIAModalOpen, setIsIAModalOpen] = useState(false);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
-  const [isPhotoUploadModalOpen, setPhotoUploadModalOpen] = useState(false);
+  const [isPhotoUploadModalOpen, setIsPhotoUploadModalOpen] = useState(false);
+  const [isFinalizeBookModalOpen, setIsFinalizeBookModalOpen] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
@@ -156,10 +155,10 @@ const NewHistory = () => {
           return;
         }
 
-        setBook(response[0]);
-        setTitle(response[0].title);
-        setQuestionUserAnswers(response[0]?.questionUserAnswers ?? [new QuestionUserAnswerModel()]);
-        getPlanChaptersQuestions(response[0].planId, id);
+        const book = response[0];
+        setBook(book);
+        setTitle(book.title);
+        getPlanChaptersQuestions(book.planId, id);
       })
       .catch((e: any) => {
         let message = "Error ao obter livro.";
@@ -202,6 +201,11 @@ const NewHistory = () => {
         setQuestionIndex(0);
         setAnswer(questionRes.questionUserAnswers[0]?.answer ?? '');
         setQtdCallIASugestionsUsed(questionRes.questionUserAnswers[0]?.qtdCallIASugestionsUsed ?? 0);
+
+        const allQuestionUserAnswers = response.chapters!.flatMap((c: ChapterModel) =>
+          c.questions!.flatMap(q => q.questionUserAnswers)
+        );
+        setQuestionUserAnswers(allQuestionUserAnswers ?? [new QuestionUserAnswerModel()]);
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
@@ -398,9 +402,9 @@ const NewHistory = () => {
     setIsLoadingSaveAnswer(true);
     await _questionService
       .upsertQuestionUserAnswer(newQuestionUserAnswerModel)
-      .then(() => {
-        const questionUserAnswersFiltered = questionUserAnswers?.filter(f => f.questionId != question.id);
-        setQuestionUserAnswers([...questionUserAnswersFiltered, newQuestionUserAnswerModel]);
+      .then((response: any) => {
+        const questionUserAnswersFiltered = questionUserAnswers?.filter(f => f.id != response.id);
+        setQuestionUserAnswers([...questionUserAnswersFiltered, response]);
       })
       .catch((e) => {
         let message = 'Error ao obter dados de participante.';
@@ -445,13 +449,32 @@ const NewHistory = () => {
   const handleClosePhotoUploadModal = (questionUserAnswer: QuestionUserAnswerModel) => {
     const questionUserAnswersTemp = questionUserAnswers?.filter(f => f.id != questionUserAnswer.id);
     setQuestionUserAnswers([...questionUserAnswersTemp, questionUserAnswer]);
-    let questionTemp = new QuestionModel({...question, questionUserAnswers: [questionUserAnswer]});
+    const questionTemp = new QuestionModel({...question, questionUserAnswers: [questionUserAnswer]});
     setQuestion(questionTemp);
-    setPhotoUploadModalOpen(false);
+    setIsPhotoUploadModalOpen(false);
   };
 
   const handleFinalizeClick = () => {
+    const chapterQuestionsList = plan.chapters!.flatMap(chapter =>
+      chapter!.questions!.map(question => ({ chapterId: chapter.id, questionId: question.id }))
+    );
 
+    const questionUserAnswersList = questionUserAnswers.map(m => ({ chapterId: m.chapterId, questionId: m.questionId }));
+
+    const chapterQuestionsSet = new Set(
+      chapterQuestionsList.map(chapterQuestion => `${chapterQuestion.chapterId}-${chapterQuestion.questionId}`)
+    );
+
+    const allExist = questionUserAnswersList.every(userAnswer =>
+      chapterQuestionsSet.has(`${userAnswer.chapterId}-${userAnswer.questionId}`)
+    );
+
+    if (!allExist) {
+      setIsFinalizeBookModalOpen(true);
+      return;
+    }
+
+    navigate(paths.HOME_LOGGED);
   };
 
   return (
@@ -534,16 +557,16 @@ const NewHistory = () => {
             <div className='col-md-5'>
               <div className='row align-items-center justify-content-end'>
                 <div className='col-auto'>
-                  <a href='#' className='btn btn-outline-secondary disabled rounded-5 f-12 px-4 py-2'
+                  <div className='btn btn-outline-secondary disabled rounded-5 f-12 px-4 py-2'
                     style={{ fontWeight: 'bold' }}
                   >
                     Livro Degustação | Tradicional
-                  </a>
+                  </div>
                 </div>
                 <div className='col-auto'>
                   <a className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2'
                     style={{ fontWeight: 'bold' }}
-                    onClick={() => navigate(paths.HOME_LOGGED)}
+                    //onClick={() => navigate(paths.HOME_LOGGED)}
                   >
                     Ver Planos
                   </a>
@@ -583,13 +606,39 @@ const NewHistory = () => {
                     >
                       <div className='f-10'>Capítulo {c.chapterNumber}</div>
                       <b className='f-13'>{c.title}</b>
-                      <div className='d-flex align-items-center text-icon f-10'>
-                        <span className='material-symbols-outlined'
-                          style={{ fontSize: '12px', color: '#db3737', marginRight: '3px' }}
-                        >
-                          quiz
-                        </span>
-                        {c.questions?.length} Pergunta{(c.questions?.length ?? 1) > 1 ? 's' : ''}
+                      <div className='d-flex align-items-center justify-content-between text-icon f-10'>
+                        <div className='d-flex'>
+                          <span className='material-symbols-outlined'
+                            style={{ fontSize: '12px', color: 'red', marginRight: '3px' }}
+                            >
+                            quiz
+                          </span>
+                          {c.questions?.length} Pergunta{(c.questions?.length ?? 1) > 1 ? 's' : ''}
+                        </div>
+                        {c.questions?.length && (
+                          questionUserAnswers?.filter(answer => answer.chapterId === c.id).length === c.questions.length ? (
+                            <div className="d-flex">
+                              <span
+                                className="material-symbols-outlined"
+                                style={{ fontSize: "12px", color: "green", marginRight: "3px" }}
+                              >
+                                check_circle
+                              </span>
+                              Respondido
+                            </div>
+                          ) : (
+                            <div className="d-flex">
+                              <span
+                                className="material-symbols-outlined"
+                                style={{ fontSize: "12px", color: "red", marginRight: "3px" }}
+                              >
+                                pending
+                              </span>
+                              Pendente
+                            </div>
+                          )
+                        )
+                        }
                       </div>
                     </div>
                   )
@@ -608,11 +657,11 @@ const NewHistory = () => {
                   </div>
                   {plan && plan.title && plan.title.toLowerCase().includes('degust') &&
                     <div className='d-flex justify-content-center p-4'>
-                      <a href='#' className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
+                      <div className='btn bg-secondary text-white rounded-5 f-12 px-4 py-2 w-50'
                         style={{ fontWeight: 'bold' }}
                       >
                         Ver Planos
-                      </a>
+                      </div>
                     </div>
                   }
                 </div>
@@ -774,9 +823,9 @@ const NewHistory = () => {
 
                   <div className='d-flex btn bg-black text-white align-items-center justify-content-center rounded-5 p-3'
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={() => { handleNextQuestionClick() }}
+                    onClick={() => { !isLastQuestion ? handleNextQuestionClick() : handleFinalizeClick() }}
                   >
-                    <b className='f-16'>{isLastQuestion ? 'Finalizar' : 'Avançar'}</b>
+                    <b className='f-16'>{!isLastQuestion ? 'Avançar' : 'Finalizar'}</b>
                     <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>arrow_right_alt</span>
                   </div>
 
@@ -805,7 +854,7 @@ const NewHistory = () => {
                     </span>
                     <span className='material-symbols-outlined text-primary px-2'
                       style={{ fontSize: '24px', cursor: 'pointer' }}
-                      onClick={() => setPhotoUploadModalOpen(true)}
+                      onClick={() => setIsPhotoUploadModalOpen(true)}
                       title='Inserir/Alterar foto'>
                       add_photo_alternate
                     </span>
@@ -851,7 +900,7 @@ const NewHistory = () => {
                           <button
                             className='btn  p-0 my-2 border-0 bg-transparent'
                             type='button'
-                            onClick={() => setPhotoUploadModalOpen(true)}
+                            onClick={() => setIsPhotoUploadModalOpen(true)}
                             style={{ outline: 'none', position: 'relative' }}
                           >
                             <div
@@ -910,9 +959,7 @@ const NewHistory = () => {
         </main>
 
         <Modal show={isTermsModalOpen} onHide={() => setIsTermsModalOpen(false)} centered={true} backdrop="static" keyboard={false}>
-          <Modal.Body className='text-center justify-content-center pt-0 px-5'
-            style={{}}
-          >
+          <Modal.Body className='text-center justify-content-center pt-0 px-5'>
             <div className='d-flex w-100 justify-content-center align-items-center'>
               <img src={WomanIsTyping} alt="Woman is typing laptop with lamp" />
             </div>
@@ -925,12 +972,12 @@ const NewHistory = () => {
                   Bem vindo Autor, você dará inicio à criação de sua história. No livro degustação você poderá experimentar a criação de um livro de memórias usando os recursos da plataforma <b>IAutor</b>.
                 </div>
                 <div className='d-flex justify-content-center pt-3'>
-                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
+                  <div className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
                     style={{ fontWeight: 'bold' }}
                     onClick={() => { setTermsTextModal(2) }}
                   >
                     Próximo
-                  </a>
+                  </div>
                 </div>
               </>
             }
@@ -944,12 +991,12 @@ const NewHistory = () => {
                   Ao mesmo tempo, evite compartilhar informações íntimas ou sensíveis.
                 </div>
                 <div className='d-flex justify-content-center pt-3'>
-                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
+                  <div className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
                     style={{ fontWeight: 'bold' }}
                     onClick={() => { setTermsTextModal(3) }}
                   >
                     Próximo
-                  </a>
+                  </div>
                 </div>
               </>
             }
@@ -968,7 +1015,7 @@ const NewHistory = () => {
                       setErrorMessage('');
                     }}
                   />
-                  Li e concordo com os <a href='#' className='fw-bold' onClick={() => { window.open(paths.TERMS, '_blank'); }}>Termos e Condições</a> da plataforma.
+                  Li e concordo com os <div className='fw-bold' onClick={() => { window.open(paths.TERMS, '_blank'); }}>Termos e Condições</div> da plataforma.
                 </label>
                 {errorMessage &&
                   <div className='d-flex justify-content-center align-items-center pb-3'>
@@ -976,12 +1023,12 @@ const NewHistory = () => {
                   </div>
                 }
                 <div className='d-flex border-top justify-content-center pt-3'>
-                  <a href='#' className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
+                  <div className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
                     style={{ fontWeight: 'bold' }}
                     onClick={handleAcceptTerms}
                   >
                     Começar
-                  </a>
+                  </div>
                 </div>
               </>
             }
@@ -1100,15 +1147,50 @@ const NewHistory = () => {
           classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
           onClose={() => setIsBookPreviewModalOpen(false)}
         >
-          <BookViewer book={book} plan={plan} chapter={chapter} questionAnsewers={questionUserAnswers} />
+          <BookViewer book={book} plan={plan} chapter={chapter} questionUserAnswers={questionUserAnswers} />
         </ModalResponsive>
 
-        <Modal show={isPhotoUploadModalOpen} onHide={() => {setPhotoUploadModalOpen(false)}}
-         size='lg' backdrop="static" keyboard={false}>
+        <Modal show={isPhotoUploadModalOpen} onHide={() => {setIsPhotoUploadModalOpen(false)}} size='lg' backdrop="static" keyboard={false}>
           <ModalHeader closeButton><span className='text-primary'><strong>Inserir/Alterar foto - Capitulo {chapter.chapterNumber}</strong></span></ModalHeader>
           <Modal.Body>
             <UploadPhotosContainer closeModal={(e) => handleClosePhotoUploadModal(e)}
              book={book} questionAnsewers={questionUserAnswers} plan={plan} question={question} />
+          </Modal.Body>
+        </Modal>
+
+        <Modal show={isFinalizeBookModalOpen} onHide={() => setIsFinalizeBookModalOpen(false)} centered={true}>
+          <Modal.Header closeButton style={{border: 'none'}} />
+          <Modal.Body className='text-center justify-content-center pt-0 px-5'>
+            <div className='d-flex w-100 justify-content-center align-items-center'>
+              <span className='material-symbols-outlined'
+                style={{ fontSize: '60px', color: '#ffc051', marginRight: '3px' }}
+              >
+                error
+              </span>
+            </div>
+            <div className='d-flex justify-content-center pt-4'>
+              <b className='f-22'>Atenção!</b>
+            </div>
+            <div className='f-15 pt-3'>
+              Você ainda possui perguntas sem respostas.
+            </div>
+            <div className='border-bottom f-15 pb-4'>
+              Tem certeza que deseja prosseguir?
+            </div>
+            <div className='d-flex justify-content-center pt-4 pb-3'>
+              <div className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
+                style={{ fontWeight: 'bold' }}
+                onClick={() => { navigate(paths.MY_HISTORIES); }}
+              >
+                Sim, quero continuar!
+              </div>
+              <div className='btn btn-outline-secondary rounded-5 f-12 py-2 w-60 ms-2'
+                style={{ fontWeight: 'bold' }}
+                onClick={() => { setIsFinalizeBookModalOpen(false) }}
+              >
+                Não, voltar para responder.
+              </div>
+            </div>
           </Modal.Body>
         </Modal>
 

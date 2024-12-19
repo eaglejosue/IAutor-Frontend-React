@@ -9,7 +9,7 @@ import "./book-viewer.scss";
 
 export interface BookViewerProps {
   book: BookModel;
-  questionAnsewers: QuestionUserAnswerModel[];
+  questionUserAnswers: QuestionUserAnswerModel[];
   plan: PlanModel;
   chapter: ChapterModel;
 }
@@ -21,14 +21,14 @@ interface BookViewerNavigate {
   subject?: string;
   imageUrl?: string;
   captionPicture?: string;
-  idAnserQuestionUser: number;
+  idAnswerQuestionUser: number;
 }
 
 const BookViewer = (props: BookViewerProps) => {
   const [bookViewerAr, setBookViewerAr] = useState<BookViewerNavigate[]>([]);
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(1);
-  
+
   const increase = async () => {
     console.log('antes', left, right)
     setRight(right < bookViewerAr.length - 1 ? right + 2 : bookViewerAr.length);
@@ -51,7 +51,7 @@ const BookViewer = (props: BookViewerProps) => {
     props.plan.chapters
       ?.sort((x1, x2) => x1.chapterNumber - x2.chapterNumber)
       .map((r: ChapterModel) => {
-        props.questionAnsewers
+        props.questionUserAnswers
           .filter((b) => b.chapterId == r.id)
           .sort((n1, n2) => n1.questionId - n2.questionId)
           .map((g: QuestionUserAnswerModel) => {
@@ -64,7 +64,7 @@ const BookViewer = (props: BookViewerProps) => {
                 answer: g.answer,
                 imageUrl: g.imagePhotoUrl,
                 captionPicture: g.imagePhotoLabel,
-                idAnserQuestionUser: g.id
+                idAnswerQuestionUser: g.id
               };
               arBooks.push(booksVw);
             }

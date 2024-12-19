@@ -23,7 +23,7 @@ const Users = lazy(() => import("../pages/admin/users/users"));
 const Chapters = lazy(() => import("../pages/admin/chapters/chapters"));
 const Questions = lazy(() =>  import("../pages/admin/questions/questions"));
 const Plans = lazy(()=>import("../pages/admin/plans/plans"));
-const PricingPlans = lazy(()=>import("../pages/pricing/pricing-plans"));
+const PricingPlans = lazy(()=>import("../pages/home/pricing/pricing-plans"));
 
 interface Routes {
   path: string;
@@ -61,14 +61,14 @@ const routes: Routes[] = [
   { path: paths.MY_ACCOUNT, element: getRouteElement(MyAccount, true, true, false) },
   { path: paths.HOME_LOGGED, element: getRouteElement(HomeLogged, true, true, false) },
   { path: paths.MY_HISTORIES, element: getRouteElement(MyHistories, true, true, false) },
+  { path: paths.PRICING_PLANS, element: getRouteElement(PricingPlans, true, true, false) },
   { path: `${paths.NEW_HISTORY}/:id`, element: getRouteElement(NewHistory, true, true, false) },
   { path: paths.TERMS, element: getRouteElement(Terms, true, true, false) },
   { path: paths.USERS, element: getRouteElement(Users, true, true) },
   { path: paths.CHAPTERS, element: getRouteElement(Chapters, true, true) },
   { path: paths.QUESTIONS, element: getRouteElement(Questions, true, true) },
   { path: paths.PLANS, element: getRouteElement(Plans, true, true) },
-  { path: paths.PRICING_PLANS, element: getRouteElement(PricingPlans, true, true) },
-  
+
 ];
 
 export default createBrowserRouter(routes);
