@@ -824,9 +824,9 @@ const NewHistory = () => {
 
                   <div className='d-flex btn bg-black text-white align-items-center justify-content-center rounded-5 p-3'
                     style={{ height: '48px', minWidth: '140px' }}
-                    onClick={() => { !isLastQuestion ? handleNextQuestionClick() : handleFinalizeClick() }}
+                    onClick={() => { isLastQuestion ? handleFinalizeClick() : handleNextQuestionClick() }}
                   >
-                    <b className='f-16'>{!isLastQuestion ? 'Avançar' : 'Finalizar'}</b>
+                    <b className='f-16'>{isLastQuestion ? 'Finalizar' : 'Avançar'}</b>
                     <span className='material-symbols-outlined ps-2' style={{ fontSize: '24px' }}>arrow_right_alt</span>
                   </div>
 
@@ -1181,7 +1181,7 @@ const NewHistory = () => {
             <div className='d-flex justify-content-center pt-4 pb-3'>
               <div className='btn bg-secondary text-white rounded-5 f-12 py-2 w-60'
                 style={{ fontWeight: 'bold' }}
-                onClick={() => { navigate(paths.MY_HISTORIES); }}
+                onClick={() => { navigate(paths.HOME_LOGGED); }}
               >
                 Sim, quero continuar!
               </div>
