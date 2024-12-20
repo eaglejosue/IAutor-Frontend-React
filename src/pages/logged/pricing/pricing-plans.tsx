@@ -9,6 +9,7 @@ import { PlanService } from '../../../common/http/api/planService';
 
 import paths from '../../../routes/paths';
 import '../../home/home.scss'
+import './pricing-plans.scss'
 
 const PricingPlans = ()=>{
   const navigate = useNavigate();
@@ -62,9 +63,7 @@ const PricingPlans = ()=>{
                       <strong>Pacotes e preços </strong>
                     </h4>
                     <p>
-                      Planos e Preços Descubra a flexibilidade e benefícios das
-                      nossas ofertas de preços para atender suas necessidades
-                      específicas.
+                    Conheça os nossos pacotes para atender suas necessidades específicas.
                     </p>
                   </div>
                 </div>
@@ -100,7 +99,7 @@ const PricingPlans = ()=>{
                               <hr />
                               <div className='row text-center'>
                                 <div className='d-flex justify-content-center pt-3'>
-                                  <div className={`btn ${i == 1 ? 'bg-white text-black' : 'bg-secondary text-white'} rounded-5 f-13 py-3 mb-4 w-70`}
+                                  <div className={`btn ${i == 1 ? 'bg-white text-black btnComprarBlack' : 'bg-secondary text-white btnComprarRed'} rounded-5 f-13 py-3 mb-4 w-70 `}
                                     style={{ fontWeight: 'bold', position: 'absolute', bottom: '0px' }}
                                     onClick={() => { navigate(paths.MY_HISTORIES); }}
                                   >

@@ -10,6 +10,8 @@ export default {
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
   NOT_FOUND: "*",
+  ABOUT: "/about",
+  FAQ: "/faq",
 
   //Logado
   HOME_LOGGED: "/home",

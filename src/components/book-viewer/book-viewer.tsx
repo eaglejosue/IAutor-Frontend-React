@@ -29,15 +29,10 @@ const BookViewer = (props: BookViewerProps) => {
   const [right, setRight] = useState(1);
 
   const increase = async () => {
-    console.log('antes', left, right)
+
     setRight(right < bookViewerAr.length - 1 ? right + 2 : bookViewerAr.length);
     setLeft(left < bookViewerAr.length - 1 ? left + 2 : bookViewerAr.length - 1);
   };
-
-  useEffect(() => {
-    console.log('depois', left, right)
-    console.log(bookViewerAr)
-  }, [left, right])
 
   const decrease = async () => {
     setRight(left == 0 ? 1 : right - 2);
@@ -77,14 +72,6 @@ const BookViewer = (props: BookViewerProps) => {
 
   return (
     <div className="bgWaterMark">
-
-      <div className="row">
-        <div className="col-1  "></div>
-        <div className="col-10 text-center">
-          <h4>{props.book.title}</h4>
-        </div>
-        <div className="col-1  "></div>
-      </div>
 
       <div className="row ">
 
@@ -144,7 +131,13 @@ const BookViewer = (props: BookViewerProps) => {
         <div className="col-5   align-self-center text-center page-right-bg">{right + 1}/{bookViewerAr.length}</div>
         <div className="col-1   align-self-center text-end"></div>
       </div>
-
+      <div className="row">
+        <div className="col-1  "></div>
+        <div className="col-10 text-center text-white">
+          <h4>Visualização meramente ilustrativa - não reflete o livro impresso</h4>
+        </div>
+        <div className="col-1  "></div>
+      </div>
     </div>
   );
 };

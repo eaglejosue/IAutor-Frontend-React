@@ -50,19 +50,19 @@ const Footer = (p: FooterProps) => {
                 />
               </li>
               <li className="nav-item" style={{ fontWeight: 700 }}>
-                <a href="#history" className="nav-link px-4 text-body-primary">Home</a>
+                <a href="/" className="nav-link px-4 text-body-primary">Home</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#who" className="nav-link px-4 text-black">Sobre nós</a>
+                <a href="/about" className="nav-link px-4 text-black">Sobre nós</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#faq" className="nav-link px-4 text-black">FAQs</a>
+                <a href="/faq" className="nav-link px-4 text-black">FAQs</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#testemonials" className="nav-link px-4 text-black">Depoimentos</a>
+                <a href="./#testemonials" target='testemonials' className="nav-link px-4 text-black">Depoimentos</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
-                <a href="#plans" className="nav-link px-4 text-black">Ver Planos</a>
+                <a href="./#plans" className="nav-link px-4 text-black">Ver Planos</a>
               </li>
               <li className="nav-item" style={{ fontWeight: 400 }}>
                 <a href="mailto:faleconosco@iautor.com.br?subject=Contato site" className="nav-link px-4 text-black">Fale Conosco</a>
