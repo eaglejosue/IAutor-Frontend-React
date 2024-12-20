@@ -8,7 +8,7 @@
 .customModal {
   background: transparent !important;
   min-width: 800px !important;
-  max-height: 1200px !important;
+  min-height: 1200px !important;
   max-width: max-content !important;
 }
 
@@ -21,14 +21,15 @@
   background-image: url('../../assets/img/Camada_1.png');
   background-repeat: no-repeat;
   background-position: center;
-  
+  font-size: 12pt;
 }
 .page-left {
   background: linear-gradient(270deg, #B3B3B3 0%, #DADADA 9%, #DBDBDB 20%, #E4E4E4 27%, #F0F0F0 40%, #F4F4F4 53%, #F0F0F0 100%);
-  min-height: 650px;
+  min-height: 1200px;
   z-index: -1;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
+ 
 }
 .page-left-bg{
   background: linear-gradient(270deg, #B3B3B3 0%, #DADADA 9%, #DBDBDB 20%, #E4E4E4 27%, #F0F0F0 40%, #F4F4F4 53%, #F0F0F0 100%);
@@ -40,6 +41,7 @@
   z-index: -1;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
+  min-height: 1200px;
 }
 .page-right-bg{
   background: linear-gradient(90deg, #A1A1A1 0%, #DADADA 2%, #E4E4E4 9%, #F0F0F0 22%, #F4F4F4 35%, #F0F0F0 100%);
