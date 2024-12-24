@@ -40,7 +40,6 @@ const BookViewer = (props: BookViewerProps) => {
   };
 
   useEffect(() => {
-    debugger;
     let arBooks: BookViewerNavigate[] = [];
 
     props.plan.chapters
@@ -126,13 +125,13 @@ const BookViewer = (props: BookViewerProps) => {
       </div>
 
       <div className="row">
-        <div className="col-1   align-self-center text-end"></div>
-        <div className="col-5   align-self-center text-center page-left-bg">{left + 1}/{bookViewerAr.length}</div>
-        <div className="col-5   align-self-center text-center page-right-bg">{right + 1}/{bookViewerAr.length}</div>
-        <div className="col-1   align-self-center text-end"></div>
+        <div className="col-1 align-self-center text-end"></div>
+        <div className="col-5 align-self-center text-center page-left-bg">{left + 1}/{bookViewerAr.length}</div>
+        <div className="col-5 align-self-center text-center page-right-bg">{right + 1}/{bookViewerAr.length}</div>
+        <div className="col-1 align-self-center text-end"></div>
       </div>
-      <div className="row">
-        <div className="col-1  "></div>
+      <div className="row mt-2">
+        <div className="col-1 "></div>
         <div className="col-10 text-center text-white">
           <h4>Visualização meramente ilustrativa - não reflete o livro impresso</h4>
         </div>

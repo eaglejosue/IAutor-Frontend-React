@@ -62,7 +62,7 @@ export class QuestionService {
   }
 
   public async uploadPhotoQuestionUserAnswer(data: any) {
-    const response = await this._httpClient.post<string>(`${this.endpoint}/uploadPhotoQuestionUserAnswer/${data.idQuestionUserAnwser}/${encodeURI(data.label==''? '-':data.label)}`, {
+    const response = await this._httpClient.post<string>(`${this.endpoint}/upload-photo/${data.idQuestionUserAnwser}/${encodeURI(data.label==''? '-':data.label)}`, {
       data, headers: {
         'content-type': 'multipart/form-data',
       },
@@ -71,7 +71,7 @@ export class QuestionService {
   }
 
   public async updatePhotoQuestionUserAnswer(data: QuestionUserAnswerModel) {
-    const response = await this._httpClient.put<string>(`${this.endpoint}/user-answers-edit-photos`, {
+    const response = await this._httpClient.put<string>(`${this.endpoint}/update-photo`, {
       data
     });
     return response.data;

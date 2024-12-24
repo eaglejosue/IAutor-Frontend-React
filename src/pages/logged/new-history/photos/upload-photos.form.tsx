@@ -63,7 +63,7 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
       .then((response: any) => {
         setUserQuestionSelected(response);
         setValue('caption', response.imagePhotoLabel);
-        setUrlPostPhoto(`${import.meta.env.VITE_BASE_URL}questions/uploadPhotoQuestionUserAnswer/${response.id}`);
+        setUrlPostPhoto(`${import.meta.env.VITE_BASE_URL}questions/upload-photo/${response.id}/${response.imagePhotoLabel}`);
       })
       .catch((e) => {
         //@ts-ignore
