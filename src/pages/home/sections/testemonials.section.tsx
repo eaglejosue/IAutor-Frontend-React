@@ -28,23 +28,21 @@ const SectionTestemonials =() =>{
             </Tab.Content>
           </div>
           <div className="row ">
-            <div className="col-1"></div>
-            <div className="col-10"> <hr className="mb-5 mt-4"/></div>
-            <div className="col-1"></div>
+          
 
-            <div className="col-12">
-            <Nav  fill  className="flex-row" variant="underline">
+            <div className="col-lg-12 col-sm-12">
+            <Nav  fill  variant="underline">
               <Nav.Item>
-                <Nav.Link eventKey="first">
-                  <div className="row">
-                    <div className="col text-end">
+                <Nav.Link eventKey="first" >
+                  <div className="row" >
+                    <div className="col col-sm-4 col-lg-6 text-end" >
                       <img src={testemonial_ball} />
                     </div>
-                    <div className="col text-start">
+                    <div className="col col-sm-8 col-lg-6 text-start" >
                       <span>
                         <strong>Keila Galebe </strong>
                       </span>
-                      <br></br>@KeilaGalebe 
+                      @KeilaGalebe 
                     </div>
                   </div>
                 </Nav.Link>
@@ -52,14 +50,14 @@ const SectionTestemonials =() =>{
               <Nav.Item>
                 <Nav.Link eventKey="second">
                   <div className="row">
-                  <div className="col text-end">
+                  <div className="col col-sm-4 col-lg-6 text-end">
                       <img src={testemonial_ball} />
                     </div>
-                    <div className="col text-start">
+                    <div className="col col-sm-8 col-lg-6 text-start">
                       <span>
                         <strong>Liana Fonseca </strong>
                       </span>
-                      <br></br>@LianaFonseca 
+                      @LianaFonseca 
                     </div>
                   </div>
                 </Nav.Link>
@@ -67,14 +65,14 @@ const SectionTestemonials =() =>{
               <Nav.Item>
                 <Nav.Link eventKey="third">
                   <div className="row">
-                  <div className="col text-end">
+                  <div className="col col-sm-4 col-lg-6 text-end">
                       <img src={testemonial_ball} />
                     </div>
-                    <div className="col text-start">
+                    <div className="col col-sm-8 col-lg-6 text-start ">
                       <span>
                         <strong>Luiz Fernandes </strong>
                       </span>
-                      <br></br>@LuizCarlosFernandesJr 
+                      @LuizCarlosFernandesJr 
                     </div>
                   </div>
                 </Nav.Link>
