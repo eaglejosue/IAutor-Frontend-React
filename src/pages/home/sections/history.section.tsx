@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { home1, home2, home3, home4, scroll } from '../../../assets/svg';
 import verticalImgs from '../../../assets/vertical-imgs';
-import { Card, Carousel } from "react-bootstrap";
+import {  Carousel } from "react-bootstrap";
 
 interface CardHomeProps {
   title: string
