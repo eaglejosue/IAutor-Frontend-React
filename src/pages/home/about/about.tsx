@@ -1,11 +1,12 @@
 import Nav from "../../../components/nav/nav.component";
+import './about.scss'
 
 const About = () => {
   return (
     <>
       <div className="container ">
         <Nav />
-        <div className="row m-3">
+        <div className="row m-3 mobileAlign">
           <div className="col-1"></div>
           <div className="col-10">
             <h1>

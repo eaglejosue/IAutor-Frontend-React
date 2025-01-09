@@ -69,7 +69,7 @@ const SectionHistory = () => {
         </div>
         <div className="col-3"></div>
       </div>
-      <div className="row mobileShowHome history-backgroud mb-5 pb-3 ">
+      <div className="row mobileShowHome  mb-5 pb-3 ">
         <div className="col-sm-12 text-center ">
           <a
             className="btn btn-secondary rounded-5 f-14 px-5 py-3  btn-lg"
@@ -78,14 +78,14 @@ const SectionHistory = () => {
             <strong>Experimente Criar uma História</strong>
           </a>
         </div>
-        <div className="col-sm-12 mb-2 ">
+        <div className="col-sm-12 mb-2 history-backgroud">
           <div className="row text-center">
             <div className="d-flex justify-content-center z-0 ">
               <img
                 src={imgRandomSrc}
                 className="history-ipad img-fluid z-0"
                 style={{
-                  width: "400px",
+                  width: "350px",
                   marginTop: "30px",
                   height: "550px",
                   objectFit: "cover",

@@ -1,0 +1,26 @@
+.mobileShowSideBar {display: none !important ;} 
+.mobileShowSideBar {  } 
+  /* Smartphone Portrait and Landscape */ 
+  @media only screen and (max-width: 576px) {
+    .mobileShowSideBar {display: inline !important; text-align: center}
+    .desktopShowSideBar{display: none !important ; } 
+}
+.bgHeaderSideBar{
+    background: rgba(219, 55, 55, 1);
+    color: white;
+    
+}
+.bgBodySideBar{
+    background: rgba(188, 47, 47, 1);
+    height: 100vh;
+}
+.sair{
+    position: absolute;
+    bottom: 0;
+}
+.aNavLink,span{
+
+    vertical-align: middle;
+}
+    
+    

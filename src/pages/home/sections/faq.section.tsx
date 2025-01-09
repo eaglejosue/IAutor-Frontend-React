@@ -40,7 +40,7 @@ const SectionFaq =() =>{
           políticas.
         </p>
         <Accordion defaultActiveKey="0" className='accordion-faq'>
-      <Card className='mb-3 w-75'>
+      <Card className='mb-3 w-85'>
         <Card.Header className='card-header-faq mt-2'>
           <ContextAwareToggle eventKey="0">Posso cancelar o serviço?</ContextAwareToggle>
         </Card.Header>
@@ -49,7 +49,7 @@ const SectionFaq =() =>{
           Vale lembrar que essa condição é válida apenas se o livro não tiver sido finalizado e/ou enviado para impressão. </Card.Body>
         </Accordion.Collapse>
       </Card>
-      <Card className='mb-3 w-75'>
+      <Card className='mb-3 w-85'>
       <Card.Header className='card-header-faq mt-2'>
           <ContextAwareToggle eventKey="1">Posso não imprimir o livro?</ContextAwareToggle>
         </Card.Header>
@@ -59,7 +59,7 @@ const SectionFaq =() =>{
           </Card.Body>
         </Accordion.Collapse>
       </Card>
-      <Card className='mb-3 w-75'>
+      <Card className='mb-3 w-85'>
       <Card.Header className='card-header-faq mt-2'>
           <ContextAwareToggle eventKey="2">Consigo dividir minha assinatura com alguém?</ContextAwareToggle>
         </Card.Header>
@@ -72,7 +72,7 @@ const SectionFaq =() =>{
           </Card.Body>
         </Accordion.Collapse>
       </Card>
-      <Card className='mb-3 w-75'>
+      <Card className='mb-3 w-85'>
       <Card.Header className='card-header-faq mt-2'>
           <ContextAwareToggle eventKey="3">Posso solicitar mais cópias do livro?</ContextAwareToggle>
         </Card.Header>
