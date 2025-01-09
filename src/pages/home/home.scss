@@ -96,6 +96,13 @@
     margin-bottom: 80px;
     margin-top: 40px;
 
+    .mobileTestemonialShow {display: none !important ;} 
+    .desktopTestemonialShow  { } 
+    /* Smartphone Portrait and Landscape */ 
+    @media only screen and (max-width: 576px) {
+        .mobileTestemonialShow {display: inline !important;background-color: red !important; }
+        .desktopTestemonialShow{display: none !important ; } 
+    }
 
 
 

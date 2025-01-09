@@ -1,0 +1,6 @@
+.mobileAlign {text-align: left;} 
+    /* Smartphone Portrait and Landscape */ 
+    @media only screen and (max-width: 576px) {
+        .mobileAlign {text-align: center;} 
+       
+    }

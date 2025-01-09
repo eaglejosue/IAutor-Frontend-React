@@ -13,3 +13,4 @@ export {default as arrowLeft} from './arrow-left.svg'
 export {default as arrowRight} from './arrow-right.svg'
 
 export {default as myHistories} from './my-histories.svg'
+export {default as paid} from './paid.svg'
