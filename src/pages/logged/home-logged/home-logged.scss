@@ -1,18 +1,47 @@
 .rectangle-right-admin{
-     
         height: 100%;
         gap: 0px;
         border-radius: 8px;
         border: 1px 0px 0px 0px;
         opacity: 0px;
         background: rgba(219, 55, 55, 1);
-        background-image: url('../../assets/img/rectangle_home_right_admin.png');
+        background-image: url('../../../assets/img/rectangle_home_right_admin.png');
         background-repeat: no-repeat;
         float: right;
         background-position: right;
         color: white;
         padding-left: 60px !important;
-   
+        @media only screen and (max-width: 767px) {
+          background-image: none;
+          text-align: center;
+          padding: 20px !important;        
+       }  
+}
+.alignResponsive{
+  @media only screen and (max-width: 767px) {
+    text-align: center;
+ }
+}
+.historyLogged{
+  @media only screen and (max-width: 767px) {
+    text-align: center;
+    margin-top: 40px;
+  }
+}
+.historyLoggedButton{
+  @media only screen and (max-width: 767px) {
+    margin:10px;
+  }
+}
+.cardMobile{
+  gap: 0px;
+  border-radius: 8px ;
+  border: 1px 0px 0px 0px;
+  opacity: 0px;
+  margin-bottom: 40px;
+}
+.bgButtonStatus{
+  background: rgba(246, 245, 244, 1);
 }
 .home-explore{
 
@@ -23,10 +52,15 @@
         border: 1px solid rgba(217, 217, 217, 1);
         border-radius: 8px;
         opacity: 0px;
-        background-image: url('../../assets/img/Rectangle_saiba_mais.png');
+        background-image: url('../../../assets/img/Rectangle_saiba_mais.png');
         background-repeat: no-repeat;
         background-position: right;
         background-color: white;
+        @media only screen and (max-width: 767px) {
+          background-image: none;
+          text-align: center;
+           
+       }  
     }
     .explore-right{
         
@@ -36,10 +70,16 @@
         border: 1px solid rgba(217, 217, 217, 1);
         border-radius: 8px;
         opacity: 0px;
-        background-image: url('../../assets/img/Rectangle_faq.png');
+        background-image: url('../../../assets/img/Rectangle_faq.png');
         background-repeat: no-repeat;
         background-position: right;
         background-color: white;
+        @media only screen and (max-width: 767px) {
+          background-image: none;
+          text-align: center;
+          margin-top: 20px;
+           
+       }  
     }
 }
 .threedots:after {

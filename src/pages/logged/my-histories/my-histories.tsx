@@ -15,12 +15,12 @@ import { PlanService } from '../../../common/http/api/planService';
 import { QuestionUserAnswerModel } from '../../../common/models/question-user-answer.model';
 import { QuestionModel } from '../../../common/models/question.model';
 
-import Sidebar from '../../../components/nav/sidebar.component';
-import NavUserOptions from '../../../components/nav/nav-user-options.component';
+
 import BookViewer from '../../../components/book-viewer/book-viewer';
 
 import paths from '../../../routes/paths';
 import './my-histories.scss'
+import NavResponsive from '../../../components/nav/nav-responsive.component';
 
 const NewHistory = () => {
   const navigate = useNavigate();
@@ -192,52 +192,54 @@ const NewHistory = () => {
   };
 
   return (
-    <div className='d-flex' style={{ height: '100vh' }}>
-      <Sidebar navItem='my-histories' />
-      <div className='flex-grow-1'>
-        <header className='bg-white border-bottom p-3'>
-          <div className='row align-items-center justify-content-beetwen'>
-            <div className='col-auto fw-bold f-18 pe-0'>IAutor /</div>
-            <div className='col-auto f-18 ps-1'>Minhas Histórias</div>
-            <div className='col'>
-              <NavUserOptions />
-            </div>
-          </div>
-        </header>
-
-        <main className='main '>
-          <div className='container-fluid'>
-            <div className='row m-5'>
-              <div className='col-8 gx-0'>
-                <h4>
-                  <strong>Minhas histórias </strong>
-                </h4>
-                <p>
-                  <strong>{''.padStart(books?.length > 9 ? 0 : 1, '0') + books?.length.toString()}</strong>  História(s) criada(s) até o momento
-                </p>
+    <>
+      <NavResponsive navItem="my-histories" navItemLabel="Minha Histórias" />
+      <div className="container-fluid ">
+        <div className="row">
+          <main
+            className="col-md-9 ms-sm-auto
+                      col-lg-11  "
+            style={{ marginTop: "70px" }}
+          >
+               <div className="p-0">
+              {/* conteudo */}
+              <div className="row m-5">
+                <div className="col-8 gx-0">
+                  <h4>
+                    <strong>Minhas histórias </strong>
+                  </h4>
+                  <p>
+                    <strong>
+                      {"".padStart(books?.length > 9 ? 0 : 1, "0") +
+                        books?.length.toString()}
+                    </strong>{" "}
+                    História(s) criada(s) até o momento
+                  </p>
+                </div>
+                <div className="col-2"></div>
+                <div className="col-2">
+                  <Button
+                    variant=" btn-secondary"
+                    onClick={() => {
+                      navigate(paths.PRICING_PLANS);
+                    }}
+                    className=" rounded-5  f-14  p-3"
+                  >
+                    <strong>Criar história</strong>
+                  </Button>
+                </div>
               </div>
-              <div className='col-2'></div>
-              <div className='col-2'>
-                <Button
-                  variant=' btn-secondary'
-                  onClick={() => { navigate(paths.PRICING_PLANS); }}
-                  className=' rounded-5  f-14  p-3'
-                >
-                  <strong>Criar história</strong>
-                </Button>
+              <div className="row m-5">
+                <div className="col-1 gx-0 text-primary">
+                  <strong>Histórias</strong>
+                  <hr></hr>
+                </div>
+                <div className="col-11 gx-0">
+                  &nbsp;
+                  <hr></hr>
+                </div>
               </div>
-            </div>
-            <div className='row m-5'>
-              <div className='col-1 gx-0 text-primary'>
-                <strong>Histórias</strong>
-                <hr></hr>
-              </div>
-              <div className='col-11 gx-0'>
-                &nbsp;
-                <hr></hr>
-              </div>
-            </div>
-            <div className='row m-5'>
+              <div className='row m-5'>
               {
                 isLoading ?
                   (
@@ -252,17 +254,24 @@ const NewHistory = () => {
               }
 
             </div>
-          </div>
-        </main>
+            </div>
+          </main>
+        </div>
+        <ModalResponsive
+          open={isBookPreviewModalOpen}
+          closeIcon={closeIcon}
+          center
+          classNames={{ overlay: "customOverlay", modal: "customModal" }}
+          onClose={() => setIsBookPreviewModalOpen(false)}
+        >
+          <BookViewer
+            book={book}
+            plan={plan}
+            questionUserAnswers={questionUserAnswers}
+          />
+        </ModalResponsive>
       </div>
-
-      <ModalResponsive open={isBookPreviewModalOpen} closeIcon={closeIcon} center
-        classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
-        onClose={() => setIsBookPreviewModalOpen(false)}
-      >
-        <BookViewer book={book} plan={plan} questionUserAnswers={questionUserAnswers} />
-      </ModalResponsive>
-    </div>
+    </>
   );
 };
 
