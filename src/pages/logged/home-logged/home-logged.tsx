@@ -11,13 +11,12 @@ import { ChapterModel } from '../../../common/models/chapter.model';
 import { QuestionUserAnswerModel } from '../../../common/models/question-user-answer.model';
 import { QuestionModel } from '../../../common/models/question.model';
 
-import Sidebar from '../../../components/nav/sidebar.component';
-import NavUserOptions from '../../../components/nav/nav-user-options.component';
 import EmptyHomeLogged from '../../home/sections/empty-logged.section';
 import BooksHistory from '../../home/sections/books-history-section';
 import BookViewer from '../../../components/book-viewer/book-viewer';
 
 import './home-logged.scss'
+import NavResponsive from '../../../components/nav/nav-responsive.component';
 
 const HomeLogged = () => {
   const user = AuthenticatedUserModel.fromLocalStorage();
@@ -93,24 +92,16 @@ const HomeLogged = () => {
 
   return (
     <>
-      <div className="d-flex" style={{ height: "100vh" }}>
-        <Sidebar navItem="home" />
-        <section className="flex-grow-1">
-
-          <header className="bg-white border-bottom p-3">
-            <div className="row align-items-center justify-content-beetwen">
-              <div className="col-auto fw-bold f-18 pe-0">IAutor /</div>
-              <div className="col-auto f-18 ps-1">Home</div>
-              <div className="col">
-                <NavUserOptions />
-              </div>
-            </div>
-          </header>
-
-          <main className="main">
-            <div className="container-fluid">
-              <div className="row m-5">
-
+      <NavResponsive navItem="home" navItemLabel='Home' />
+      <div className="container-fluid " >
+        <div className="row"  >
+          <main
+            className="col-md-9 ms-sm-auto
+                        col-lg-11  " style={{marginTop:'70px'}}
+          >
+            <div className="p-3">
+      
+            <div className="row mb-4 pt-4 ">
                 {isLoading ? (
                   <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
                     <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status" />
@@ -122,17 +113,16 @@ const HomeLogged = () => {
                 )
                 }
               </div>
-
               <div className="row ">
                 <div className="col-12">
-                  <div className="row home-explore m-5 mt-0 bg-white p-5 border rounded">
-                    <div className="col-12 mb-4">
+                  <div className="row home-explore bg-white border rounded p-5">
+                    <div className="col-12 mb-4 alignResponsive">
                       <h4>
                         <strong>Explore o IAutor</strong>
                       </h4>
                     </div>
 
-                    <div className="col-5 explore-left p-5">
+                    <div className="col-md-5 explore-left p-5">
                       <span>
                         <strong>Saiba mais sobre o IAutor</strong>
                       </span>
@@ -147,7 +137,7 @@ const HomeLogged = () => {
                       </Button>
                     </div>
                     <div className="col-2 "></div>
-                    <div className="col-5 explore-right p-5 ">
+                    <div className="col-md-5  explore-right p-5  ">
                       <span>
                         <strong>FAQ</strong>
                       </span>
@@ -167,15 +157,21 @@ const HomeLogged = () => {
               </div>
             </div>
           </main>
-
-        </section>
+        </div>
       </div>
 
-      <ModalResponsive open={isBookPreviewModalOpen} closeIcon={closeIcon} center
-        classNames={{ overlay: 'customOverlay', modal: 'customModal' }}
+      <ModalResponsive
+        open={isBookPreviewModalOpen}
+        closeIcon={closeIcon}
+        center
+        classNames={{ overlay: "customOverlay", modal: "customModal" }}
         onClose={() => setIsBookPreviewModalOpen(false)}
       >
-        <BookViewer book={book} plan={plan} questionUserAnswers={questionUserAnswers} />
+        <BookViewer
+          book={book}
+          plan={plan}
+          questionUserAnswers={questionUserAnswers}
+        />
       </ModalResponsive>
     </>
   );
