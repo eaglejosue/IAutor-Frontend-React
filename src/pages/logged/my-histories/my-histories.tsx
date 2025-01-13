@@ -130,12 +130,12 @@ const NewHistory = () => {
   const ItemCards: FunctionComponent<ItemCardProps> = (props) => {
     return (
       <>
-        <div className='col-3'>
-          <Card className='border-card'>
-            <Card.Body>
+        <div className='col-md-3 d-flex justify-content-center mb-2'  >
+          <Card className='border-card '>
+            <Card.Body className='m-0  '>
               <div className='row m-2'>
                 <div className='col-8'>
-                  <span className='border rounded-5 text-secondary  py-2 p-2'>
+                  <span className='border rounded-5 text-secondary  py-2 p-2 bgButtonStatus'>
                     {props.book?.plan?.title}
                   </span>
                 </div>
@@ -151,6 +151,7 @@ const NewHistory = () => {
                       </Dropdown.Item>
                       <Dropdown.Item
                         disabled={true}
+                        className='d-none d-md-block'
                         onClick={() => handlerVisualizar(props.book)}
                       >
                         Visualizar
@@ -174,19 +175,21 @@ const NewHistory = () => {
                   <br></br>
                   <br></br>
                 </div>
-                <div className='col-12 colIcon  mt-3'>
+                <div className='col-12 colIcon  mt-3 alignResponsive'>
                   <img src={myHistories} alt='My-histories'></img>
                 </div>
-                <div className='col-12  mt-3 '>
+                <div className='col-12  mt-3 alignResponsive'>
                   {props.book.title}
                 </div>
-                <div className='col-12   '>
+                <div className='col-12   alignResponsive'>
                   <small>{props.book?.updatedAt != null ? `Última edição há ${differenceInDays(new Date(), props.book?.updatedAt)} dias` : ''}</small>
                 </div>
               </div>
             </Card.Body>
           </Card>
         </div>
+
+     
       </>
     );
   };
@@ -203,8 +206,8 @@ const NewHistory = () => {
           >
                <div className="p-0">
               {/* conteudo */}
-              <div className="row m-5">
-                <div className="col-8 gx-0">
+              <div className="row mt-4">
+                <div className="col-md-8 gx-0 alignResponsive">
                   <h4>
                     <strong>Minhas histórias </strong>
                   </h4>
@@ -216,30 +219,37 @@ const NewHistory = () => {
                     História(s) criada(s) até o momento
                   </p>
                 </div>
-                <div className="col-2"></div>
-                <div className="col-2">
-                  <Button
-                    variant=" btn-secondary"
-                    onClick={() => {
-                      navigate(paths.PRICING_PLANS);
-                    }}
-                    className=" rounded-5  f-14  p-3"
-                  >
-                    <strong>Criar história</strong>
-                  </Button>
-                </div>
+        
+                <div className="col-md-2 text-end d-none d-md-block">
+                           <Button
+                             variant=" btn-secondary"
+                             onClick={() => navigate(paths.PRICING_PLANS)}
+                             className=" rounded-5  f-14  p-3 d-none d-md-block"
+                           >
+                             <strong>Criar história</strong>
+                           </Button>
+                         </div>
+                         <div className="col-md-2 text-end  gap-2 d-grid d-md-none ">
+                           <Button
+                             variant=" btn-secondary"
+                             onClick={() => navigate(paths.PRICING_PLANS)}
+                             className=" rounded-5  f-14  p-3 historyLoggedButton"
+                           >
+                             <strong>Criar história</strong>
+                           </Button>
+                         </div>
               </div>
-              <div className="row m-5">
-                <div className="col-1 gx-0 text-primary">
+              <div className="row mt-2 alignResponsive">
+                <div className="col-md-1 gx-0 text-primary alignResponsive">
                   <strong>Histórias</strong>
                   <hr></hr>
                 </div>
-                <div className="col-11 gx-0">
+                <div className="col-11 gx-0 d-none d-md-block">
                   &nbsp;
                   <hr></hr>
                 </div>
               </div>
-              <div className='row m-5'>
+              <div className='row mt-4'>
               {
                 isLoading ?
                   (
@@ -247,9 +257,13 @@ const NewHistory = () => {
                       <div className='spinner-border text-primary' style={{ width: '3rem', height: '3rem' }} role='status' />
                     </div>
                   ) : (
+       
                   books?.map((b: BookModel) => {
                     return (ItemCards({ book: b }))
+                    
                   })
+               
+                
                 )
               }
 

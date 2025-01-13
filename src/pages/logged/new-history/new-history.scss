@@ -1,0 +1,20 @@
+.bgHeaderSideBar{
+    background: rgba(219, 55, 55, 1);
+    color: white;
+    
+}
+.bgBodySideBar{
+    background: rgba(188, 47, 47, 1);
+    height: 100vh;
+}
+.aNavLink,span{
+
+    vertical-align: middle;
+}
+
+
+.marginLeftContainer {margin-left: 2.6rem}
+@media only screen and (max-width: 767px) {
+    .marginLeftContainer { margin-left: 0px !important;}
+   
+}

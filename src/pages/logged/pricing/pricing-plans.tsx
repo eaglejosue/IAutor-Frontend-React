@@ -1,6 +1,3 @@
-import NavUserOptions from '../../../components/nav/nav-user-options.component';
-import Sidebar from '../../../components/nav/sidebar.component';
-
 import { PlanItens, PlanModel } from '../../../common/models/plan.model';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -10,6 +7,7 @@ import { PlanService } from '../../../common/http/api/planService';
 import paths from '../../../routes/paths';
 import '../../home/home.scss'
 import './pricing-plans.scss'
+import NavResponsive from '../../../components/nav/nav-responsive.component';
 
 const PricingPlans = ()=>{
   const navigate = useNavigate();
@@ -42,23 +40,18 @@ const PricingPlans = ()=>{
         };
     return (
       <>
-        <div className='d-flex' style={{ height: '100vh' }}>
-          <Sidebar navItem='my-histories' />
-          <div className='flex-grow-1'>
-            <header className='bg-white border-bottom p-3'>
-              <div className='row align-items-center justify-content-beetwen'>
-                <div className='col-auto fw-bold f-18 pe-0'>IAutor /</div>
-                <div className='col-auto f-18 ps-1'>Pacotes e preços</div>
-                <div className='col'>
-                  <NavUserOptions />
-                </div>
-              </div>
-            </header>
-
-            <main className='main '>
-              <div className='container-fluid'>
-                <div className='row m-5'>
-                  <div className='col-12 text-center'>
+       <NavResponsive navItem="Pacotes" navItemLabel={'Pacotes e Preços'} />
+      <div className="container-fluid ">
+        <div className="row">
+          <main
+            className="col-md-9 ms-sm-auto
+                        col-lg-11  "  style={{marginTop:'70px'}}
+          >
+            <div className="pt-0">
+              
+                {/* conteudo */}
+                <div className='row mt-5'>
+                  <div className='col-12 alignResponsive'>
                     <h4>
                       <strong>Pacotes e preços </strong>
                     </h4>
@@ -67,57 +60,57 @@ const PricingPlans = ()=>{
                     </p>
                   </div>
                 </div>
-                <div className='row m-5'>
+                <div className='row '>
 
-                    {plans?.map((r: PlanModel, i: number) => {
-                      return (
-                        <div key={i.toString()} className='col-sm-12 col-lg-4 mt-2'>
-                          <div className={`card ${(i === 1 ? 'bg-primary  text-white' : '')}`} style={{ minHeight: '500px' }}>
-                            <div className='card-body text-start'>
-                              <h5 className='m-2'>
-                                <strong>{r.title}</strong>
-                              </h5>
-                              <div className='row '>
-                                <div className='col-12 m-2'>
-                                  <h1>
-                                    <strong>{r.currency} {r.price}</strong>{' '}
-                                    <small className='fs-6'></small>
-                                  </h1>
-                                </div>
-                              </div>
-                              <p className='mb-5 m-2'>{r.description}</p>
-                              <hr />
-                              <ul className='mt-5 mb-4 f-14'>
-                                {
-                                  r.planItems?.map((r: PlanItens, i: number) => {
-                                    return (
-                                      <li key={i.toString()} className='fw-bold'>{r.description}</li>
-                                    )
-                                  })
-                                }
-                              </ul>
-                              <hr />
-                              <div className='row text-center'>
-                                <div className='d-flex justify-content-center pt-3'>
-                                  <div className={`btn ${i == 1 ? 'bg-white text-black btnComprarBlack' : 'bg-secondary text-white btnComprarRed'} rounded-5 f-13 py-3 mb-4 w-70 `}
-                                    style={{ fontWeight: 'bold', position: 'absolute', bottom: '0px' }}
-                                    onClick={() => { navigate(paths.MY_HISTORIES); }}
-                                  >
-                                    Comprar agora
-                                  </div>
-                                </div>
+                {plans?.map((r: PlanModel, i: number) => {
+                  return (
+                    <div key={i.toString()} className='col-sm-12 col-lg-4 mt-4'>
+                      <div className={`card ${(i === 1 ? 'bg-primary  text-white' : '')}`} style={{ minHeight: '500px' }}>
+                        <div className='card-body text-start'>
+                          <h5 className='m-2'>
+                            <strong>{r.title}</strong>
+                          </h5>
+                          <div className='row '>
+                            <div className='col-12 m-2'>
+                              <h1>
+                                <strong>{r.currency} {r.price}</strong>{' '}
+                                <small className='fs-6'></small>
+                              </h1>
+                            </div>
+                          </div>
+                          <p className='mb-5 m-2'>{r.description}</p>
+                          <hr />
+                          <ul className='mt-5 mb-4 f-14'>
+                            {
+                              r.planItems?.map((r: PlanItens, i: number) => {
+                                return (
+                                  <li key={i.toString()} className='fw-bold'>{r.description}</li>
+                                )
+                              })
+                            }
+                          </ul>
+                          <hr />
+                          <div className='row text-center'>
+                            <div className='d-flex justify-content-center pt-3'>
+                              <div className={`btn ${i == 1 ? 'bg-white text-black btnComprarBlack' : 'bg-secondary text-white btnComprarRed'} rounded-5 f-13 py-3 mb-4 w-70 `}
+                                style={{ fontWeight: 'bold', position: 'absolute', bottom: '0px' }}
+                                onClick={() => { navigate(paths.MY_HISTORIES); }}
+                              >
+                                Comprar agora
                               </div>
                             </div>
                           </div>
                         </div>
-                      );
-                    })}
+                      </div>
+                    </div>
+                  );
+                })}
 
                 </div>
-              </div>
-            </main>
-          </div>
+            </div>
+          </main>
         </div>
+      </div>
       </>
     );
 }

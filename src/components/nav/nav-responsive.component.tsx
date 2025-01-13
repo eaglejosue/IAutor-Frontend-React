@@ -7,6 +7,7 @@ import paths from "../../routes/paths";
 import NavUserOptions from "./nav-user-options.component";
 import './sidebar.scss';
 import Logo from '../../assets/img/favicon-32x32.png';
+import { Offcanvas } from "react-bootstrap";
 
 export interface Props {
   navItem: string;
@@ -18,6 +19,10 @@ const NavResponsive = (p: Props) => {
       const navigate = useNavigate();
       //const user = AuthenticatedUserModel.fromLocalStorage();
       const [user, setUser] = useState<AuthenticatedUserModel>();
+      const [show, setShow] = useState(false);
+
+      const handleClose = () => setShow(false);
+      const handleShow = () => setShow(true);
 
       useEffect(() => {
         const user = AuthenticatedUserModel.fromLocalStorage();
@@ -37,8 +42,7 @@ const NavResponsive = (p: Props) => {
         <button
           className="navbar-toggler d-block d-md-none p-0 m-3"
           style={{border:'none'}}
-          data-bs-toggle="offcanvas"
-          data-bs-target="#sidebar"
+          onClick={()=>handleShow()}
           aria-controls="sidebar"
         >
           <FontAwesomeIcon icon={faBars} />
@@ -69,23 +73,13 @@ const NavResponsive = (p: Props) => {
           </span>
         </div>
       </nav>
-      <div
-        className="offcanvas offcanvas-start  
-                bg-success d-md-block"
-        tabIndex={-1}
-        id="sidebar"
-        aria-labelledby="sidebarLabel"
-      >
-        <div className="offcanvas-header bgHeaderSideBar">
-          <button
-            type="button"
-            className="btn-close text-reset"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div className="offcanvas-body bgHeaderSideBar p-0">
-          <div className="row text-start m-4 ">
+
+      <Offcanvas show={show} onHide={handleClose}>
+        <Offcanvas.Header closeButton className="bgHeaderSideBar">
+          <Offcanvas.Title></Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body className="bgHeaderSideBar p-0">
+        <div className="row text-start m-4 ">
                        <div className="col-12">
                          {user?.profileImgUrl ? (
                            <img
@@ -111,7 +105,7 @@ const NavResponsive = (p: Props) => {
                                href="#"
                                className="nav-link text-white text-decoration-underline"
                                aria-label="Close"
-                               onClick={() => {navigate(paths.MY_ACCOUNT);}}
+                               onClick={() => { navigate(paths.MY_ACCOUNT);handleClose()}}
                              >
                            {user?.firstname} {user?.lastname}
                            </a>
@@ -124,6 +118,7 @@ const NavResponsive = (p: Props) => {
                          </button>
                        </div>
                      </div>
+
                      <div className="bgBodySideBar pt-3">
                        <div className="row text-start m-4 ">
                          <h3>
@@ -136,7 +131,7 @@ const NavResponsive = (p: Props) => {
                                href="#"
                                className="nav-link text-white"
                                aria-label="Close"
-                               onClick={() => {navigate(paths.HOME_LOGGED);}}
+                               onClick={() => {navigate(paths.HOME_LOGGED);handleClose()}}
                              >
                                <span
                                  className="material-symbols-outlined text-white "
@@ -153,7 +148,7 @@ const NavResponsive = (p: Props) => {
                                href="#"
                                className="nav-link text-white"
                                onClick={() =>
-                                 {navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`); }
+                                 {navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`);handleClose() }
                                }
                              >
                                <span
@@ -170,7 +165,7 @@ const NavResponsive = (p: Props) => {
                              <a
                                href="#"
                                className="nav-link text-white"
-                               onClick={() => {navigate(paths.MY_HISTORIES);}}
+                               onClick={() => {navigate(paths.MY_HISTORIES);handleClose()}}
                              >
                                <span
                                  className="material-symbols-outlined text-white"
@@ -185,7 +180,7 @@ const NavResponsive = (p: Props) => {
                              <a
                                href="#"
                                className="nav-link text-white"
-                               onClick={() => {navigate(paths.PRICING_PLANS);}}
+                               onClick={() => {navigate(paths.PRICING_PLANS);handleClose()}}
                              >
                                <span
                                  className="material-symbols-outlined text-white"
@@ -200,7 +195,7 @@ const NavResponsive = (p: Props) => {
                              <a
                                href="#"
                                className="nav-link text-white"
-                               onClick={() => logout()}
+                               onClick={() => {logout();handleClose()}}
                              >
                                <span
                                  className="material-symbols-outlined text-white"
@@ -214,9 +209,10 @@ const NavResponsive = (p: Props) => {
                          </ul>
                        </div>
                      </div>
-        </div>
-      </div>
-
+        </Offcanvas.Body>
+      </Offcanvas>
+      
+     
       <div
         className=" d-none d-md-flex position-fixed "
         style={{ height: "100vh",marginTop:'70px' }}
