@@ -4,7 +4,7 @@ import './about.scss'
 const About = () => {
   return (
     <>
-      <div className="container ">
+      <div className="container">
         <Nav />
         <div className="row m-3 mobileAlign">
           <div className="col-1"></div>

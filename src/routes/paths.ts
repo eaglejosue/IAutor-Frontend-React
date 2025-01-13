@@ -12,6 +12,7 @@ export default {
   NOT_FOUND: "*",
   ABOUT: "/about",
   FAQ: "/faq",
+  PAYMENT_TERMS: "/payment-terms",
 
   //Logado
   HOME_LOGGED: "/home",
