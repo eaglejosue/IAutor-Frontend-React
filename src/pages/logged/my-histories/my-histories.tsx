@@ -154,14 +154,14 @@ const NewHistory = () => {
       <>
         <div className='col-md-3 d-flex justify-content-center mb-2'  >
           <Card className='border-card '>
-            <Card.Body className='m-0  '>
-              <div className='row m-2'>
-                <div className='col-8'>
+            <Card.Body >
+              <div className='row m-1'>
+                <div className='col-9'>
                   <span className='border rounded-5 text-secondary  py-2 p-2 bgButtonStatus'>
                     {props.book?.plan?.title}
                   </span>
                 </div>
-                <div className="col-4 text-end " style={{ marginTop: "-15px" }}>
+                <div className="col-3 text-end " style={{ marginTop: "-15px" }}>
                   <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} />
                     <Dropdown.Menu>
@@ -205,7 +205,7 @@ const NewHistory = () => {
                 <div className='col-12  mt-3 alignResponsive'>
                   {props.book.title}
                 </div>
-                <div className='col-12   alignResponsive'>
+                <div className='col-12   alignResponsive text-muted'>
                   <small>{props.book?.updatedAt != null ? `Última edição há ${differenceInDays(new Date(), props.book?.updatedAt)} dias` : ''}</small>
                 </div>
               </div>
