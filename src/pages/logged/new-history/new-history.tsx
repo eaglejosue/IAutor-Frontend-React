@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars,  faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBars,  faChevronRight,  faUser } from '@fortawesome/free-solid-svg-icons';
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import { Modal, ModalHeader, Nav, Offcanvas, Tab } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -39,6 +39,8 @@ import hearts from '../../../assets/svg/hearts.svg';
 import WomanIsTyping from '../../../assets/img/woman-is-typing-laptop-with-lamp-her.png';
 import Logo from '../../../assets/img/favicon-32x32.png'
 import './new-history.scss'
+import React from 'react';
+import {  help } from '../../../assets/img';
 
 const NewHistory = () => {
 
@@ -121,7 +123,21 @@ const NewHistory = () => {
       saveUserAcceptedTerms();
     }
   };
-
+  const CustomToggle = React.forwardRef(({ children, onClick }: any, ref) => (
+    <a
+      href=''
+      style={{ textDecoration: 'none' }}
+      //@ts-ignore
+      ref={ref}
+      onClick={e => {
+        e.preventDefault();
+        onClick(e);
+      }}
+    >
+      {children}
+      <p className='threedots' />
+    </a>
+  ));
   const saveUserAcceptedTerms = async () => {
     setIsLoading2(true);
     const user = AuthenticatedUserModel.fromLocalStorage()!;
@@ -599,6 +615,27 @@ const NewHistory = () => {
                 )}
               </span>
             </span>
+            <span className=" float-start px-5 " style={{ display: "flex" }}>
+            <div className='row align-items-center'>
+                <div className='col-auto'>
+                  <b className='bg-pink text-primary rounded-5 f-12 px-4 py-1'>
+                    Criação
+                  </b>
+                </div>
+                <div className='col-auto f-12'>
+                  <FontAwesomeIcon icon={faChevronRight} style={{ color: '#7F7F8B' }} />
+                </div>
+                <div className='col-auto'
+                >
+                  <a className='btn bg-secondary text-white rounded-5 f-12 px-4 py-1'
+                    style={{ fontWeight: 'bold' }}
+                    onClick={() => { handleFinalizeClick() }}
+                  >
+                    Finalizar
+                  </a>
+                </div>
+              </div>
+            </span>
             <span className="float-end">
               <NavUserOptions />
             </span>
@@ -844,16 +881,28 @@ const NewHistory = () => {
   const CapitulosSection:FunctionComponent =()=> {
     return (
       <>
-        <div className="col-md-3 border-end p-4">
+        <div className="col-md-3 border-end paddingResponsive">
           <div className="d-flex align-items-center justify-content-between border-bottom px-4 pb-4">
-            <b className="f-16">Capítulos</b>
+            <b className="f-16 d-none d-md-block">Capítulos</b>
             <div
-              className="text-primary fw-bold rounded-5 f-10 px-4 py-1"
+              className="text-primary fw-bold rounded-5 f-10 px-4 py-1 d-none d-md-block"
               style={{ border: "1px solid #db3737" }}
             >
               {plan.chapters?.length} Capítulo
               {(plan.chapters?.length ?? 1) > 1 ? "s" : ""}
             </div>
+                <div className="clearfix w-100 d-block d-md-none ">
+      
+                    <div
+                  className="text-primary fw-bold rounded-5 f-10 px-4 py-1 mt-3 float-end "
+                  style={{ border: "1px solid #db3737" }}
+                >
+                  {plan.chapters?.length} Capítulo
+                  {(plan.chapters?.length ?? 1) > 1 ? "s" : ""}
+                </div>
+            </div>
+
+
           </div>
 
           {isLoading2 && (
@@ -874,7 +923,7 @@ const NewHistory = () => {
             return (
               <div
                 key={index}
-                className={`border-bottom p-3 ${chapter.id === c.id ? "bg-iautor-color" : ""}`}
+                className={`border-bottom p-3  ${chapter.id === c.id ? "bg-iautor-color" : "bg-white"}`}
                 style={{ cursor: "pointer" }}
                 onClick={() => {
                   handleChapterClick(c.id);
@@ -935,7 +984,7 @@ const NewHistory = () => {
           })}
 
           {/* Img baixo */}
-          <div id="img-baixo" className="pb-2 mt-5">
+          <div id="img-baixo" className="pb-2 mt-5 d-none d-md-block">
             <div className="d-flex justify-content-center">
               <img
                 src={imgRandomSrc}
@@ -974,7 +1023,7 @@ const NewHistory = () => {
   const PerguntasSection:FunctionComponent =()=> {
     return (
       <>
-      <div className="d-flex align-items-center border-bottom px-4 py-3">
+                  <div className=" align-items-center border-bottom px-4 py-3 d-none d-md-flex">
                     <div
                       className="d-flex bg-primary align-items-center justify-content-center"
                       style={{
@@ -991,7 +1040,7 @@ const NewHistory = () => {
                         quiz
                       </span>
                     </div>
-                    <div className="f-14">
+                    <div className="f-14 ">
                       <b>Perguntas</b>
                       <div>
                         Responda as perguntas abaixo para criar sua história
@@ -1013,7 +1062,7 @@ const NewHistory = () => {
                     </div>
                   ) : (
                     <>
-                      <div className="d-flex align-items-center justify-content-between px-5 pt-5">
+                      <div className="d-flex align-items-center justify-content-between paddingResponsivePerguntasHeader ">
                         <div>
                           <div className="f-14">
                             Capítulo {chapter.chapterNumber}
@@ -1028,7 +1077,7 @@ const NewHistory = () => {
                           {chapter.questions?.length}
                         </div>
                       </div>
-                      <div className="d-flex align-items-center justify-content-between px-5 pt-3">
+                      <div className="d-flex align-items-center justify-content-between paddingResponsivePerguntas ">
                         <div>
                           <span className="text-primary">
                             {questionIndex + 1} -{" "}
@@ -1040,7 +1089,7 @@ const NewHistory = () => {
                   )}
 
                   {/* Área resposta */}
-                  <div className="d-flex px-5 pt-4">
+                  <div className="d-flex paddingResponsivePerguntasBody ">
                     <TextareaAutosize
                       onChange={(e) => {
                         setAnswer(e.target.value);
@@ -1061,8 +1110,8 @@ const NewHistory = () => {
                     />
                   </div>
 
-                  {/* Limite caracter, temas e botão IA */}
-                  <div className="d-flex align-items-center justify-content-between px-5 py-3">
+                  {/* Limite caracter, temas e botão IA - DESKTOP */}
+                  <div className="d-none d-md-flex align-items-center justify-content-between px-5 py-3">
                     <span className="text-muted f-14">
                       {answer.length} / {question.maxLimitCharacters}
                     </span>
@@ -1203,12 +1252,173 @@ const NewHistory = () => {
                       <img className="ps-1" src={artificialInteligence} />
                     </div>
                   </div>
+                  {/* Limite caracter, temas e botão IA - MOBILE */}
+                  <div className="clearfix w-100 d-flex d-md-none paddingLimitesTemas" >
+
+                      <span className="float-start  w-50 text-muted f-14">
+                          {answer.length} / {question.maxLimitCharacters}
+                      </span>
+
+                      <span className="float-end  w-25  ">
+                      <Dropdown drop="up">
+                        <Dropdown.Toggle
+                          className="btn bg-pink text-primary d-flex align-items-center justify-content-center rounded-5"
+                          style={{ width: "48px", height: "32px" }}
+                          id="dropdown-basic"
+                        >
+                          {theme === "Tradicional" ? (
+                            <img
+                              className="me-2"
+                              src={openBook}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Bibliográfico" ? (
+                            <img
+                              className="me-2"
+                              src={life}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Cômico" ? (
+                            <img
+                              className="me-2"
+                              src={clownWithHat}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Dramático" ? (
+                            <img
+                              className="me-2"
+                              src={theater}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Romântico" ? (
+                            <img
+                              className="me-2"
+                              src={hearts}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : (
+                            <span
+                              className="material-symbols-outlined"
+                              style={{ fontSize: "16px" }}
+                            >
+                              mood
+                            </span>
+                          )}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="f-14">
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Tradicional")}
+                          >
+                            <img
+                              className="me-2"
+                              src={openBook}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Tradicional
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Bibliográfico")}
+                          >
+                            <img
+                              className="me-2"
+                              src={life}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Bibliográfico
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Cômico")}
+                          >
+                            <img
+                              className="me-2"
+                              src={clownWithHat}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Cômico
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Dramático")}
+                          >
+                            <img
+                              className="me-2"
+                              src={theater}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Dramático
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Romântico")}
+                          >
+                            <img
+                              className="me-2"
+                              src={hearts}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Romântico
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+
+                      </span>
+                      <span className="float-end  w-25 text-end">
+                      <Dropdown drop="up">
+                        <Dropdown.Toggle
+                          className="btn bg-pink text-primary d-flex align-items-center justify-content-center rounded-5"
+                          style={{ width: "48px", height: "32px" }}
+                          id="dropdown-basic-1" as={CustomToggle} >
+                         
+                            <span
+                              className="material-symbols-outlined"
+                              style={{ fontSize: "16px" }}
+                            >
+                              more_vert
+                            </span>
+                           
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="f-14">
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={handleIASuggestionClick}
+                          >
+                            <img
+                              className="me-2"
+                              src={artificialInteligence}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Texto sugerido pelo IAutor
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setIsHelpModalOpen(true)}
+                          >
+                            <img
+                              className="me-2"
+                              src={help}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Ajuda
+                          </Dropdown.Item>
+                         
+                        </Dropdown.Menu>
+                      </Dropdown>
+
+                      </span>
+                  </div>
+                
 
                   {/* Botões navegação das perguntas */}
                   <div className="d-flex align-items-center justify-content-between px-5 pt-3">
                     <div
-                      className={`d-flex btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
-      ${isFirstQuestion ? " disabled" : ""}`}
+                      className={` btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
+                         d-none d-md-flex
+                        ${isFirstQuestion ? " disabled" : ""}`}
                       style={{ height: "48px", minWidth: "140px" }}
                       onClick={handleBeforeQuestionClick}
                     >
@@ -1218,12 +1428,29 @@ const NewHistory = () => {
                       >
                         arrow_left_alt
                       </span>
-                      <b className="f-16">Voltar</b>
+                      <b className="f-16 ">Voltar</b>
+                    </div>
+                          {/* MOBILE */}
+                    <div
+                      className={`d-flex d-md-none btn bg-disabled text-icon align-items-center 
+                        justify-content-center rounded-5 p-3 mb-5
+                         
+                        ${isFirstQuestion ? " disabled" : ""}`}
+                      style={{ height: "48px", width: "48px" }}
+                      onClick={handleBeforeQuestionClick}
+                    >
+                      <span
+                        className="material-symbols-outlined pe-2"
+                        style={{ fontSize: "24px" }}
+                      >
+                        arrow_left_alt
+                      </span>
+                    
                     </div>
 
                     <div
-                      className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5
-      ${isLastQuestion ? " disabled" : ""}`}
+                      className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5 marginButtonSaveResponsive
+                      ${isLastQuestion ? " disabled" : ""}`}
                       style={{ border: "1px solid black", padding: "0.7rem" }}
                       onClick={() => {
                         saveQuestionAnswer();
@@ -1246,7 +1473,7 @@ const NewHistory = () => {
                     </div>
 
                     <div
-                      className="d-flex btn bg-black text-white align-items-center justify-content-center rounded-5 p-3"
+                      className="d-none  d-md-flex btn bg-black text-white align-items-center justify-content-center rounded-5 p-3"
                       style={{ height: "48px", minWidth: "140px" }}
                       onClick={() => {
                         isLastQuestion
@@ -1264,8 +1491,29 @@ const NewHistory = () => {
                         arrow_right_alt
                       </span>
                     </div>
+                       {/* MOBILE */}
+                       <div
+                      className="d-flex d-md-none btn bg-black text-white align-items-center justify-content-center rounded-circle  mb-5"
+                      style={{ height: "48px", width: "48px" }}
+                      onClick={() => {
+                        isLastQuestion
+                          ? handleFinalizeClick()
+                          : handleNextQuestionClick();
+                      }}
+                    >
+                      <b className="f-16">
+                        {isLastQuestion ? "" : ""}
+                      </b>
+                      <span
+                        className="material-symbols-outlined ps-2"
+                        style={{ fontSize: "24px" }}
+                      >
+                        arrow_right_alt
+                      </span>
+                    </div>
+
                   </div>
-                  <div className="d-flex text-black justify-content-center f-14 pt-2">
+                  <div className="d-none d-md-flex text-black justify-content-center f-14 pt-2">
                     Salvar Resposta
                   </div>
        </>
@@ -1282,11 +1530,11 @@ const NewHistory = () => {
                     <div className="f-14">Preview</div>
                   </div>
 
-                  <div className="d-flex justify-content-center align-items-center bg-white shadow rounded-3 mx-5 my-4 p-4">
+                  <div className="d-flex justify-content-center align-items-center bg-white shadow rounded-3 marginFerramentasEdicao my-4 p-4">
                     <div className="d-flex f-14">Ferramentas de Edição</div>
                     <div className="d-flex text-icon ps-4">
                       <span
-                        className="material-symbols-outlined text-primary px-2"
+                        className="material-symbols-outlined text-primary px-2 d-none d-md-block"
                         style={{ fontSize: "24px", cursor: "pointer" }}
                         onClick={() => setIsBookPreviewModalOpen(true)}
                         title="Visualizar livro"
@@ -1325,9 +1573,9 @@ const NewHistory = () => {
                     </div>
                   </div>
 
-                  <div className="d-flex justify-content-center pb-4">
+                  <div className="d-flex justify-content-center pb-4 " >
                     {answer.length == 0 ? (
-                      <img src={previewCapaLivro} />
+                      <img src={previewCapaLivro}  />
                     ) : (
                       <img src={previewCapaLivroBranca} />
                     )}
@@ -1338,7 +1586,7 @@ const NewHistory = () => {
                           className="d-flex position-absolute text-center f-11"
                           style={{
                             fontFamily: "Times New Roman",
-                            marginTop: "6vh",
+                            marginTop: "6vh"
                           }}
                         >
                           Capítulo {chapter.chapterNumber}
@@ -1486,10 +1734,10 @@ const NewHistory = () => {
 
               {/* conteudo Mobile */}
               <div className="row d-block d-md-none">
-              <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+              <Tab.Container id="left-tabs-example" defaultActiveKey="capitulos">
                
             
-                  <Nav variant="underline" defaultActiveKey="capitulos" fill className='m-2'>
+                  <Nav variant="underline" defaultActiveKey="capitulos" fill className='mt-3'>
                     <Nav.Item>
                       <Nav.Link  eventKey="capitulos">Capítulos</Nav.Link>
                     </Nav.Item>
@@ -1502,8 +1750,8 @@ const NewHistory = () => {
                       </Nav.Link>
                     </Nav.Item>
                   </Nav>
-                  <Tab.Content >
-                    <Tab.Pane eventKey="capitulos">  <CapitulosSection /></Tab.Pane>
+                  <Tab.Content className='bgTab'>
+                    <Tab.Pane eventKey="capitulos"  >  <CapitulosSection /></Tab.Pane>
                     <Tab.Pane eventKey="perguntas">   <PerguntasSection /></Tab.Pane>
                     <Tab.Pane eventKey="preview">  <PreviewSection /></Tab.Pane>
                   </Tab.Content>
@@ -1513,9 +1761,6 @@ const NewHistory = () => {
 
             </div>
           
-          </main>
-        </div>
-
             <Modal
               show={isTermsModalOpen}
               onHide={() => setIsTermsModalOpen(false)}
@@ -1633,6 +1878,9 @@ const NewHistory = () => {
               size="lg"
               centered={true}
             >
+               <Modal.Header closeButton>
+       
+      </Modal.Header>
               <Modal.Body
                 className="text-center justify-content-center f-18 p-5"
                 style={{
@@ -1784,7 +2032,7 @@ const NewHistory = () => {
                 questionUserAnswers={questionUserAnswers}
               />
             </ModalResponsive>
-
+           
             <Modal
               show={isPhotoUploadModalOpen}
               onHide={() => {
@@ -1794,6 +2042,9 @@ const NewHistory = () => {
               backdrop="static"
               keyboard={false}
             >
+             
+
+               
               <ModalHeader closeButton>
                 <span className="text-primary">
                   <strong>
@@ -1810,8 +2061,9 @@ const NewHistory = () => {
                   question={question}
                 />
               </Modal.Body>
+             
             </Modal>
-
+        
             <Modal
               show={isFinalizeBookModalOpen}
               onHide={() => setIsFinalizeBookModalOpen(false)}
@@ -1862,6 +2114,11 @@ const NewHistory = () => {
                 </div>
               </Modal.Body>
             </Modal>
+         
+          </main>
+        </div>
+
+          
       </div>
     </>
   );

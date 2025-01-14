@@ -123,7 +123,7 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
         {props.question?.title}
       </span>
       <div className="row rowTopUpload border-top mt-3 pt-3">
-        <div className="col-12 mt-2 text-center">
+        <div className=" mt-2 text-center">
           <Uploader headers={{ authorization: 'Bearer ' + user?.token }}
             locale={{ error: 'Erro', clear: 'Limpar', loading: 'Carregando', remove: 'Remover', emptyMessage: 'Sem mensagem' }}
             listType="picture"
