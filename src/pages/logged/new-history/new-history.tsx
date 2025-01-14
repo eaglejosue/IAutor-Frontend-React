@@ -142,7 +142,7 @@ const NewHistory = () => {
       }}
     >
       {children}
-      <p className='threedots' />
+    
     </a>
   ));
   const saveUserAcceptedTerms = async () => {
@@ -394,6 +394,13 @@ const NewHistory = () => {
     handleQuestionUserAnswer(questionB.id, chapter.id);
   };
 
+  const handlerFocus =(e:any)=>
+  {
+    console.log(e)
+    var temp_value = e.target.value
+  e.target.value = ''
+  e.target.value = temp_value
+  }
   const handleNextQuestionClick = () => {
     if (answerChanged) {
       saveQuestionAnswer();
@@ -423,6 +430,7 @@ const NewHistory = () => {
     handleQuestionUserAnswer(questionN.id, chapter.id);
   };
 
+  
   useEffect(() => {
     if (!answerChanged) return; // Não faz nada se `answerChanged` for falso.
 
@@ -434,6 +442,7 @@ const NewHistory = () => {
     // Limpa o temporizador se o usuário continuar digitando.
     return () => clearTimeout(handler);
   }, [answerChanged, answer]);
+  
 
   const saveQuestionAnswer = async (
     txt?: string,
@@ -1172,7 +1181,10 @@ const NewHistory = () => {
 
                   {/* Área resposta */}
                   <div className="d-flex paddingResponsivePerguntasBody ">
+                 
                     <TextareaAutosize
+                      autoFocus
+                      onFocus={(e) =>handlerFocus(e)} 
                       onChange={(e) => {
                         setAnswer(e.target.value);
                         setAnswerChanged(true);
@@ -1186,6 +1198,7 @@ const NewHistory = () => {
                         padding: "10px",
                         borderRadius: "5px",
                         border: "1px solid #757575",
+                        
                       }}
                       minLength={question.minLimitCharacters}
                       maxLength={question.maxLimitCharacters}
@@ -1522,7 +1535,7 @@ const NewHistory = () => {
                       onClick={handleBeforeQuestionClick}
                     >
                       <span
-                        className="material-symbols-outlined pe-2"
+                        className="material-symbols-outlined "
                         style={{ fontSize: "24px" }}
                       >
                         arrow_left_alt
@@ -1587,7 +1600,7 @@ const NewHistory = () => {
                         {isLastQuestion ? "" : ""}
                       </b>
                       <span
-                        className="material-symbols-outlined ps-2"
+                        className="material-symbols-outlined "
                         style={{ fontSize: "24px" }}
                       >
                         arrow_right_alt
