@@ -102,7 +102,7 @@ const PricingPlans = () => {
                           <div className="row text-center">
                             <div className="d-flex justify-content-center pt-3">
                               <button
-                                disabled={plan.price === 0}
+                                // disabled={plan.price === 0}
                                 className={`btn ${i == 1 ? "bg-white text-black btnComprarBlack" : "bg-secondary text-white btnComprarRed"} rounded-5 f-13 py-3 mb-4 w-70 `}
                                 style={{
                                   fontWeight: "bold",
