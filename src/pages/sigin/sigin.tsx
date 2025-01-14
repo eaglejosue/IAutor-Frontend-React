@@ -46,7 +46,7 @@ const SigIn = () => {
     } else {
       let url = `${paths.NEW_HISTORY}/${user.lastBookId}`;
       if (user.type === EnumUserTypes.Admin) url = paths.HOME_LOGGED;
-      if (redirect?.length) url = `${redirect}?logged=true`;
+      if (redirect?.length) url = redirect;
       navigate(url);
     }
     reset();

@@ -6,6 +6,7 @@ export class OrderModel extends BaseModel {
   bookId!: number;
   iuguFaturaSecureUrl?: string;
   payments?: PaymentModel[];
+  planId!: number;
 
   constructor(j?: any) {
     super(j);
@@ -14,6 +15,7 @@ export class OrderModel extends BaseModel {
       this.bookId = j.bookId;
       this.iuguFaturaSecureUrl = j.iuguFaturaSecureUrl;
       this.payments = j.payments;
+      this.planId = j.planId;
     }
   }
 }
