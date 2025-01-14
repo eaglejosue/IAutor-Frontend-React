@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-
 import { UserService } from '../../../common/http/api/userService';
 import { UserModel } from '../../../common/models/user.model';
 import { AuthenticatedUserModel } from '../../../common/models/authenticated.model';
@@ -10,10 +9,9 @@ import { CpfValidator } from '../../../common/validation/cpfValidator';
 import { BirthDateValidator } from '../../../common/validation/birthDateValidator';
 import CustomInput from '../../../components/forms/customInput/customInput';
 import ChangePasswordForm from '../../../components/changePasswordForm/changePasswordForm.component';
-
-
 import horizontalImgs from '../../../assets/horizontal-imgs';
 import NavResponsive from '../../../components/nav/nav-responsive.component';
+import './my-account.scss'
 
 const MyAccount = () => {
   const [imgRandomSrc, setImgRandomSrc] = useState('1');
@@ -117,7 +115,13 @@ const MyAccount = () => {
             <div className="pt-0">
               <div className="row">
                 <div className="col-12 col-xl-8 border-end" id="user-form">
-                  <div className="row border-bottom p-3">
+                  <div className="row border-bottom p-3 d-none d-md-block">
+                    <b className="f-18">Dados Pessoais</b>
+                    <div className="f-16">
+                      Visualize ou altere abaixo os seus dados pessoais.
+                    </div>
+                  </div>
+                  <div className="row border-bottom p-3 text-center d-block d-md-none">
                     <b className="f-18">Dados Pessoais</b>
                     <div className="f-16">
                       Visualize ou altere abaixo os seus dados pessoais.
@@ -126,13 +130,14 @@ const MyAccount = () => {
 
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row p-3 mt-5">
-                      <div className="col-md-2 mt-2 ">
+                      <div className="col-lg-2 col-md-12 mt-2" >
                         <div
                           className=" rounded-circle bg-light d-flex justify-content-center align-items-center"
                           style={{
                             width: "100px",
                             height: "100px",
-                            position: "relative",
+                         
+
                           }}
                         >
                           {urlImgPerfil ? (
@@ -265,7 +270,7 @@ const MyAccount = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="d-flex justify-content-end mt-4 p-3">
+                    <div className="d-flex justify-content-end mt-4 p-3 alignResponsive">
                       <button
                         className="btn btn-primary text-white rounded-5 f-14 px-4 p-2"
                         type="submit"
@@ -280,6 +285,8 @@ const MyAccount = () => {
                           ></span>
                         )}
                       </button>
+                     
+
                     </div>
                   </form>
 
@@ -287,8 +294,8 @@ const MyAccount = () => {
                 </div>
 
                 {/* Img baixo */}
-                <div className="col-12 col-xl-4" style={{ minHeight: "845px" }}>
-                  <div id="img-baixo" style={{ marginTop: "40vh" }}>
+                <div className="col-12 col-xl-4 imgSide" style={{ minHeight: "845px" }}>
+                  <div id="img-baixo" >
                     <div className="d-flex justify-content-center">
                       <img
                         src={imgRandomSrc}

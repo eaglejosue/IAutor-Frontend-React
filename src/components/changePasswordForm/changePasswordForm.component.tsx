@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-
 import CustomInput from '../../components/forms/customInput/customInput';
 import { UserService } from '../../common/http/api/userService';
 import { UserModel } from '../../common/models/user.model';
+
 
 export interface ChangePasswordFormProps {
   userId: number;
@@ -64,7 +64,11 @@ const ChangePasswordForm = (p: ChangePasswordFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmitPasswordChange)}>
-      <div className='p-3'>
+      <div className='p-3 d-block d-md-none text-center'>
+        <p className="mb-0 p-0 fw-bold f-18">Altere sua Senha</p>
+        <p className='f-14'>Sua senha deve ter no mínimo 8 dígitos com números,  letras, <br></br> maiúscula e caracteries especiais (Exemplo: ./#*)</p>
+      </div>
+      <div className='p-3  d-none d-md-block'>
         <p className="mb-0 p-0 fw-bold f-18">Altere sua Senha</p>
         <p className='f-14'>Sua senha deve ter no mínimo 8 dígitos com números,  letras, <br></br> maiúscula e caracteries especiais (Exemplo: ./#*)</p>
       </div>
@@ -140,7 +144,7 @@ const ChangePasswordForm = (p: ChangePasswordFormProps) => {
         </div>
       </div>
 
-      <div className='d-flex justify-content-end mt-4 p-3'>
+      <div className='d-flex justify-content-end mt-4 p-3 alignResponsive'>
         <button className='btn btn-primary text-white rounded-5 f-14 px-4 p-2'
           type="submit"
           disabled={isLoading || p.isLoading}
