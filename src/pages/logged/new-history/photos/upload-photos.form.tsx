@@ -40,8 +40,7 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
   const [uploading, setUploading] = useState(false);
   const [fileInfo, setFileInfo] = useState(null);
   //@ts-ignore
-  const [userQuestionSelected, setUserQuestionSelected] =
-    useState<QuestionUserAnswerModel>(null);
+  const [userQuestionSelected, setUserQuestionSelected] =useState<QuestionUserAnswerModel>(null);
 
   const {
     setValue,
