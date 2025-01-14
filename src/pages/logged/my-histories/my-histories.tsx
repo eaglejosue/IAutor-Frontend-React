@@ -1,26 +1,25 @@
-import React from 'react';
-import { useState, useEffect, FunctionComponent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Card, Dropdown } from 'react-bootstrap';
-import { Modal as ModalResponsive } from 'react-responsive-modal';
-import { differenceInDays } from 'date-fns';
+import React from "react";
+import { useState, useEffect, FunctionComponent } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, Card, Dropdown } from "react-bootstrap";
+import { Modal as ModalResponsive } from "react-responsive-modal";
+import { differenceInDays } from "date-fns";
 
-import { myHistories } from '../../../assets/svg';
-import { BookService } from '../../../common/http/api/bookService';
-import { AuthenticatedUserModel } from '../../../common/models/authenticated.model';
-import { BookModel } from '../../../common/models/book.model';
-import { PlanModel } from '../../../common/models/plan.model';
-import { ChapterModel } from '../../../common/models/chapter.model';
-import { PlanService } from '../../../common/http/api/planService';
-import { QuestionUserAnswerModel } from '../../../common/models/question-user-answer.model';
-import { QuestionModel } from '../../../common/models/question.model';
+import { myHistories } from "../../../assets/svg";
+import { BookService } from "../../../common/http/api/bookService";
+import { AuthenticatedUserModel } from "../../../common/models/authenticated.model";
+import { BookModel } from "../../../common/models/book.model";
+import { PlanModel } from "../../../common/models/plan.model";
+import { ChapterModel } from "../../../common/models/chapter.model";
+import { PlanService } from "../../../common/http/api/planService";
+import { QuestionUserAnswerModel } from "../../../common/models/question-user-answer.model";
+import { QuestionModel } from "../../../common/models/question.model";
 
+import BookViewer from "../../../components/book-viewer/book-viewer";
 
-import BookViewer from '../../../components/book-viewer/book-viewer';
-
-import paths from '../../../routes/paths';
-import './my-histories.scss'
-import NavResponsive from '../../../components/nav/nav-responsive.component';
+import paths from "../../../routes/paths";
+import "./my-histories.scss";
+import NavResponsive from "../../../components/nav/nav-responsive.component";
 
 const NewHistory = () => {
   const navigate = useNavigate();
@@ -32,17 +31,21 @@ const NewHistory = () => {
   const [books, setBooks] = useState<BookModel[]>([]);
   const [isBookPreviewModalOpen, setIsBookPreviewModalOpen] = useState(false);
 
-  const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Alterar Título da História' }));
-  const [plan, setPlan] = useState<PlanModel>(new PlanModel())
-  const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
+  const [book, setBook] = useState<BookModel>(
+    new BookModel({ title: "Alterar Título da História" }),
+  );
+  const [plan, setPlan] = useState<PlanModel>(new PlanModel());
+  const [questionUserAnswers, setQuestionUserAnswers] = useState<
+    QuestionUserAnswerModel[]
+  >([new QuestionUserAnswerModel()]);
 
   useEffect(() => {
     if (!user) {
       navigate(paths.LOGIN);
-      return
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
     _bookService
       //@ts-ignore
       .getAll({ userId: user.id, includeUserBookPlan: true })
@@ -52,50 +55,66 @@ const NewHistory = () => {
         }
       })
       .catch((e: any) => {
-        let message = 'Error ao obter livros.';
+        let message = "Error ao obter livros.";
         if (e.response?.data?.length > 0 && e.response.data[0].message)
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log('Erro: ', message, e);
+        console.log("Erro: ", message, e);
       })
       .finally(() => {
-        setIsLoading(false)
+        setIsLoading(false);
       });
-  }, [])
+  }, []);
 
   const handlerVisualizar = (book: BookModel) => {
     setBook(book);
     setPlan(book.plan);
     getPlanChaptersQuestions(book.planId, book.id);
-  }
+  };
 
-  const handlerSelect = (e: any) => {
-    console.log(e)
-  }
+  // const handlerSelect = (e: any) => {
+  //   console.log(e);
+  // };
 
   const CustomToggle = React.forwardRef(({ children, onClick }: any, ref) => (
     <a
-      href=''
-      style={{ textDecoration: 'none' }}
+      href=""
+      style={{ textDecoration: "none" }}
       //@ts-ignore
       ref={ref}
-      onClick={e => {
+      onClick={(e) => {
         e.preventDefault();
         onClick(e);
       }}
     >
       {children}
-      <p className='threedots' />
+      <p className="threedots" />
     </a>
   ));
 
   const closeIcon = (
-    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-      <mask id='mask0_693_22769' maskUnits='userSpaceOnUse' x='0' y='0' width='24' height='24'>
-        <rect width='24' height='24' fill='#D9D9D9' />
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <mask
+        id="mask0_693_22769"
+        maskUnits="userSpaceOnUse"
+        x="0"
+        y="0"
+        width="24"
+        height="24"
+      >
+        <rect width="24" height="24" fill="#D9D9D9" />
       </mask>
-      <g mask='url(#mask0_693_22769)'>
-        <path d='M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z' fill='white' />
+      <g mask="url(#mask0_693_22769)">
+        <path
+          d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z"
+          fill="white"
+        />
       </g>
     </svg>
   );
@@ -105,18 +124,21 @@ const NewHistory = () => {
     await _planService
       .getChaptersAndQuestionsByPlanIdAndBookId(planId, bookId)
       .then((response: any) => {
-        const allQuestionUserAnswers = response.chapters!.flatMap((c: ChapterModel) =>
-          c.questions!.flatMap((q: QuestionModel) => q.questionUserAnswers)
+        const allQuestionUserAnswers = response.chapters!.flatMap(
+          (c: ChapterModel) =>
+            c.questions!.flatMap((q: QuestionModel) => q.questionUserAnswers),
         );
-        setQuestionUserAnswers(allQuestionUserAnswers ?? [new QuestionUserAnswerModel()]);
+        setQuestionUserAnswers(
+          allQuestionUserAnswers ?? [new QuestionUserAnswerModel()],
+        );
         setIsBookPreviewModalOpen(true);
       })
       .catch((e: any) => {
-        let message = 'Error ao obter plano, capitulos e perguntas.';
+        let message = "Error ao obter plano, capitulos e perguntas.";
         if (e.response?.data?.length > 0 && e.response.data[0].message)
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log('Erro: ', message, e);
+        console.log("Erro: ", message, e);
       })
       .finally(() => {
         setIsLoading(false);
@@ -139,13 +161,15 @@ const NewHistory = () => {
                     {props.book?.plan?.title}
                   </span>
                 </div>
-                <div className='col-4 text-end ' style={{ marginTop: '-15px' }}>
+                <div className="col-4 text-end " style={{ marginTop: "-15px" }}>
                   <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} />
                     <Dropdown.Menu>
-                      <Dropdown.Item title='Editar'
-                        disabled={true}
-                        onClick={() => handlerSelect('Editar')}
+                      <Dropdown.Item
+                        title="Editar"
+                        onClick={() =>
+                          navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`)
+                        }
                       >
                         Editar
                       </Dropdown.Item>
@@ -156,7 +180,7 @@ const NewHistory = () => {
                       >
                         Visualizar
                       </Dropdown.Item>
-                      <Dropdown.Item
+                      {/* <Dropdown.Item
                         disabled={true}
                         onClick={() => handlerSelect('Baixar')}
                       >
@@ -167,11 +191,11 @@ const NewHistory = () => {
                         onClick={() => handlerSelect('Deletar')}
                       >
                         Deletar
-                      </Dropdown.Item>
+                      </Dropdown.Item> */}
                     </Dropdown.Menu>
                   </Dropdown>
                 </div>
-                <div className='col-12'>
+                <div className="col-12">
                   <br></br>
                   <br></br>
                 </div>
@@ -204,7 +228,7 @@ const NewHistory = () => {
                       col-lg-11  "
             style={{ marginTop: "70px" }}
           >
-               <div className="p-0">
+            <div className="p-0">
               {/* conteudo */}
               <div className="row mt-4">
                 <div className="col-md-8 gx-0 alignResponsive">
@@ -271,6 +295,7 @@ const NewHistory = () => {
             </div>
           </main>
         </div>
+
         <ModalResponsive
           open={isBookPreviewModalOpen}
           closeIcon={closeIcon}

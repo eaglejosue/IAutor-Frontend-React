@@ -8,6 +8,7 @@ import { faBars} from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import {  Button, Offcanvas } from 'react-bootstrap';
+
 export interface Props {
   navItem: string
 }

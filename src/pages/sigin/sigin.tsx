@@ -37,14 +37,20 @@ const SigIn = () => {
   const setUserAuthenticated = (response: any) => {
     const user = new AuthenticatedUserModel(response);
     AuthenticatedUserModel.saveToLocalStorage(user);
-
-    let url = `${paths.NEW_HISTORY}/${user.lastBookId}`;
-    if (user.type === EnumUserTypes.Admin) url = paths.HOME_LOGGED;
-    if (redirect?.length) url = `${redirect}?logged=true`;
-
-    navigate(url);
+    if (!user.isValid) {
+      toast.warning("CPF e Data de Nascimento obrigatórios para cadastro!", {
+        position: "top-left",
+        style: { minWidth: 600 },
+      });
+      navigate(paths.MY_ACCOUNT);
+    } else {
+      let url = `${paths.NEW_HISTORY}/${user.lastBookId}`;
+      if (user.type === EnumUserTypes.Admin) url = paths.HOME_LOGGED;
+      if (redirect?.length) url = redirect;
+      navigate(url);
+    }
     reset();
-  }
+  };
 
   const googleLogin = useGoogleLogin({
     onSuccess: async s => {

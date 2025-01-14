@@ -23,6 +23,8 @@ const PageNotFound = lazy(
 );
 const About = lazy(() => import("../pages/home/about/about"));
 const Faq = lazy(() => import("../pages/home/faq/faq"));
+const PaymentTerms = lazy(() => import("../pages/payment-terms/payment-terms"));
+
 //Logado
 const HomeLogged = lazy(
   () => import("../pages/logged/home-logged/home-logged"),
@@ -84,6 +86,7 @@ const routes: Routes[] = [
   { path: paths.NOT_FOUND, element: getRouteElement(PageNotFound) },
   { path: paths.ABOUT, element: getRouteElement(About) },
   { path: paths.FAQ, element: getRouteElement(Faq) },
+  { path: `${paths.PAYMENT_TERMS}/:id`, element: getRouteElement(PaymentTerms, false, true) },
 
   //Logado
   {

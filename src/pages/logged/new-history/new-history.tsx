@@ -1,49 +1,49 @@
-import { FunctionComponent, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars,  faChevronRight,  faUser } from '@fortawesome/free-solid-svg-icons';
-import { TextareaAutosize } from '@mui/base/TextareaAutosize';
-import { Modal, ModalHeader, Nav, Offcanvas, Tab } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import Dropdown from 'react-bootstrap/Dropdown';
-import { Modal as ModalResponsive } from 'react-responsive-modal';
+/* eslint-disable no-debugger */
+import { FunctionComponent, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars,  faChevronRight,  faUser } from "@fortawesome/free-solid-svg-icons";
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
+import { Modal, ModalHeader, Nav, Offcanvas, Tab } from "react-bootstrap";
+import { toast } from "react-toastify";
+import Dropdown from "react-bootstrap/Dropdown";
+import { Modal as ModalResponsive } from "react-responsive-modal";
 
 import NavUserOptions from '../../../components/nav/nav-user-options.component';
 import BookViewer from '../../../components/book-viewer/book-viewer';
 import UploadPhotosContainer from './photos/upload-photos.container';
 
-import { UserService } from '../../../common/http/api/userService';
-import { BookService } from '../../../common/http/api/bookService';
-import { PlanService } from '../../../common/http/api/planService';
-import { QuestionService } from '../../../common/http/api/questionService';
-import { IAService } from '../../../common/http/api/iaService';
+import { UserService } from "../../../common/http/api/userService";
+import { BookService } from "../../../common/http/api/bookService";
+import { PlanService } from "../../../common/http/api/planService";
+import { QuestionService } from "../../../common/http/api/questionService";
+import { IAService } from "../../../common/http/api/iaService";
 
-import { AuthenticatedUserModel } from '../../../common/models/authenticated.model';
-import { BookFilter } from '../../../common/models/filters/book.filter';
-import { BookModel } from '../../../common/models/book.model';
-import { PlanModel } from '../../../common/models/plan.model';
-import { ChapterModel } from '../../../common/models/chapter.model';
-import { QuestionModel } from '../../../common/models/question.model';
-import { QuestionUserAnswerModel } from '../../../common/models/question-user-answer.model';
+import { AuthenticatedUserModel } from "../../../common/models/authenticated.model";
+import { BookFilter } from "../../../common/models/filters/book.filter";
+import { BookModel } from "../../../common/models/book.model";
+import { PlanModel } from "../../../common/models/plan.model";
+import { ChapterModel } from "../../../common/models/chapter.model";
+import { QuestionModel } from "../../../common/models/question.model";
+import { QuestionUserAnswerModel } from "../../../common/models/question-user-answer.model";
 
-import paths from '../../../routes/paths';
-import horizontalImgs from '../../../assets/horizontal-imgs';
-import previewCapaLivro from '../../../assets/img/preview-capa-livro.png';
-import previewCapaLivroBranca from '../../../assets/img/Preview-capa-livro-branca.png';
-import artificialInteligence from '../../../assets/svg/artificial-inteligence.svg';
-import openBook from '../../../assets/svg/open-book.svg';
-import life from '../../../assets/svg/life.svg';
-import clownWithHat from '../../../assets/svg/face-of-clown-with-hat.svg';
-import theater from '../../../assets/svg/theater.svg';
-import hearts from '../../../assets/svg/hearts.svg';
-import WomanIsTyping from '../../../assets/img/woman-is-typing-laptop-with-lamp-her.png';
+import paths from "../../../routes/paths";
+import horizontalImgs from "../../../assets/horizontal-imgs";
+import previewCapaLivro from "../../../assets/img/preview-capa-livro.png";
+import previewCapaLivroBranca from "../../../assets/img/Preview-capa-livro-branca.png";
+import artificialInteligence from "../../../assets/svg/artificial-inteligence.svg";
+import openBook from "../../../assets/svg/open-book.svg";
+import life from "../../../assets/svg/life.svg";
+import clownWithHat from "../../../assets/svg/face-of-clown-with-hat.svg";
+import theater from "../../../assets/svg/theater.svg";
+import hearts from "../../../assets/svg/hearts.svg";
+import WomanIsTyping from "../../../assets/img/woman-is-typing-laptop-with-lamp-her.png";
 import Logo from '../../../assets/img/favicon-32x32.png'
 import './new-history.scss'
 import React from 'react';
 import {  help } from '../../../assets/img';
 
 const NewHistory = () => {
-
   const navigate = useNavigate();
   const param = useParams();
 
@@ -57,24 +57,27 @@ const NewHistory = () => {
   const [isLoading2, setIsLoading2] = useState<boolean>(false);
   const isLoading = isLoading1 || isLoading2;
 
-  const [isLoadingSaveAnswer, setIsLoadingSaveAnswer] = useState<boolean>(false);
-  const [imgRandomSrc, setImgRandomSrc] = useState('1');
+  const [isLoadingSaveAnswer, setIsLoadingSaveAnswer] =
+    useState<boolean>(false);
+  const [imgRandomSrc, setImgRandomSrc] = useState("1");
 
   const [isLoadingPDF, setIsLoadingPDF] = useState<boolean>(false);
 
-  const [book, setBook] = useState<BookModel>(new BookModel({ title: 'Alterar Título da História' }))
-  const [plan, setPlan] = useState<PlanModel>(new PlanModel())
+  const [book, setBook] = useState<BookModel>(
+    new BookModel({ title: "Alterar Título da História" }),
+  );
+  const [plan, setPlan] = useState<PlanModel>(new PlanModel());
   const [chapter, setChapter] = useState(new ChapterModel());
   const [question, setQuestion] = useState(new QuestionModel());
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [title, setTitle] = useState('Alterar Título da História');
-  const [theme, setTheme] = useState('');
+  const [title, setTitle] = useState("Alterar Título da História");
+  const [theme, setTheme] = useState("");
 
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [termsTextModal, setTermsTextModal] = useState(1);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
   const [isIAModalOpen, setIsIAModalOpen] = useState(false);
@@ -84,8 +87,11 @@ const NewHistory = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isFirstQuestion, setIsFirstQuestion] = useState(true);
   const [isLastQuestion, setIsLastQuestion] = useState(false);
-  const [questionUserAnswers, setQuestionUserAnswers] = useState<QuestionUserAnswerModel[]>([new QuestionUserAnswerModel()]);
-  const [answer, setAnswer] = useState('');
+  const [questionUserAnswers, setQuestionUserAnswers] = useState<
+    QuestionUserAnswerModel[]
+  >([new QuestionUserAnswerModel()]);
+
+  const [answer, setAnswer] = useState("");
   const [answerChanged, setAnswerChanged] = useState<boolean>(false);
   const [qtdCallIASugestionsUsed, setQtdCallIASugestionsUsed] = useState(0);
   const [IAText, setIAText] = useState('');
@@ -97,7 +103,7 @@ const NewHistory = () => {
   const [user, setUser] = useState<AuthenticatedUserModel>();
 
   useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * 16);// Gera um número entre 0 e 15
+    const randomIndex = Math.floor(Math.random() * 16); // Gera um número entre 0 e 15
     setImgRandomSrc(horizontalImgs[randomIndex]);
     
     const user = AuthenticatedUserModel.fromLocalStorage()!;
@@ -105,8 +111,7 @@ const NewHistory = () => {
 
     if (user.termsAccepted) {
       getBook(parseInt(param.id!));
-    }
-    else {
+    } else {
       setTermsTextModal(1);
       setIsTermsModalOpen(true);
     }
@@ -117,9 +122,11 @@ const NewHistory = () => {
       };
   const handleAcceptTerms = () => {
     if (!acceptedTerms) {
-      setErrorMessage("Antes de prosseguir, por favor, confirme que leu e concorda com nossos termos e condições.");
+      setErrorMessage(
+        "Antes de prosseguir, por favor, confirme que leu e concorda com nossos termos e condições.",
+      );
     } else {
-      setErrorMessage('');
+      setErrorMessage("");
       saveUserAcceptedTerms();
     }
   };
@@ -162,12 +169,28 @@ const NewHistory = () => {
   };
 
   const closeIcon = (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <mask id="mask0_693_22769" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <mask
+        id="mask0_693_22769"
+        maskUnits="userSpaceOnUse"
+        x="0"
+        y="0"
+        width="24"
+        height="24"
+      >
         <rect width="24" height="24" fill="#D9D9D9" />
       </mask>
       <g mask="url(#mask0_693_22769)">
-        <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="white" />
+        <path
+          d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z"
+          fill="white"
+        />
       </g>
     </svg>
   );
@@ -176,7 +199,7 @@ const NewHistory = () => {
     setIsLoading1(true);
     const user = AuthenticatedUserModel.fromLocalStorage()!;
     _bookService
-      .getAll(new BookFilter({id, userId: user.id}))
+      .getAll(new BookFilter({ id, userId: user.id }))
       .then((response: any) => {
         if (!response.length) {
           navigate(paths.HOME_LOGGED);
@@ -200,10 +223,11 @@ const NewHistory = () => {
       });
   };
 
-  const saveBook = async () => {
-    await _bookService
+  const saveBook = () => {
+    _bookService
       .put(new BookModel({ ...book, title: title }))
       .then(() => {
+        navigate(paths.HOME_LOGGED);
       })
       .catch((e: any) => {
         let message = "Error ao salvar livro.";
@@ -212,8 +236,7 @@ const NewHistory = () => {
         if (e.response?.data?.detail) message = e.response?.data?.detail;
         console.log("Erro: ", message, e);
       })
-      .finally(() => {
-      });
+      .finally(() => {});
   };
 
   const getPlanChaptersQuestions = async (planId: number, bookId: number) => {
@@ -227,13 +250,18 @@ const NewHistory = () => {
         const questionRes = response.chapters[0].questions[0];
         setQuestion(questionRes);
         setQuestionIndex(0);
-        setAnswer(questionRes.questionUserAnswers[0]?.answer ?? '');
-        setQtdCallIASugestionsUsed(questionRes.questionUserAnswers[0]?.qtdCallIASugestionsUsed ?? 0);
-
-        const allQuestionUserAnswers = response.chapters!.flatMap((c: ChapterModel) =>
-          c.questions!.flatMap((q: QuestionModel) => q.questionUserAnswers)
+        setAnswer(questionRes.questionUserAnswers[0]?.answer ?? "");
+        setQtdCallIASugestionsUsed(
+          questionRes.questionUserAnswers[0]?.qtdCallIASugestionsUsed ?? 0,
         );
-        setQuestionUserAnswers(allQuestionUserAnswers ?? [new QuestionUserAnswerModel()]);
+
+        const allQuestionUserAnswers = response.chapters!.flatMap(
+          (c: ChapterModel) =>
+            c.questions!.flatMap((q: QuestionModel) => q.questionUserAnswers),
+        );
+        setQuestionUserAnswers(
+          allQuestionUserAnswers ?? [new QuestionUserAnswerModel()],
+        );
       })
       .catch((e: any) => {
         let message = "Error ao obter plano, capitulos e perguntas.";
@@ -248,38 +276,45 @@ const NewHistory = () => {
   };
 
   const handleQuestionUserAnswer = (questionId: number, chapterId: number) => {
-    const questionUserAnswer = questionUserAnswers?.find(f => f.questionId == questionId && f.chapterId == chapterId);
-    setAnswer(questionUserAnswer?.answer ?? '');
-    setQtdCallIASugestionsUsed(questionUserAnswer?.qtdCallIASugestionsUsed ?? 0);
+    const questionUserAnswer = questionUserAnswers?.find(
+      (f) => f.questionId == questionId && f.chapterId == chapterId,
+    );
+    setAnswer(questionUserAnswer?.answer ?? "");
+    setQtdCallIASugestionsUsed(
+      questionUserAnswer?.qtdCallIASugestionsUsed ?? 0,
+    );
   };
 
   const handleIASuggestionClick = () => {
     if (answer.length == 0) {
-      toast.error('Digite sua resposta para consultar!', {
-        position: 'top-center',
-        style: { width: 450 }
+      toast.error("Digite sua resposta para consultar!", {
+        position: "top-center",
+        style: { width: 450 },
       });
       return;
     }
 
     if (answer.length < question.minLimitCharacters) {
-      toast.error(`Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`, {
-        position: 'top-center',
-        style: { width: 450 }
-      });
+      toast.error(
+        `Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`,
+        {
+          position: "top-center",
+          style: { width: 450 },
+        },
+      );
       return;
     }
 
     if (qtdCallIASugestionsUsed === plan.maxQtdCallIASugestions) {
-      toast.error('Você não possui mais sugestões de texto do IAutor!', {
-        position: 'top-center',
-        style: { width: 450 }
+      toast.error("Você não possui mais sugestões de texto do IAutor!", {
+        position: "top-center",
+        style: { width: 450 },
       });
       return;
     }
 
     setIsIAModalOpen(true);
-    setIAText('');
+    setIAText("");
     postIASugestion();
   };
 
@@ -290,24 +325,25 @@ const NewHistory = () => {
         question: question.title,
         questionAnswer: answer,
         theme,
-        maxCaracters: question.maxLimitCharacters
+        maxCaracters: question.maxLimitCharacters,
       })
       .then((response: any) => {
         setIAText(response.text);
-        const qtd = qtdCallIASugestionsUsed + 1
+        const qtd = qtdCallIASugestionsUsed + 1;
         setQtdCallIASugestionsUsed(qtd);
         saveQuestionAnswer(undefined, qtd, false);
       })
       .catch((e) => {
-        let message = 'Error ao obter dados de participante.';
-        if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+        let message = "Error ao obter dados de participante.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log('Erro: ', message, e);
+        console.log("Erro: ", message, e);
       })
       .finally(() => {
         setIsLoading1(false);
       });
-  }
+  };
 
   const handleIAAccept = () => {
     setIsIAModalOpen(false);
@@ -318,17 +354,19 @@ const NewHistory = () => {
   const handleChapterClick = (id: number, fromBeforeClick: boolean = false) => {
     setAnswerChanged(false);
 
-    const chapterC = plan.chapters!.find(f => f.id == id);
+    const chapterC = plan.chapters!.find((f) => f.id == id);
     setChapter(chapterC!);
 
     const questionsLength = chapterC!.questions!.length;
-    const questionC = fromBeforeClick ? chapterC!.questions![questionsLength - 1] : chapterC!.questions![0];
+    const questionC = fromBeforeClick
+      ? chapterC!.questions![questionsLength - 1]
+      : chapterC!.questions![0];
     setQuestion(questionC);
     const questionCIndex = fromBeforeClick ? questionsLength - 1 : 0;
     setQuestionIndex(questionCIndex);
     handleQuestionUserAnswer(questionC.id, chapterC!.id);
 
-    const chapterIndex = plan.chapters!.findIndex(f => f.id == id);
+    const chapterIndex = plan.chapters!.findIndex((f) => f.id == id);
     setIsFirstQuestion(chapterIndex == 0 && questionCIndex == 0);
   };
 
@@ -337,7 +375,7 @@ const NewHistory = () => {
     setAnswerChanged(false);
 
     const isFirstQuestionB = questionIndex == 0;
-    const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
+    const chapterIndex = plan.chapters!.findIndex((f) => f.id == chapter.id);
     const isFirstChapter = chapterIndex == 0;
 
     if (isFirstQuestionB && isFirstChapter) {
@@ -351,7 +389,7 @@ const NewHistory = () => {
     }
 
     const questionB = chapter.questions![questionIndex - 1];
-    setQuestion(questionB)
+    setQuestion(questionB);
     setQuestionIndex(questionIndex - 1);
     handleQuestionUserAnswer(questionB.id, chapter.id);
   };
@@ -365,7 +403,7 @@ const NewHistory = () => {
     setAnswerChanged(false);
 
     const isLastQuestionN = questionIndex + 1 == chapter.questions!.length;
-    const chapterIndex = plan.chapters!.findIndex(f => f.id == chapter.id);
+    const chapterIndex = plan.chapters!.findIndex((f) => f.id == chapter.id);
     const isLastChapter = chapterIndex + 1 == plan.chapters!.length;
 
     if (isLastQuestionN && isLastChapter) {
@@ -380,7 +418,7 @@ const NewHistory = () => {
     }
 
     const questionN = chapter.questions![questionIndex + 1];
-    setQuestion(questionN)
+    setQuestion(questionN);
     setQuestionIndex(questionIndex + 1);
     handleQuestionUserAnswer(questionN.id, chapter.id);
   };
@@ -397,12 +435,16 @@ const NewHistory = () => {
     return () => clearTimeout(handler);
   }, [answerChanged, answer]);
 
-  const saveQuestionAnswer = async (txt?: string, qtd?: number, fromAutomatic: boolean = false) => {
+  const saveQuestionAnswer = async (
+    txt?: string,
+    qtd?: number,
+    fromAutomatic: boolean = false,
+  ) => {
     if (answer.length == 0) {
       if (!fromAutomatic) {
-        toast.error('Digite sua resposta para consultar!', {
-          position: 'top-center',
-          style: { width: 450 }
+        toast.error("Digite sua resposta para consultar!", {
+          position: "top-center",
+          style: { width: 450 },
         });
       }
       return;
@@ -410,10 +452,13 @@ const NewHistory = () => {
 
     if (answer.length < question.minLimitCharacters) {
       if (!fromAutomatic) {
-        toast.error(`Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`, {
-          position: 'top-center',
-          style: { width: 450 }
-        });
+        toast.error(
+          `Resposta deve conter no mínimo ${question.minLimitCharacters} caracteres!`,
+          {
+            position: "top-center",
+            style: { width: 450 },
+          },
+        );
       }
       return;
     }
@@ -424,21 +469,24 @@ const NewHistory = () => {
       userId: book.userId,
       bookId: book.id,
       answer: txt ?? answer,
-      qtdCallIASugestionsUsed: qtd ?? qtdCallIASugestionsUsed
+      qtdCallIASugestionsUsed: qtd ?? qtdCallIASugestionsUsed,
     });
 
     setIsLoadingSaveAnswer(true);
     await _questionService
       .upsertQuestionUserAnswer(newQuestionUserAnswerModel)
       .then((response: any) => {
-        const questionUserAnswersFiltered = questionUserAnswers?.filter(f => f.id != response.id);
+        const questionUserAnswersFiltered = questionUserAnswers?.filter(
+          (f) => f.id != response.id,
+        );
         setQuestionUserAnswers([...questionUserAnswersFiltered, response]);
       })
       .catch((e) => {
-        let message = 'Error ao obter dados de participante.';
-        if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+        let message = "Error ao obter dados de participante.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log('Erro: ', message, e);
+        console.log("Erro: ", message, e);
       })
       .finally(() => {
         setIsLoadingSaveAnswer(false);
@@ -452,57 +500,86 @@ const NewHistory = () => {
       .then((response: any) => {
         // Decodifica o byteArray de Base64
         const byteCharacters = atob(response.byteArray);
-        const byteNumbers = new Array(byteCharacters.length).fill(0).map((_, i) => byteCharacters.charCodeAt(i));
+        const byteNumbers = new Array(byteCharacters.length)
+          .fill(0)
+          .map((_, i) => byteCharacters.charCodeAt(i));
         const byteArray = new Uint8Array(byteNumbers);
         // Cria o Blob e URL
-        const url = window.URL.createObjectURL(new Blob([byteArray], { type: response.mimeType }));
-        const link = document.createElement('a');
+        const url = window.URL.createObjectURL(
+          new Blob([byteArray], { type: response.mimeType }),
+        );
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', response.fileName);
+        link.setAttribute("download", response.fileName);
         document.body.appendChild(link);
         link.click();
         link.remove();
       })
       .catch((e) => {
-        let message = 'Error ao obter dados de participante.';
-        if (e.response?.data?.length > 0 && e.response.data[0].message) message = e.response.data[0].message;
+        let message = "Error ao obter dados de participante.";
+        if (e.response?.data?.length > 0 && e.response.data[0].message)
+          message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log('Erro: ', message, e);
+        console.log("Erro: ", message, e);
       })
       .finally(() => {
         setIsLoadingPDF(false);
       });
   };
 
-  const handleClosePhotoUploadModal = (questionUserAnswer: QuestionUserAnswerModel) => {
-    const questionUserAnswersTemp = questionUserAnswers?.filter(f => f.id != questionUserAnswer.id);
+  const handleClosePhotoUploadModal = (
+    questionUserAnswer: QuestionUserAnswerModel,
+  ) => {
+    const questionUserAnswersTemp = questionUserAnswers?.filter(
+      (f) => f.id != questionUserAnswer.id,
+    );
     setQuestionUserAnswers([...questionUserAnswersTemp, questionUserAnswer]);
-    const questionTemp = new QuestionModel({...question, questionUserAnswers: [questionUserAnswer]});
+    const questionTemp = new QuestionModel({
+      ...question,
+      questionUserAnswers: [questionUserAnswer],
+    });
     setQuestion(questionTemp);
     setIsPhotoUploadModalOpen(false);
   };
 
   const handleFinalizeClick = () => {
-    const chapterQuestionsList = plan.chapters!.flatMap(chapter =>
-      chapter!.questions!.map(question => ({ chapterId: chapter.id, questionId: question.id }))
+    const chapterQuestionsList = plan.chapters!.flatMap((chapter) =>
+      chapter!.questions!.map((question) => ({
+        chapterId: chapter.id,
+        questionId: question.id,
+      })),
     );
 
-    const questionUserAnswersList = questionUserAnswers.map(m => ({ chapterId: m.chapterId, questionId: m.questionId }));
+    const questionUserAnswersList = questionUserAnswers.map((m) => ({
+      chapterId: m.chapterId,
+      questionId: m.questionId,
+    }));
 
     const chapterQuestionsSet = new Set(
-      chapterQuestionsList.map(chapterQuestion => `${chapterQuestion.chapterId}-${chapterQuestion.questionId}`)
+      chapterQuestionsList.map(
+        (chapterQuestion) =>
+          `${chapterQuestion.chapterId}-${chapterQuestion.questionId}`,
+      ),
     );
 
-    const allExist = questionUserAnswersList.every(userAnswer =>
-      chapterQuestionsSet.has(`${userAnswer.chapterId}-${userAnswer.questionId}`)
-    );
+    const allExist =
+      questionUserAnswersList.length > 0 &&
+      questionUserAnswersList.every((userAnswer) =>
+        chapterQuestionsSet.has(
+          `${userAnswer.chapterId}-${userAnswer.questionId}`,
+        ),
+      );
 
     if (!allExist) {
       setIsFinalizeBookModalOpen(true);
-      return;
     }
 
-    navigate(paths.HOME_LOGGED);
+    finalizeBook();
+  };
+
+  const finalizeBook = () => {
+    //Change book Status
+
   };
  interface PropsSideMenu {
   navItem: string;
@@ -622,14 +699,19 @@ const NewHistory = () => {
                     Criação
                   </b>
                 </div>
-                <div className='col-auto f-12'>
-                  <FontAwesomeIcon icon={faChevronRight} style={{ color: '#7F7F8B' }} />
+                <div className="col-auto f-12">
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    style={{ color: "#7F7F8B" }}
+                  />
                 </div>
-                <div className='col-auto'
-                >
-                  <a className='btn bg-secondary text-white rounded-5 f-12 px-4 py-1'
-                    style={{ fontWeight: 'bold' }}
-                    onClick={() => { handleFinalizeClick() }}
+                <div className="col-auto">
+                  <a
+                    className="btn bg-secondary text-white rounded-5 f-12 px-4 py-1"
+                    style={{ fontWeight: "bold" }}
+                    onClick={() => {
+                      handleFinalizeClick();
+                    }}
                   >
                     Finalizar
                   </a>
