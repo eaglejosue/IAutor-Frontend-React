@@ -1618,14 +1618,15 @@ const NewHistory = () => {
   const PreviewSection:FunctionComponent =()=> {
     return(
       <>
-       <div
-                    className="d-flex bg-white justify-content-center px-4 py-3"
-                    style={{ borderBottom: "3px solid #db3737" }}
+                  <div
+                    className="d-none d-md-flex bg-white justify-content-center px-4 py-3"
+                    style={{ borderBottom: "2px solid #db3737" }}
                   >
-                    <div className="f-14">Preview</div>
+                    <div className="f-14 "><br></br>&nbsp;Preview</div>
                   </div>
 
-                  <div className="d-flex justify-content-center align-items-center bg-white shadow rounded-3 marginFerramentasEdicao my-4 p-4">
+                  <div className="d-flex justify-content-center align-items-center bg-white shadow rounded-3 marginFerramentasEdicao
+                   my-4 p-4 ">
                     <div className="d-flex f-14">Ferramentas de Edição</div>
                     <div className="d-flex text-icon ps-4">
                       <span
@@ -1644,11 +1645,7 @@ const NewHistory = () => {
                       >
                         add_photo_alternate
                       </span>
-                      {/* <span className='material-symbols-outlined px-2'
-        style={{ fontSize: '24px', cursor: 'pointer' }}
-        title='Alterar fonte'>
-        draw
-      </span> */}
+                    
                       {isLoadingPDF ? (
                         <span
                           className="spinner-border spinner-border-sm text-primary mt-1 mx-2"

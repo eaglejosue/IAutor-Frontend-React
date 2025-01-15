@@ -154,14 +154,14 @@ const NewHistory = () => {
       <>
         <div className='col-md-3 d-flex justify-content-center mb-2'  >
           <Card className='border-card '>
-            <Card.Body >
-              <div className='row m-1'>
-                <div className='col-9'>
+            <Card.Body  className="p-0">
+              <div className='row m-1 pt-3'>
+                <div className='col-10'>
                   <span className='border rounded-5 text-secondary  py-2 p-2 bgButtonStatus'>
                     {props.book?.plan?.title}
                   </span>
                 </div>
-                <div className="col-3 text-end " style={{ marginTop: "-15px" }}>
+                <div className="col-2 text-end " style={{ marginTop: "-15px" }}>
                   <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} />
                     <Dropdown.Menu>
