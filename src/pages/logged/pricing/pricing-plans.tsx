@@ -8,29 +8,32 @@ import paths from "../../../routes/paths";
 import "../../home/home.scss";
 import "./pricing-plans.scss";
 import NavResponsive from "../../../components/nav/nav-responsive.component";
-import { AuthenticatedUserModel } from "../../../common/models/authenticated.model";
-import { BookService } from "../../../common/http/api/bookService";
-import { BookFilter } from "../../../common/models/filters/book.filter";
-import { BookModel } from "../../../common/models/book.model";
+
+// import { AuthenticatedUserModel } from "../../../common/models/authenticated.model";
+// import { BookService } from "../../../common/http/api/bookService";
+// import { BookFilter } from "../../../common/models/filters/book.filter";
+// import { BookModel } from "../../../common/models/book.model";
 
 const PricingPlans = () => {
   const navigate = useNavigate();
 
   const [plans, setPlans] = useState<PlanModel[]>([]);
   const _planService = new PlanService();
-  const _bookService = new BookService();
   const [isLoading, setIsloading] = useState(false);
-  const [book, setBook] = useState<BookModel>(
-    new BookModel({ title: "Alterar Título da História" }),
-  );
+
+  //const _bookService = new BookService();
+  // const [book, setBook] = useState<BookModel>(
+  //   new BookModel({ title: "Alterar Título da História" }),
+  // );
 
   useEffect(() => {
     //@ts-ignore
     getPlans({ isActive: true });
-    const user = AuthenticatedUserModel.fromLocalStorage()!;
-    if (user) {
-      getBook(user.lastBookId, user);
-    }
+
+    // const user = AuthenticatedUserModel.fromLocalStorage()!;
+    // if (user) {
+    //   getBook(user.lastBookId, user);
+    // }
   }, []);
 
   const getPlans = (filter?: PlanFilter) => {
@@ -52,29 +55,29 @@ const PricingPlans = () => {
       });
   };
 
-  const getBook = (id: number, user: AuthenticatedUserModel) => {
-    setIsloading(true);
-    _bookService
-      .getAll(new BookFilter({ id, userId: user.id }))
-      .then((response: any) => {
-        if (!response.length) {
-          return;
-        }
+  // const getBook = (id: number, user: AuthenticatedUserModel) => {
+  //   setIsloading(true);
+  //   _bookService
+  //     .getAll(new BookFilter({ id, userId: user.id }))
+  //     .then((response: any) => {
+  //       if (!response.length) {
+  //         return;
+  //       }
 
-        const book = response[0];
-        setBook(book);
-      })
-      .catch((e: any) => {
-        let message = "Error ao obter livro.";
-        if (e.response?.data?.length > 0 && e.response.data[0].message)
-          message = e.response.data[0].message;
-        if (e.response?.data?.detail) message = e.response?.data?.detail;
-        console.log("Erro: ", message, e);
-      })
-      .finally(() => {
-        setIsloading(false);
-      });
-  };
+  //       const book = response[0];
+  //       setBook(book);
+  //     })
+  //     .catch((e: any) => {
+  //       let message = "Error ao obter livro.";
+  //       if (e.response?.data?.length > 0 && e.response.data[0].message)
+  //         message = e.response.data[0].message;
+  //       if (e.response?.data?.detail) message = e.response?.data?.detail;
+  //       console.log("Erro: ", message, e);
+  //     })
+  //     .finally(() => {
+  //       setIsloading(false);
+  //     });
+  // };
 
   const PacotesSection: FunctionComponent = () => {
     return (
@@ -147,8 +150,7 @@ const PricingPlans = () => {
       <div className="container-fluid ">
         <div className="row">
           <main
-            className="col-md-9 ms-sm-auto
-                        col-lg-11  "
+            className="col-md-9 ms-sm-auto col-lg-11"
             style={{ marginTop: "70px" }}
           >
             <div className="pt-0">
