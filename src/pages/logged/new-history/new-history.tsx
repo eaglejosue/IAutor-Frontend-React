@@ -1,5 +1,5 @@
 /* eslint-disable no-debugger */
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import { FunctionComponent, useEffect,  useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars,  faChevronRight,  faUser } from "@fortawesome/free-solid-svg-icons";
