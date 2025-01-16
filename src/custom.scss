@@ -46,7 +46,10 @@ $custom-colors: (
 .bg-iautor {
   background: linear-gradient(180deg, #FFFFFF 47.65%, #F6F5F4 87.66%);
 }
+.container-fluid {
 
+  height: 100vh !important;
+}
 $theme-colors: map-merge($theme-colors, $custom-colors);
 
 @each $color, $value in $theme-colors {

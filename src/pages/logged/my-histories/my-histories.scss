@@ -16,3 +16,11 @@
   
    bottom: 0px;;
 }
+.alignResponsive{
+  @media only screen and (max-width: 767px) {
+    justify-content: center !important;
+  }
+}
+.bgButtonStatus{
+  background: rgba(246, 245, 244, 1);
+}

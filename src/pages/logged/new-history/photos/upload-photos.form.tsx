@@ -40,8 +40,7 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
   const [uploading, setUploading] = useState(false);
   const [fileInfo, setFileInfo] = useState(null);
   //@ts-ignore
-  const [userQuestionSelected, setUserQuestionSelected] =
-    useState<QuestionUserAnswerModel>(null);
+  const [userQuestionSelected, setUserQuestionSelected] =useState<QuestionUserAnswerModel>(null);
 
   const {
     setValue,
@@ -127,16 +126,9 @@ const UploadPhotosForm = (props: UploadPhotosFormProps) => {
       <br></br>
       <span>{props.question?.title}</span>
       <div className="row rowTopUpload border-top mt-3 pt-3">
-        <div className="col-12 mt-2 text-center">
-          <Uploader
-            headers={{ authorization: "Bearer " + user?.token }}
-            locale={{
-              error: "Erro",
-              clear: "Limpar",
-              loading: "Carregando",
-              remove: "Remover",
-              emptyMessage: "Sem mensagem",
-            }}
+        <div className=" mt-2 text-center">
+          <Uploader headers={{ authorization: 'Bearer ' + user?.token }}
+            locale={{ error: 'Erro', clear: 'Limpar', loading: 'Carregando', remove: 'Remover', emptyMessage: 'Sem mensagem' }}
             listType="picture"
             action={urlPostPhoto}
             fileListVisible={false}

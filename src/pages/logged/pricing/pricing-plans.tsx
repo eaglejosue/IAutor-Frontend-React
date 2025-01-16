@@ -1,5 +1,3 @@
-import NavUserOptions from "../../../components/nav/nav-user-options.component";
-import Sidebar from "../../../components/nav/sidebar.component";
 
 import { PlanItens, PlanModel } from "../../../common/models/plan.model";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +8,7 @@ import { PlanService } from "../../../common/http/api/planService";
 import paths from "../../../routes/paths";
 import "../../home/home.scss";
 import "./pricing-plans.scss";
+import NavResponsive from "../../../components/nav/nav-responsive.component";
 
 const PricingPlans = () => {
   const navigate = useNavigate();
@@ -39,23 +38,18 @@ const PricingPlans = () => {
   };
   return (
     <>
-      <div className="d-flex" style={{ height: "100vh" }}>
-        <Sidebar navItem="my-histories" />
-        <div className="flex-grow-1">
-          <header className="bg-white border-bottom p-3">
-            <div className="row align-items-center justify-content-beetwen">
-              <div className="col-auto fw-bold f-18 pe-0">IAutor /</div>
-              <div className="col-auto f-18 ps-1">Pacotes e preços</div>
-              <div className="col">
-                <NavUserOptions />
-              </div>
-            </div>
-          </header>
-
-          <main className="main ">
-            <div className="container-fluid">
-              <div className="row m-5">
-                <div className="col-12 text-center">
+      <NavResponsive navItem="pricing" navItemLabel="Pacotes e Preços" />
+      <div className="container-fluid ">
+        <div className="row">
+          <main
+            className="col-md-9 ms-sm-auto
+                        col-lg-11  "
+            style={{ marginTop: "70px" }}
+          >
+            <div className="pt-0">
+              {/* conteudo */}
+              <div className="row ">
+                <div className="col-12 alignResponsive mt-3">
                   <h4>
                     <strong>Pacotes e preços </strong>
                   </h4>
@@ -65,7 +59,7 @@ const PricingPlans = () => {
                   </p>
                 </div>
               </div>
-              <div className="row m-5">
+              <div className="row ">
                 {plans?.map((plan: PlanModel, i: number) => {
                   return (
                     <div key={i.toString()} className="col-sm-12 col-lg-4 mt-2">

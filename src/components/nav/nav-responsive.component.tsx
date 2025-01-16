@@ -7,6 +7,7 @@ import paths from "../../routes/paths";
 import NavUserOptions from "./nav-user-options.component";
 import "./sidebar.scss";
 import Logo from "../../assets/img/favicon-32x32.png";
+import { Offcanvas } from "react-bootstrap";
 
 export interface Props {
   navItem: string;
@@ -14,10 +15,15 @@ export interface Props {
 }
 
 const NavResponsive = (p: Props) => {
-  const navigate = useNavigate();
-  //const user = AuthenticatedUserModel.fromLocalStorage();
-  const [user, setUser] = useState<AuthenticatedUserModel>();
 
+
+      const navigate = useNavigate();
+      //const user = AuthenticatedUserModel.fromLocalStorage();
+      const [user, setUser] = useState<AuthenticatedUserModel>();
+      const [show, setShow] = useState(false);
+
+      const handleClose = () => setShow(false);
+      const handleShow = () => setShow(true);
   useEffect(() => {
     const user = AuthenticatedUserModel.fromLocalStorage();
     if (user && user.token?.length) setUser(user);
@@ -37,8 +43,7 @@ const NavResponsive = (p: Props) => {
         <button
           className="navbar-toggler d-block d-md-none p-0 m-3"
           style={{ border: "none" }}
-          data-bs-toggle="offcanvas"
-          data-bs-target="#sidebar"
+          onClick={()=>handleShow()}
           aria-controls="sidebar"
         >
           <FontAwesomeIcon icon={faBars} />
@@ -67,164 +72,146 @@ const NavResponsive = (p: Props) => {
           </span>
         </div>
       </nav>
-      <div
-        className="offcanvas offcanvas-start
-                bg-success d-md-block"
-        tabIndex={-1}
-        id="sidebar"
-        aria-labelledby="sidebarLabel"
-      >
-        <div className="offcanvas-header bgHeaderSideBar">
-          <button
-            type="button"
-            className="btn-close text-reset"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-          ></button>
-        </div>
-        <div className="offcanvas-body bgHeaderSideBar p-0">
-          <div className="row text-start m-4 ">
-            <div className="col-12">
-              {user?.profileImgUrl ? (
-                <img
-                  src={user.profileImgUrl}
-                  alt={user.firstname}
-                  onClick={() => {
-                    navigate(paths.MY_ACCOUNT);
-                  }}
-                  className="rounded-circle me-1"
-                  style={{
-                    width: "64px",
-                    height: "64px",
-                    objectFit: "cover",
-                  }}
-                />
-              ) : (
-                <a target="_blank" style={{ color: "black" }}>
-                  <FontAwesomeIcon icon={faUser} />
-                </a>
-              )}
-            </div>
-            <div className="col-12">
-              <h4 className="mt-2 mb-0">
-                <a
-                  href="#"
-                  className="nav-link text-white text-decoration-underline"
-                  aria-label="Close"
-                  onClick={() => {
-                    navigate(paths.MY_ACCOUNT);
-                  }}
-                >
-                  {user?.firstname} {user?.lastname}
-                </a>
-              </h4>
-              <small>Autor</small>
-            </div>
-            <div className="col-12 mt-3">
-              <button className="btn  text-white border border-white rounded-5 f-14 px-4 py-2">
-                Livro degustação&nbsp;|&nbsp;Tradicional
-              </button>
-            </div>
-          </div>
-          <div className="bgBodySideBar pt-3">
-            <div className="row text-start m-4 ">
-              <h3>
-                <strong>Menu</strong>
-              </h3>
-              <ul className="nav nav-pills flex-row align-items-start   ">
-                <li className="mb-3 ">
-                  {" "}
-                  <a
-                    href="#"
-                    className="nav-link text-white"
-                    aria-label="Close"
-                    onClick={() => {
-                      navigate(paths.HOME_LOGGED);
-                    }}
-                  >
-                    <span
-                      className="material-symbols-outlined text-white "
-                      style={{ fontSize: "32px", color: "black" }}
-                    >
-                      cottage
-                    </span>
-                    <span className="p-4 ">Home</span>
-                  </a>
-                </li>
-                <li className="mb-3">
-                  {" "}
-                  <a
-                    href="#"
-                    className="nav-link text-white"
-                    onClick={() => {
-                      navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`)
-                    }}
-                  >
-                    <span
-                      className="material-symbols-outlined text-white"
-                      style={{ fontSize: "32px", color: "black" }}
-                    >
-                      book_2
-                    </span>
-                    <span className="p-4">Criar História</span>
-                  </a>
-                </li>
-                <li className="mb-3">
-                  {" "}
-                  <a
-                    href="#"
-                    className="nav-link text-white"
-                    onClick={() => {
-                      navigate(paths.MY_HISTORIES);
-                    }}
-                  >
-                    <span
-                      className="material-symbols-outlined text-white"
-                      style={{ fontSize: "32px", color: "black" }}
-                    >
-                      shelves
-                    </span>
-                    <span className="p-4">Minhas Histórias</span>
-                  </a>
-                </li>
-                <li className="mb-3">
-                  <a
-                    href="#"
-                    className="nav-link text-white"
-                    onClick={() => {
-                      navigate(paths.PRICING_PLANS);
-                    }}
-                  >
-                    <span
-                      className="material-symbols-outlined text-white"
-                      style={{ fontSize: "32px", color: "black" }}
-                    >
-                      paid
-                    </span>
-                    <span className="p-4">Ver Planos</span>
-                  </a>
-                </li>
-                <li className="mt-5">
-                  <a
-                    href="#"
-                    className="nav-link text-white"
-                    onClick={() => logout()}
-                  >
-                    <span
-                      className="material-symbols-outlined text-white"
-                      style={{ fontSize: "32px", color: "black" }}
-                    >
-                      logout
-                    </span>
-                    <span className="p-4 m-1">Sair</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
 
+      <Offcanvas show={show} onHide={handleClose}>
+        <Offcanvas.Header closeButton className="bgHeaderSideBar">
+          <Offcanvas.Title></Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body className="bgHeaderSideBar p-0">
+        <div className="row text-start m-4 ">
+                       <div className="col-12">
+                         {user?.profileImgUrl ? (
+                           <img
+                             src={user.profileImgUrl}
+                             alt={user.firstname}
+                             onClick={() => {navigate(paths.MY_ACCOUNT);}}
+                             className="rounded-circle me-1"
+                             style={{
+                               width: "64px",
+                               height: "64px",
+                               objectFit: "cover",
+                             }}
+                           />
+                         ) : (
+                           <a target="_blank" style={{ color: "black" }}>
+                             <FontAwesomeIcon icon={faUser} />
+                           </a>
+                         )}
+                       </div>
+                       <div className="col-12">
+                         <h4 className="mt-2 mb-0">
+                         <a
+                               href="#"
+                               className="nav-link text-white text-decoration-underline"
+                               aria-label="Close"
+                               onClick={() => { navigate(paths.MY_ACCOUNT);handleClose()}}
+                             >
+                           {user?.firstname} {user?.lastname}
+                           </a>
+                         </h4>
+                         <small>Autor</small>
+                       </div>
+                       <div className="col-12 mt-3">
+                         <button className="btn  text-white border border-white rounded-5 f-14 px-4 py-2">
+                           Livro degustação&nbsp;|&nbsp;Tradicional
+                         </button>
+                       </div>
+                     </div>
+
+                     <div className="bgBodySideBar pt-3">
+                       <div className="row text-start m-4 ">
+                         <h3>
+                           <strong>Menu</strong>
+                         </h3>
+                         <ul className="nav nav-pills flex-row align-items-start   ">
+                           <li className="mb-3 ">
+                             {" "}
+                             <a
+                               href="#"
+                               className="nav-link text-white"
+                               aria-label="Close"
+                               onClick={() => {navigate(paths.HOME_LOGGED);handleClose()}}
+                             >
+                               <span
+                                 className="material-symbols-outlined text-white "
+                                 style={{ fontSize: "32px", color: "black" }}
+                               >
+                                 cottage
+                               </span>
+                               <span  className="p-4 ">Home</span>
+                             </a>
+                           </li>
+                           <li className="mb-3">
+                             {" "}
+                             <a
+                               href="#"
+                               className="nav-link text-white"
+                               onClick={() =>
+                                 {navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`);handleClose() }
+                               }
+                             >
+                               <span
+                                 className="material-symbols-outlined text-white"
+                                 style={{ fontSize: "32px", color: "black" }}
+                               >
+                                 book_2
+                               </span>
+                               <span className="p-4">Criar História</span>
+                             </a>
+                           </li>
+                           <li className="mb-3">
+                             {" "}
+                             <a
+                               href="#"
+                               className="nav-link text-white"
+                               onClick={() => {navigate(paths.MY_HISTORIES);handleClose()}}
+                             >
+                               <span
+                                 className="material-symbols-outlined text-white"
+                                 style={{ fontSize: "32px", color: "black" }}
+                               >
+                                 shelves
+                               </span>
+                               <span className="p-4">Minhas Histórias</span>
+                             </a>
+                           </li>
+                           <li className="mb-3">
+                             <a
+                               href="#"
+                               className="nav-link text-white"
+                               onClick={() => {navigate(paths.PRICING_PLANS);handleClose()}}
+                             >
+                               <span
+                                 className="material-symbols-outlined text-white"
+                                 style={{ fontSize: "32px", color: "black" }}
+                               >
+                                 paid
+                               </span>
+                               <span className="p-4">Ver Planos</span>
+                             </a>
+                           </li>
+                           <li className="mt-5">
+                             <a
+                               href="#"
+                               className="nav-link text-white"
+                               onClick={() => {logout();handleClose()}}
+                             >
+                               <span
+                                 className="material-symbols-outlined text-white"
+                                 style={{ fontSize: "32px", color: "black" }}
+                               >
+                                 logout
+                               </span>
+                               <span className="p-4 m-1">Sair</span>
+                             </a>
+                           </li>
+                         </ul>
+                       </div>
+                     </div>
+        </Offcanvas.Body>
+      </Offcanvas>
+      
+     
       <div
         className=" d-none d-md-flex position-fixed "
         style={{ height: "100vh", marginTop: "70px" }}
