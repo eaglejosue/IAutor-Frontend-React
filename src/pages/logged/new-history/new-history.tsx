@@ -1,5 +1,5 @@
 /* eslint-disable no-debugger */
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars,  faChevronRight,  faUser } from "@fortawesome/free-solid-svg-icons";
@@ -394,14 +394,19 @@ const NewHistory = () => {
     handleQuestionUserAnswer(questionB.id, chapter.id);
   };
 
-  const handlerFocus =(e:any)=>
+  const handlerFocus = (e:any)=>
   {
-    console.log(e)
     var temp_value = e.target.value
     e.target.value = ''
     e.target.value = temp_value
 
   }
+  
+  const handlerChangeIaText = (e:any)=>{
+      e.preventDefault();
+      setIAText(e.target.value)      
+  }
+  
   const handleNextQuestionClick = () => {
     if (answerChanged) {
       saveQuestionAnswer();
@@ -1112,10 +1117,206 @@ const NewHistory = () => {
     );
   }
 
-  const PerguntasSection:FunctionComponent =()=> {
-    return (
+  const PreviewSection:FunctionComponent =()=> {
+    return(
       <>
-                  <div className=" align-items-center border-bottom px-4 py-3 d-none d-md-flex">
+                  <div
+                    className="d-none d-md-flex bg-white justify-content-center px-4 py-3"
+                    style={{ borderBottom: "2px solid #db3737" }}
+                  >
+                    <div className="f-14 "><br></br>&nbsp;Preview</div>
+                  </div>
+
+                  <div className="d-flex justify-content-center align-items-center bg-white shadow rounded-3 marginFerramentasEdicao
+                   my-4 p-4 ">
+                    <div className="d-flex f-14">Ferramentas de Edição</div>
+                    <div className="d-flex text-icon ps-4">
+                      <span
+                        className="material-symbols-outlined text-primary px-2 d-none d-md-block"
+                        style={{ fontSize: "24px", cursor: "pointer" }}
+                        onClick={() => setIsBookPreviewModalOpen(true)}
+                        title="Visualizar livro"
+                      >
+                        auto_stories
+                      </span>
+                      <span
+                        className="material-symbols-outlined text-primary px-2"
+                        style={{ fontSize: "24px", cursor: "pointer" }}
+                        onClick={() => setIsPhotoUploadModalOpen(true)}
+                        title="Inserir/Alterar foto"
+                      >
+                        add_photo_alternate
+                      </span>
+                    
+                      {isLoadingPDF ? (
+                        <span
+                          className="spinner-border spinner-border-sm text-primary mt-1 mx-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                      ) : (
+                        <span
+                          className="material-symbols-outlined text-primary px-2"
+                          style={{ fontSize: "24px", cursor: "pointer" }}
+                          onClick={bookPDF}
+                          title="Visualizar PDF"
+                        >
+                          file_save
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="d-flex justify-content-center pb-4 " >
+                    {answer.length == 0 ? (
+                      <img src={previewCapaLivro}  />
+                    ) : (
+                      <img src={previewCapaLivroBranca} />
+                    )}
+                    {answer.length > 0 && (
+                      <>
+                        <div
+                          id="chapter"
+                          className="d-flex position-absolute text-center f-11"
+                          style={{
+                            fontFamily: "Times New Roman",
+                            marginTop: "6vh"
+                          }}
+                        >
+                          Capítulo {chapter.chapterNumber}
+                        </div>
+                        <div
+                          id="title"
+                          className="d-flex position-absolute text-center f-18"
+                          style={{
+                            fontFamily: "Times New Roman",
+                            marginTop: "8vh",
+                          }}
+                        >
+                          <b>{question.subject}</b>
+                        </div>
+
+                        {question.questionUserAnswers &&
+                          question.questionUserAnswers[0]?.imagePhotoUrl && (
+                            <div
+                              id="img"
+                              className="d-flex position-absolute text-center "
+                              style={{ marginTop: "12vh" }}
+                            >
+                              <button
+                                className="btn  p-0 my-2 border-0 bg-transparent"
+                                type="button"
+                                onClick={() => setIsPhotoUploadModalOpen(true)}
+                                style={{
+                                  outline: "none",
+                                  position: "relative",
+                                }}
+                              >
+                                <div
+                                  className="rounded-circle bg-light d-flex justify-content-center align-items-center"
+                                  style={{
+                                    width: "220px",
+                                    position: "relative",
+                                  }}
+                                >
+                                  {question.questionUserAnswers[0]
+                                    ?.imagePhotoUrl ? (
+                                    <img
+                                      src={
+                                        question.questionUserAnswers[0]
+                                          ?.imagePhotoUrl
+                                      }
+                                      alt="Participante"
+                                      className="img-fluid img-thumbnail "
+                                      style={{
+                                        maxHeight: "155px",
+                                        objectFit: "cover",
+                                      }}
+                                    />
+                                  ) : (
+                                    <span
+                                      className="material-symbols-outlined"
+                                      style={{
+                                        fontSize: "45px",
+                                        color: "#6c63ff",
+                                      }}
+                                    >
+                                      person
+                                    </span>
+                                  )}
+                                </div>
+                                <div
+                                  className="d-flex justify-content-center align-items-center bg-body-bg rounded-circle"
+                                  style={{
+                                    width: "24px",
+                                    height: "24px",
+                                    position: "absolute",
+                                    bottom: "5px",
+                                    right: "5px",
+                                    border: "1px solid #ccc",
+                                  }}
+                                >
+                                  <span
+                                    className="material-symbols-outlined"
+                                    style={{
+                                      fontSize: "16px",
+                                      color: "#DB3737",
+                                    }}
+                                  >
+                                    edit
+                                  </span>
+                                </div>
+                              </button>
+                            </div>
+                          )}
+
+                        <div
+                          className="d-flex position-absolute f-13"
+                          style={{
+                            fontFamily: "Times New Roman",
+                            lineHeight: "16px",
+                            marginTop:
+                              question.questionUserAnswers &&
+                              question.questionUserAnswers[0]?.imagePhotoUrl ==
+                                null
+                                ? "12vh"
+                                : "36vh",
+                            marginLeft: "9%",
+                            marginRight: "9%",
+                          }}
+                        >
+                          {answer.substring(
+                            0,
+                            question.questionUserAnswers &&
+                              question.questionUserAnswers[0]?.imagePhotoUrl ==
+                                null
+                              ? 1400
+                              : 900,
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+      </>
+    )
+  }
+  return (
+    <>
+      <SideMenu navItem="book" navItemLabel="Criar História" />
+      <div className="container-fluid ">
+        <div className="row">
+          <main
+            className="col-md-9 col-lg-12 marginLeftContainer "
+            style={{ marginTop: "70px" }}>
+            <div className="pt-0">
+              {/* conteudo Desktop */}
+              <div className="row d-none d-md-flex">
+                {/* 1 - Capítulos */}
+                  <CapitulosSection />
+
+                {/* 2 - Perguntas */}
+                <div className="col-md-4 border-end p-0">
+                <div className=" align-items-center border-bottom px-4 py-3 d-none d-md-flex">
                     <div
                       className="d-flex bg-primary align-items-center justify-content-center"
                       style={{
@@ -1612,212 +1813,10 @@ const NewHistory = () => {
                   <div className="d-none d-md-flex text-black justify-content-center f-14 pt-2">
                     Salvar Resposta
                   </div>
-       </>
-    );
-  }
-
-  const PreviewSection:FunctionComponent =()=> {
-    return(
-      <>
-                  <div
-                    className="d-none d-md-flex bg-white justify-content-center px-4 py-3"
-                    style={{ borderBottom: "2px solid #db3737" }}
-                  >
-                    <div className="f-14 "><br></br>&nbsp;Preview</div>
-                  </div>
-
-                  <div className="d-flex justify-content-center align-items-center bg-white shadow rounded-3 marginFerramentasEdicao
-                   my-4 p-4 ">
-                    <div className="d-flex f-14">Ferramentas de Edição</div>
-                    <div className="d-flex text-icon ps-4">
-                      <span
-                        className="material-symbols-outlined text-primary px-2 d-none d-md-block"
-                        style={{ fontSize: "24px", cursor: "pointer" }}
-                        onClick={() => setIsBookPreviewModalOpen(true)}
-                        title="Visualizar livro"
-                      >
-                        auto_stories
-                      </span>
-                      <span
-                        className="material-symbols-outlined text-primary px-2"
-                        style={{ fontSize: "24px", cursor: "pointer" }}
-                        onClick={() => setIsPhotoUploadModalOpen(true)}
-                        title="Inserir/Alterar foto"
-                      >
-                        add_photo_alternate
-                      </span>
-                    
-                      {isLoadingPDF ? (
-                        <span
-                          className="spinner-border spinner-border-sm text-primary mt-1 mx-2"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                      ) : (
-                        <span
-                          className="material-symbols-outlined text-primary px-2"
-                          style={{ fontSize: "24px", cursor: "pointer" }}
-                          onClick={bookPDF}
-                          title="Visualizar PDF"
-                        >
-                          file_save
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="d-flex justify-content-center pb-4 " >
-                    {answer.length == 0 ? (
-                      <img src={previewCapaLivro}  />
-                    ) : (
-                      <img src={previewCapaLivroBranca} />
-                    )}
-                    {answer.length > 0 && (
-                      <>
-                        <div
-                          id="chapter"
-                          className="d-flex position-absolute text-center f-11"
-                          style={{
-                            fontFamily: "Times New Roman",
-                            marginTop: "6vh"
-                          }}
-                        >
-                          Capítulo {chapter.chapterNumber}
-                        </div>
-                        <div
-                          id="title"
-                          className="d-flex position-absolute text-center f-18"
-                          style={{
-                            fontFamily: "Times New Roman",
-                            marginTop: "8vh",
-                          }}
-                        >
-                          <b>{question.subject}</b>
-                        </div>
-
-                        {question.questionUserAnswers &&
-                          question.questionUserAnswers[0]?.imagePhotoUrl && (
-                            <div
-                              id="img"
-                              className="d-flex position-absolute text-center "
-                              style={{ marginTop: "12vh" }}
-                            >
-                              <button
-                                className="btn  p-0 my-2 border-0 bg-transparent"
-                                type="button"
-                                onClick={() => setIsPhotoUploadModalOpen(true)}
-                                style={{
-                                  outline: "none",
-                                  position: "relative",
-                                }}
-                              >
-                                <div
-                                  className="rounded-circle bg-light d-flex justify-content-center align-items-center"
-                                  style={{
-                                    width: "220px",
-                                    position: "relative",
-                                  }}
-                                >
-                                  {question.questionUserAnswers[0]
-                                    ?.imagePhotoUrl ? (
-                                    <img
-                                      src={
-                                        question.questionUserAnswers[0]
-                                          ?.imagePhotoUrl
-                                      }
-                                      alt="Participante"
-                                      className="img-fluid img-thumbnail "
-                                      style={{
-                                        maxHeight: "155px",
-                                        objectFit: "cover",
-                                      }}
-                                    />
-                                  ) : (
-                                    <span
-                                      className="material-symbols-outlined"
-                                      style={{
-                                        fontSize: "45px",
-                                        color: "#6c63ff",
-                                      }}
-                                    >
-                                      person
-                                    </span>
-                                  )}
-                                </div>
-                                <div
-                                  className="d-flex justify-content-center align-items-center bg-body-bg rounded-circle"
-                                  style={{
-                                    width: "24px",
-                                    height: "24px",
-                                    position: "absolute",
-                                    bottom: "5px",
-                                    right: "5px",
-                                    border: "1px solid #ccc",
-                                  }}
-                                >
-                                  <span
-                                    className="material-symbols-outlined"
-                                    style={{
-                                      fontSize: "16px",
-                                      color: "#DB3737",
-                                    }}
-                                  >
-                                    edit
-                                  </span>
-                                </div>
-                              </button>
-                            </div>
-                          )}
-
-                        <div
-                          className="d-flex position-absolute f-13"
-                          style={{
-                            fontFamily: "Times New Roman",
-                            lineHeight: "16px",
-                            marginTop:
-                              question.questionUserAnswers &&
-                              question.questionUserAnswers[0]?.imagePhotoUrl ==
-                                null
-                                ? "12vh"
-                                : "36vh",
-                            marginLeft: "9%",
-                            marginRight: "9%",
-                          }}
-                        >
-                          {answer.substring(
-                            0,
-                            question.questionUserAnswers &&
-                              question.questionUserAnswers[0]?.imagePhotoUrl ==
-                                null
-                              ? 1400
-                              : 900,
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </div>
-      </>
-    )
-  }
-  return (
-    <>
-      <SideMenu navItem="book" navItemLabel="Criar História" />
-      <div className="container-fluid ">
-        <div className="row">
-          <main
-            className="col-md-9 col-lg-12 marginLeftContainer "
-            style={{ marginTop: "70px" }}>
-            <div className="pt-0">
-              {/* conteudo Desktop */}
-              <div className="row d-none d-md-flex">
-                {/* 1 - Capítulos */}
-                  <CapitulosSection />
-
-                {/* 2 - Perguntas */}
-                <div className="col-md-4 border-end p-0">
-                    <PerguntasSection />
                 </div>
+                {/* 2 - FIM Perguntas */}
 
+                
                 {/* 3 - Preview */}
                 <div className="col-md-5 bg-iautor-color p-0 ">
                   <PreviewSection />
@@ -1845,7 +1844,506 @@ const NewHistory = () => {
                   </Nav>
                   <Tab.Content className='bgTab'>
                     <Tab.Pane eventKey="capitulos"  >  <CapitulosSection /></Tab.Pane>
-                    <Tab.Pane eventKey="perguntas">   <PerguntasSection /></Tab.Pane>
+                    <Tab.Pane eventKey="perguntas">  
+                    <div className=" align-items-center border-bottom px-4 py-3 d-none d-md-flex">
+                    <div
+                      className="d-flex bg-primary align-items-center justify-content-center"
+                      style={{
+                        width: "32px",
+                        height: "32px",
+                        borderRadius: "100%",
+                        marginRight: "15px",
+                      }}
+                    >
+                      <span
+                        className="material-symbols-outlined"
+                        style={{ fontSize: "16px", color: "white" }}
+                      >
+                        quiz
+                      </span>
+                    </div>
+                    <div className="f-14 ">
+                      <b>Perguntas</b>
+                      <div>
+                        Responda as perguntas abaixo para criar sua história
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contador de perguntas */}
+                  {isLoading ? (
+                    <div
+                      className="d-flex justify-content-center align-items-center"
+                      style={{ height: "20%", borderRadius: "9px" }}
+                    >
+                      <div
+                        className="spinner-border text-primary"
+                        style={{ width: "3rem", height: "3rem" }}
+                        role="status"
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="d-flex align-items-center justify-content-between paddingResponsivePerguntasHeader ">
+                        <div>
+                          <div className="f-14">
+                            Capítulo {chapter.chapterNumber}
+                          </div>
+                          <b className="f-16">{chapter.title}</b>
+                        </div>
+                        <div
+                          className="text-primary fw-bold rounded-5 f-10 px-4 py-1"
+                          style={{ border: "1px solid #db3737" }}
+                        >
+                          Pergunta {questionIndex + 1}/
+                          {chapter.questions?.length}
+                        </div>
+                      </div>
+                      <div className="d-flex align-items-center justify-content-between paddingResponsivePerguntas ">
+                        <div>
+                          <span className="text-primary">
+                            {questionIndex + 1} -{" "}
+                          </span>
+                          {question.title}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Área resposta */}
+                  <div className="d-flex paddingResponsivePerguntasBody ">
+                 
+                    <TextareaAutosize
+                      autoFocus
+                      onFocus={(e) =>handlerFocus(e)} 
+                      onChange={(e) => {
+                        setAnswer(e.target.value);
+                        setAnswerChanged(true);
+                      }}
+                      value={answer}
+                      disabled={isLoading}
+                      placeholder="Digite sua resposta aqui..."
+                      style={{
+                        width: "100%",
+                        minHeight: "300px",
+                        padding: "10px",
+                        borderRadius: "5px",
+                        border: "1px solid #757575",
+                        
+                      }}
+                      minLength={question.minLimitCharacters}
+                      maxLength={question.maxLimitCharacters}
+                    />
+                  </div>
+
+                  {/* Limite caracter, temas e botão IA - DESKTOP */}
+                  <div className="d-none d-md-flex align-items-center justify-content-between px-5 py-3">
+                    <span className="text-muted f-14">
+                      {answer.length} / {question.maxLimitCharacters}
+                    </span>
+
+                    <div className="d-flex justify-content-center">
+                      <div
+                        className="d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5 me-4"
+                        style={{
+                          width: "32px",
+                          height: "32px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          setIsHelpModalOpen(true);
+                        }}
+                      >
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ fontSize: "16px" }}
+                        >
+                          help
+                        </span>
+                      </div>
+
+                      <Dropdown drop="up">
+                        <Dropdown.Toggle
+                          className="btn bg-pink text-primary d-flex align-items-center justify-content-center rounded-5"
+                          style={{ width: "68px", height: "32px" }}
+                          id="dropdown-basic"
+                        >
+                          {theme === "Tradicional" ? (
+                            <img
+                              className="me-2"
+                              src={openBook}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Bibliográfico" ? (
+                            <img
+                              className="me-2"
+                              src={life}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Cômico" ? (
+                            <img
+                              className="me-2"
+                              src={clownWithHat}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Dramático" ? (
+                            <img
+                              className="me-2"
+                              src={theater}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Romântico" ? (
+                            <img
+                              className="me-2"
+                              src={hearts}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : (
+                            <span
+                              className="material-symbols-outlined"
+                              style={{ fontSize: "16px" }}
+                            >
+                              mood
+                            </span>
+                          )}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="f-14">
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Tradicional")}
+                          >
+                            <img
+                              className="me-2"
+                              src={openBook}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Tradicional
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Bibliográfico")}
+                          >
+                            <img
+                              className="me-2"
+                              src={life}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Bibliográfico
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Cômico")}
+                          >
+                            <img
+                              className="me-2"
+                              src={clownWithHat}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Cômico
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Dramático")}
+                          >
+                            <img
+                              className="me-2"
+                              src={theater}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Dramático
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Romântico")}
+                          >
+                            <img
+                              className="me-2"
+                              src={hearts}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Romântico
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </div>
+
+                    <div
+                      className={`d-flex btn bg-pink text-primary align-items-center justify-content-center rounded-5
+      ${plan.maxQtdCallIASugestions - qtdCallIASugestionsUsed == 0 ? " disabled" : ""}`}
+                      style={{ height: "32px" }}
+                      onClick={handleIASuggestionClick}
+                    >
+                      <b className="f-12">Texto sugerido pelo IAutor</b>
+                      <img className="ps-1" src={artificialInteligence} />
+                    </div>
+                  </div>
+                  {/* Limite caracter, temas e botão IA - MOBILE */}
+                  <div className="clearfix w-100 d-flex d-md-none paddingLimitesTemas" >
+
+                      <span className="float-start  w-50 text-muted f-14">
+                          {answer.length} / {question.maxLimitCharacters}
+                      </span>
+
+                      <span className="float-end  w-25  ">
+                      <Dropdown drop="up">
+                        <Dropdown.Toggle
+                          className="btn bg-pink text-primary d-flex align-items-center justify-content-center rounded-5"
+                          style={{ width: "48px", height: "32px" }}
+                          id="dropdown-basic"
+                        >
+                          {theme === "Tradicional" ? (
+                            <img
+                              className="me-2"
+                              src={openBook}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Bibliográfico" ? (
+                            <img
+                              className="me-2"
+                              src={life}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Cômico" ? (
+                            <img
+                              className="me-2"
+                              src={clownWithHat}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Dramático" ? (
+                            <img
+                              className="me-2"
+                              src={theater}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : theme === "Romântico" ? (
+                            <img
+                              className="me-2"
+                              src={hearts}
+                              style={{ height: "18px", width: "18px" }}
+                            />
+                          ) : (
+                            <span
+                              className="material-symbols-outlined"
+                              style={{ fontSize: "16px" }}
+                            >
+                              mood
+                            </span>
+                          )}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="f-14">
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Tradicional")}
+                          >
+                            <img
+                              className="me-2"
+                              src={openBook}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Tradicional
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Bibliográfico")}
+                          >
+                            <img
+                              className="me-2"
+                              src={life}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Bibliográfico
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Cômico")}
+                          >
+                            <img
+                              className="me-2"
+                              src={clownWithHat}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Cômico
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Dramático")}
+                          >
+                            <img
+                              className="me-2"
+                              src={theater}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Dramático
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setTheme("Romântico")}
+                          >
+                            <img
+                              className="me-2"
+                              src={hearts}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Romântico
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+
+                      </span>
+                      <span className="float-end  w-25 text-end">
+                      <Dropdown drop="up">
+                        <Dropdown.Toggle
+                          className="btn bg-pink text-primary d-flex align-items-center justify-content-center rounded-5"
+                          style={{ width: "48px", height: "32px" }}
+                          id="dropdown-basic-1" as={CustomToggle} >
+                         
+                            <span
+                              className="material-symbols-outlined"
+                              style={{ fontSize: "16px" }}
+                            >
+                              more_vert
+                            </span>
+                           
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu className="f-14">
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={handleIASuggestionClick}
+                          >
+                            <img
+                              className="me-2"
+                              src={artificialInteligence}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Texto sugerido pelo IAutor
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            className="d-flex align-items-center"
+                            onClick={() => setIsHelpModalOpen(true)}
+                          >
+                            <img
+                              className="me-2"
+                              src={help}
+                              style={{ height: "20px", width: "20px" }}
+                            />
+                            Ajuda
+                          </Dropdown.Item>
+                         
+                        </Dropdown.Menu>
+                      </Dropdown>
+
+                      </span>
+                  </div>
+                
+
+                  {/* Botões navegação das perguntas */}
+                  <div className="d-flex align-items-center justify-content-between px-5 pt-3">
+                    <div
+                      className={` btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
+                         d-none d-md-flex
+                        ${isFirstQuestion ? " disabled" : ""}`}
+                      style={{ height: "48px", minWidth: "140px" }}
+                      onClick={handleBeforeQuestionClick}
+                    >
+                      <span
+                        className="material-symbols-outlined pe-2"
+                        style={{ fontSize: "24px" }}
+                      >
+                        arrow_left_alt
+                      </span>
+                      <b className="f-16 ">Voltar</b>
+                    </div>
+                          {/* MOBILE */}
+                    <div
+                      className={`d-flex d-md-none btn bg-disabled text-icon align-items-center 
+                        justify-content-center rounded-5 p-3 mb-5
+                         
+                        ${isFirstQuestion ? " disabled" : ""}`}
+                      style={{ height: "48px", width: "48px" }}
+                      onClick={handleBeforeQuestionClick}
+                    >
+                      <span
+                        className="material-symbols-outlined "
+                        style={{ fontSize: "24px" }}
+                      >
+                        arrow_left_alt
+                      </span>
+                    
+                    </div>
+
+                    <div
+                      className={`d-flex btn bg-white text-black align-items-center justify-content-center rounded-5 marginButtonSaveResponsive
+                      ${isLastQuestion ? " disabled" : ""}`}
+                      style={{ border: "1px solid black", padding: "0.7rem" }}
+                      onClick={() => {
+                        saveQuestionAnswer();
+                      }}
+                    >
+                      {isLoadingSaveAnswer ? (
+                        <span
+                          className="spinner-border spinner-border-sm text-black"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                      ) : (
+                        <span
+                          className="material-symbols-outlined"
+                          style={{ fontSize: "24px" }}
+                        >
+                          save
+                        </span>
+                      )}
+                    </div>
+
+                    <div
+                      className="d-none  d-md-flex btn bg-black text-white align-items-center justify-content-center rounded-5 p-3"
+                      style={{ height: "48px", minWidth: "140px" }}
+                      onClick={() => {
+                        isLastQuestion
+                          ? handleFinalizeClick()
+                          : handleNextQuestionClick();
+                      }}
+                    >
+                      <b className="f-16">
+                        {isLastQuestion ? "Finalizar" : "Avançar"}
+                      </b>
+                      <span
+                        className="material-symbols-outlined ps-2"
+                        style={{ fontSize: "24px" }}
+                      >
+                        arrow_right_alt
+                      </span>
+                    </div>
+                       {/* MOBILE */}
+                       <div
+                      className="d-flex d-md-none btn bg-black text-white align-items-center justify-content-center rounded-circle  mb-5"
+                      style={{ height: "48px", width: "48px" }}
+                      onClick={() => {
+                        isLastQuestion
+                          ? handleFinalizeClick()
+                          : handleNextQuestionClick();
+                      }}
+                    >
+                      <b className="f-16">
+                        {isLastQuestion ? "" : ""}
+                      </b>
+                      <span
+                        className="material-symbols-outlined "
+                        style={{ fontSize: "24px" }}
+                      >
+                        arrow_right_alt
+                      </span>
+                    </div>
+
+                  </div>
+                  <div className="d-none d-md-flex text-black justify-content-center f-14 pt-2">
+                    Salvar Resposta
+                  </div>
+
+                    </Tab.Pane>
                     <Tab.Pane eventKey="preview">  <PreviewSection /></Tab.Pane>
                   </Tab.Content>
                 </Tab.Container>
@@ -2041,12 +2539,13 @@ const NewHistory = () => {
                     <b className="f-12 ms-2">Texto Escrito pelo Autor</b>
                   </div>
 
-                  <div className="d-flex">
+                  <div className="d-flex" >
                     <TextareaAutosize
-                     autoFocus
-                     onFocus={(e) =>handlerFocus(e)} 
+                    
+                     
                       onChange={(e) => {
                         setAnswer(e.target.value);
+                        
                       }}
                       name="questionAnswer"
                       value={answer}
@@ -2057,6 +2556,7 @@ const NewHistory = () => {
                         padding: "10px",
                         borderRadius: "5px",
                         border: "1px solid #757575",
+                       
                       }}
                     />
                   </div>
@@ -2080,10 +2580,10 @@ const NewHistory = () => {
                   ) : (
                     <div className="d-flex">
                       <TextareaAutosize
-                       autoFocus
-                       onFocus={(e) =>handlerFocus(e)} 
+                      
                         onChange={(e) => {
-                          setIAText(e.target.value);
+                          //setIAText(e.target.value);
+                          handlerChangeIaText(e)
                         }}
                         name="IAText"
                         value={IAText}
@@ -2095,9 +2595,12 @@ const NewHistory = () => {
                           border: "1px solid #757575",
                         }}
                       />
+
                     </div>
+                   
                   )}
                 </div>
+               
               </Modal.Body>
               <Modal.Footer className="justify-content-center border-0">
                 <button
