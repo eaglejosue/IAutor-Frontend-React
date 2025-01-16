@@ -20,7 +20,7 @@ const Footer = (p: FooterProps) => {
             style={{ fontSize: 16, lineHeight: '18px' }}
           >
             <li>
-              <p className="text-center f-14 mt-4">Copyright © 2024 IAutor | Todos os direitos reservados</p>
+              <p className="text-center f-14 mt-4">Copyright © 2025 IAutor | Todos os direitos reservados</p>
             </li>
             <li className='bg-primary d-flex justify-content-center align-items-center'
               style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px', marginLeft: '15px' }}>
@@ -30,7 +30,7 @@ const Footer = (p: FooterProps) => {
             </li>
             <li className='bg-primary d-flex justify-content-center align-items-center'
               style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
-              <a href='#'>
+              <a href='https://www.instagram.com/iautoroficial' target='_blank'>
                 <FontAwesomeIcon icon={faInstagram} style={{ color: 'white' }} />
               </a>
             </li>
@@ -125,7 +125,7 @@ const Footer = (p: FooterProps) => {
               </li>
               <li className=' nav-item bg-primary d-flex justify-content-center align-items-center '
                 style={{ width: '36px', height: '36px', borderRadius: '100%', marginRight: '15px' }}>
-                <a href='https://www.instagram.com/iautoroficial/profilecard/?igsh=MWYwNjN6dDNxMXoy' target='_blank'>
+                <a href='https://www.instagram.com/iautoroficial' target='_blank'>
                   <FontAwesomeIcon icon={faInstagram} style={{ color: 'white' }} />
                 </a>
               </li>
@@ -134,7 +134,7 @@ const Footer = (p: FooterProps) => {
 
 
             <div className='border-bottom'></div>
-            <p className="text-center f-14 mt-4 pb-4">Copyright © 2024 IAutor | Todos os direitos reservados.</p>
+            <p className="text-center f-14 mt-4 pb-4">Copyright © 2025 IAutor | Todos os direitos reservados.</p>
           </div>
         </div>
       }

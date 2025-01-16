@@ -1,7 +1,7 @@
 
 import { PlanItens, PlanModel } from "../../../common/models/plan.model";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { PlanFilter } from "../../../common/models/filters/plan.filter";
 import { PlanService } from "../../../common/http/api/planService";
 
@@ -9,19 +9,34 @@ import paths from "../../../routes/paths";
 import "../../home/home.scss";
 import "./pricing-plans.scss";
 import NavResponsive from "../../../components/nav/nav-responsive.component";
+import { AuthenticatedUserModel } from "../../../common/models/authenticated.model";
+import { BookService } from "../../../common/http/api/bookService";
+import { BookFilter } from "../../../common/models/filters/book.filter";
+import { BookModel } from "../../../common/models/book.model";
 
 const PricingPlans = () => {
   const navigate = useNavigate();
 
   const [plans, setPlans] = useState<PlanModel[]>([]);
   const _planService = new PlanService();
+  const _bookService = new BookService();
+  const [isLoading,setIsloading] = useState(false);
+  const [book, setBook] = useState<BookModel>(
+     new BookModel({ title: "Alterar Título da História" }),
+   );
+
 
   useEffect(() => {
     //@ts-ignore
     getPlans({ isActive: true });
+    const user = AuthenticatedUserModel.fromLocalStorage()!;
+    if(user){
+      getBook(user.lastBookId,user)
+    }
   }, []);
 
   const getPlans = (filter?: PlanFilter) => {
+    setIsloading(true)
     _planService
       .getAll(filter ?? new PlanFilter())
       .then((response: any) => {
@@ -34,32 +49,39 @@ const PricingPlans = () => {
         if (e.response?.data?.detail) message = e.response?.data?.detail;
         console.log("Erro: ", message, e);
       })
-      .finally(() => {});
+      .finally(() => { setIsloading(false)});
   };
-  return (
-    <>
-      <NavResponsive navItem="pricing" navItemLabel="Pacotes e Preços" />
-      <div className="container-fluid ">
-        <div className="row">
-          <main
-            className="col-md-9 ms-sm-auto
-                        col-lg-11  "
-            style={{ marginTop: "70px" }}
-          >
-            <div className="pt-0">
-              {/* conteudo */}
-              <div className="row ">
-                <div className="col-12 alignResponsive mt-3">
-                  <h4>
-                    <strong>Pacotes e preços </strong>
-                  </h4>
-                  <p>
-                    Conheça os nossos pacotes para atender suas necessidades
-                    específicas.
-                  </p>
-                </div>
-              </div>
-              <div className="row ">
+
+    const getBook = (id: number,user:AuthenticatedUserModel) => {
+      setIsloading(true)
+      _bookService
+        .getAll(new BookFilter({ id, userId: user.id }))
+        .then((response: any) => {
+          if (!response.length) {
+        
+            return;
+          }
+  
+          const book = response[0];
+          setBook(book);
+
+        })
+        .catch((e: any) => {
+          let message = "Error ao obter livro.";
+          if (e.response?.data?.length > 0 && e.response.data[0].message)
+            message = e.response.data[0].message;
+          if (e.response?.data?.detail) message = e.response?.data?.detail;
+          console.log("Erro: ", message, e);
+        })
+        .finally(() => {
+          setIsloading(false)
+        });
+    };
+
+
+    const PacotesSection:FunctionComponent =()=>{
+      return (<>
+       <div className="row">
                 {plans?.map((plan: PlanModel, i: number) => {
                   return (
                     <div key={i.toString()} className="col-sm-12 col-lg-4 mt-2">
@@ -96,7 +118,7 @@ const PricingPlans = () => {
                           <div className="row text-center">
                             <div className="d-flex justify-content-center pt-3">
                               <button
-                                disabled={plan.price === 0}
+                                disabled={book?.planId == plan.id}
                                 className={`btn ${i == 1 ? "bg-white text-black btnComprarBlack" : "bg-secondary text-white btnComprarRed"} rounded-5 f-13 py-3 mb-4 w-70 `}
                                 style={{
                                   fontWeight: "bold",
@@ -117,6 +139,46 @@ const PricingPlans = () => {
                   );
                 })}
               </div>
+      </>)
+    }
+  return (
+    <>
+      <NavResponsive navItem="pricing" navItemLabel="Pacotes e Preços" />
+      <div className="container-fluid ">
+        <div className="row">
+          <main
+            className="col-md-9 ms-sm-auto
+                        col-lg-11  "
+            style={{ marginTop: "70px" }}
+          >
+            <div className="pt-0">
+              {/* conteudo */}
+              <div className="row ">
+                <div className="col-12 alignResponsive mt-3">
+                  <h4>
+                    <strong>Pacotes e preços </strong>
+                  </h4>
+                  <p>
+                    Conheça os nossos pacotes para atender suas necessidades
+                    específicas.
+                  </p>
+                </div>
+              </div>
+              {isLoading? (
+                <div
+                  className="d-flex justify-content-center align-items-center"
+                  style={{ height: "100%", borderRadius: "9px" }}
+                >
+                  <div
+                    className="spinner-border text-primary"
+                    style={{ width: "3rem", height: "3rem" }}
+                    role="status"
+                  />
+                </div>
+              ):<PacotesSection />
+            
+            }
+              
             </div>
           </main>
         </div>

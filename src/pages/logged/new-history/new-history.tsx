@@ -398,8 +398,9 @@ const NewHistory = () => {
   {
     console.log(e)
     var temp_value = e.target.value
-  e.target.value = ''
-  e.target.value = temp_value
+    e.target.value = ''
+    e.target.value = temp_value
+
   }
   const handleNextQuestionClick = () => {
     if (answerChanged) {
@@ -2011,6 +2012,7 @@ const NewHistory = () => {
               onHide={() => setIsIAModalOpen(false)}
               size="lg"
               backdrop="static"
+      
               keyboard={false}
             >
               <Modal.Body>
@@ -2041,6 +2043,8 @@ const NewHistory = () => {
 
                   <div className="d-flex">
                     <TextareaAutosize
+                     autoFocus
+                     onFocus={(e) =>handlerFocus(e)} 
                       onChange={(e) => {
                         setAnswer(e.target.value);
                       }}
@@ -2076,6 +2080,8 @@ const NewHistory = () => {
                   ) : (
                     <div className="d-flex">
                       <TextareaAutosize
+                       autoFocus
+                       onFocus={(e) =>handlerFocus(e)} 
                         onChange={(e) => {
                           setIAText(e.target.value);
                         }}
