@@ -20,8 +20,9 @@ import BookViewer from "../../../components/book-viewer/book-viewer";
 import paths from "../../../routes/paths";
 import "./my-histories.scss";
 import NavResponsive from "../../../components/nav/nav-responsive.component";
+import { BookFilter } from "../../../common/models/filters/book.filter";
 
-const NewHistory = () => {
+const MyHistories = () => {
   const navigate = useNavigate();
 
   const _bookService = new BookService();
@@ -47,8 +48,13 @@ const NewHistory = () => {
 
     setIsLoading(true);
     _bookService
-      //@ts-ignore
-      .getAll({ userId: user.id, includeUserBookPlan: true })
+      .getAll(
+        new BookFilter({
+          userId: user.id,
+          includeUserBookPlan: true,
+          paymentsApproved: true,
+        }),
+      )
       .then((response: any) => {
         if (response) {
           setBooks(response);
@@ -151,36 +157,35 @@ const NewHistory = () => {
 
   const ItemCards: FunctionComponent<ItemCardProps> = (props) => {
     return (
-      <>
-        <div className='col-md-3 d-flex justify-content-center mb-2'  >
-          <Card className='border-card '>
-            <Card.Body  className="p-0">
-              <div className='row m-1 pt-3'>
-                <div className='col-10'>
-                  <span className='border rounded-5 text-secondary  py-2 p-2 bgButtonStatus'>
-                    {props.book?.plan?.title}
-                  </span>
-                </div>
-                <div className="col-2 text-end " style={{ marginTop: "-15px" }}>
-                  <Dropdown>
-                    <Dropdown.Toggle as={CustomToggle} />
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        title="Editar"
-                        onClick={() =>
-                          navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`)
-                        }
-                      >
-                        Editar
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        disabled={true}
-                        className='d-none d-md-block'
-                        onClick={() => handlerVisualizar(props.book)}
-                      >
-                        Visualizar
-                      </Dropdown.Item>
-                      {/* <Dropdown.Item
+      <div className="col-md-3 d-flex justify-content-center mb-2">
+        <Card className="border-card">
+          <Card.Body className="p-0">
+            <div className="row m-1 pt-3">
+              <div className="col-10">
+                <span className="border rounded-5 text-secondary  py-2 p-2 bgButtonStatus">
+                  {props.book?.plan?.title}
+                </span>
+              </div>
+              <div className="col-2 text-end" style={{ marginTop: "-15px" }}>
+                <Dropdown>
+                  <Dropdown.Toggle as={CustomToggle} />
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      title="Editar"
+                      onClick={() =>
+                        navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`)
+                      }
+                    >
+                      Editar
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      disabled={true}
+                      className="d-none d-md-block"
+                      onClick={() => handlerVisualizar(props.book)}
+                    >
+                      Visualizar
+                    </Dropdown.Item>
+                    {/* <Dropdown.Item
                         disabled={true}
                         onClick={() => handlerSelect('Baixar')}
                       >
@@ -192,29 +197,30 @@ const NewHistory = () => {
                       >
                         Deletar
                       </Dropdown.Item> */}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-                <div className="col-12">
-                  <br></br>
-                  <br></br>
-                </div>
-                <div className='col-12 colIcon  mt-3 alignResponsive'>
-                  <img src={myHistories} alt='My-histories'></img>
-                </div>
-                <div className='col-12  mt-3 alignResponsive'>
-                  {props.book.title}
-                </div>
-                <div className='col-12   alignResponsive text-muted'>
-                  <small>{props.book?.updatedAt != null ? `Última edição há ${differenceInDays(new Date(), props.book?.updatedAt)} dias` : ''}</small>
-                </div>
+                  </Dropdown.Menu>
+                </Dropdown>
               </div>
-            </Card.Body>
-          </Card>
-        </div>
-
-     
-      </>
+              <div className="col-12">
+                <br></br>
+                <br></br>
+              </div>
+              <div className="col-12 colIcon  mt-3 alignResponsive">
+                <img src={myHistories} alt="My-histories"></img>
+              </div>
+              <div className="col-12 mt-3 alignResponsive">
+                {props.book.title}
+              </div>
+              <div className="col-12 alignResponsive text-muted">
+                <small>
+                  {props.book?.updatedAt != null
+                    ? `Última edição há ${differenceInDays(new Date(), props.book?.updatedAt)} dias`
+                    : ""}
+                </small>
+              </div>
+            </div>
+          </Card.Body>
+        </Card>
+      </div>
     );
   };
 
@@ -243,25 +249,25 @@ const NewHistory = () => {
                     História(s) criada(s) até o momento
                   </p>
                 </div>
-        
+
                 <div className="col-md-2 text-end d-none d-md-block">
-                           <Button
-                             variant=" btn-secondary"
-                             onClick={() => navigate(paths.PRICING_PLANS)}
-                             className=" rounded-5  f-14  p-3 d-none d-md-block"
-                           >
-                             <strong>Criar história</strong>
-                           </Button>
-                         </div>
-                         <div className="col-md-2 text-end  gap-2 d-grid d-md-none ">
-                           <Button
-                             variant=" btn-secondary"
-                             onClick={() => navigate(paths.PRICING_PLANS)}
-                             className=" rounded-5  f-14  p-3 historyLoggedButton"
-                           >
-                             <strong>Criar história</strong>
-                           </Button>
-                         </div>
+                  <Button
+                    variant=" btn-secondary"
+                    onClick={() => navigate(paths.PRICING_PLANS)}
+                    className=" rounded-5  f-14  p-3 d-none d-md-block"
+                  >
+                    <strong>Criar história</strong>
+                  </Button>
+                </div>
+                <div className="col-md-2 text-end  gap-2 d-grid d-md-none ">
+                  <Button
+                    variant=" btn-secondary"
+                    onClick={() => navigate(paths.PRICING_PLANS)}
+                    className=" rounded-5  f-14  p-3 historyLoggedButton"
+                  >
+                    <strong>Criar história</strong>
+                  </Button>
+                </div>
               </div>
               <div className="row mt-2 alignResponsive">
                 <div className="col-md-1 gx-0 text-primary alignResponsive">
@@ -273,25 +279,24 @@ const NewHistory = () => {
                   <hr></hr>
                 </div>
               </div>
-              <div className='row mt-4'>
-              {
-                isLoading ?
-                  (
-                    <div className='d-flex justify-content-center align-items-center' style={{ height: '100%', borderRadius: '9px' }}>
-                      <div className='spinner-border text-primary' style={{ width: '3rem', height: '3rem' }} role='status' />
-                    </div>
-                  ) : (
-       
+              <div className="row mt-4">
+                {isLoading ? (
+                  <div
+                    className="d-flex justify-content-center align-items-center"
+                    style={{ height: "100%", borderRadius: "9px" }}
+                  >
+                    <div
+                      className="spinner-border text-primary"
+                      style={{ width: "3rem", height: "3rem" }}
+                      role="status"
+                    />
+                  </div>
+                ) : (
                   books?.map((b: BookModel) => {
-                    return (ItemCards({ book: b }))
-                    
+                    return ItemCards({ book: b });
                   })
-               
-                
-                )
-              }
-
-            </div>
+                )}
+              </div>
             </div>
           </main>
         </div>
@@ -314,4 +319,4 @@ const NewHistory = () => {
   );
 };
 
-export default NewHistory;
+export default MyHistories;

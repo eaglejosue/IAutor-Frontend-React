@@ -121,12 +121,11 @@ const HomeLogged = () => {
       <div className="container-fluid ">
         <div className="row">
           <main
-            className="col-md-9 ms-sm-auto
-                        col-lg-11  "
+            className="col-md-9 ms-sm-auto col-lg-11"
             style={{ marginTop: "70px" }}
           >
             <div className="p-3">
-              <div className="row mb-4 pt-4 ">
+              <div className="row mb-4 pt-4">
                 {isLoading ? (
                   <div
                     className="d-flex justify-content-center align-items-center"

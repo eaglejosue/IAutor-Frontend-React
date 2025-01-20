@@ -144,6 +144,7 @@ const PricingPlans = () => {
       </>
     );
   };
+
   return (
     <>
       <NavResponsive navItem="pricing" navItemLabel="Pacotes e Preços" />

@@ -68,7 +68,7 @@ const Login = () => {
     AuthenticatedUserModel.saveToLocalStorage(user);
     if (!user.isValid) {
       toast.warning("CPF e Data de Nascimento obrigatórios para cadastro!", {
-        position: "top-left",
+        position: "top-center",
         style: { minWidth: 600 },
       });
       navigate(paths.MY_ACCOUNT);
@@ -151,7 +151,7 @@ const Login = () => {
         if (e.response?.data?.detail) message = e.response?.data?.detail;
         console.log("Login erro: ", e);
         toast.error(message, {
-          position: "top-left",
+          position: "top-center",
           style: { minWidth: 600 },
         });
       })

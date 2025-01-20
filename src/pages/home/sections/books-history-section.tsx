@@ -2,7 +2,6 @@ import { Button, Card, Dropdown, Table } from "react-bootstrap"
 import { bookuserbooks } from "../../../assets/svg";
 import { differenceInDays } from 'date-fns';
 import React from "react";
-
 import { BookModel } from "../../../common/models/book.model";
 import { AuthenticatedUserModel } from "../../../common/models/authenticated.model";
 import { useNavigate } from "react-router-dom";
@@ -65,7 +64,7 @@ const BooksHistory = ({ book, user, handlerSelect, plan }: BooksHistoryProps) =>
               <strong>Criar história</strong>
             </Button>
           </div>
-          <div className="col-md-2 text-end  gap-2 d-grid d-md-none ">
+          <div className="col-md-2 text-end gap-2 d-grid d-md-none ">
             <Button
               variant=" btn-secondary"
               onClick={() => navigate(paths.PRICING_PLANS)}
@@ -75,13 +74,13 @@ const BooksHistory = ({ book, user, handlerSelect, plan }: BooksHistoryProps) =>
             </Button>
           </div>
 
-          <div className="col-md-2 text-end ">
+          <div className="col-md-2 text-end">
             <Button
               variant="outline-secondary "
               className=" rounded-5  f-14  p-3 d-none d-md-block"
               onClick={() => navigate(paths.MY_HISTORIES)}
             >
-              <strong>Vá para minhas histórias</strong>
+              <strong>Minhas histórias</strong>
             </Button>
             <div className="col-md-2 text-end d-grid gap-2 d-md-none historyLoggedButton">
               <Button
@@ -89,7 +88,7 @@ const BooksHistory = ({ book, user, handlerSelect, plan }: BooksHistoryProps) =>
                 className=" rounded-5  f-14  p-3"
                 onClick={() => navigate(paths.MY_HISTORIES)}
               >
-                <strong>Vá para minhas histórias</strong>
+                <strong>Minhas histórias</strong>
               </Button>
             </div>
           </div>

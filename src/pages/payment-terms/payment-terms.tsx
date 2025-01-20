@@ -92,7 +92,7 @@ const MyAccount = () => {
       toast.error(
         "Por favor, aceite os termos e condições antes de prosseguir.",
         {
-          position: "top-left",
+          position: "top-center",
           style: { minWidth: 600 },
         },
       );
@@ -115,7 +115,7 @@ const MyAccount = () => {
         `${paths.MY_ACCOUNT}?redirect=${paths.PAYMENT_TERMS}/${planId}`,
       );
       toast.warning("CPF e Data de Nascimento obrigatórios para cadastro!", {
-        position: "top-left",
+        position: "top-center",
         style: { minWidth: 600 },
       });
       return;
@@ -132,11 +132,15 @@ const MyAccount = () => {
         }),
       )
       .then((response: any) => {
-        console.log(response);
+        if (response.bookId) {
+          const user = AuthenticatedUserModel.fromLocalStorage()!;
+          user.lastBookId = response.bookId;
+          AuthenticatedUserModel.saveToLocalStorage(user);
+        }
         toast.warning(
           "Após o pagamento confirmado você poderá ver o registro do livro.",
           {
-            position: "top-left",
+            position: "top-center",
             style: { minWidth: 600 },
           },
         );
@@ -145,7 +149,7 @@ const MyAccount = () => {
         //   toast.warning(
         //     "Após o pagamento confirmado você poderá ver o registro do livro.",
         //     {
-        //       position: "top-left",
+        //       position: "top-center",
         //       style: { minWidth: 600 },
         //     },
         //   );
@@ -160,7 +164,7 @@ const MyAccount = () => {
           message = e.response.data[0].message;
         if (e.response?.data?.detail) message = e.response?.data?.detail;
         toast.error(message, {
-          position: "top-left",
+          position: "top-center",
           style: { minWidth: 600 },
         });
       })
