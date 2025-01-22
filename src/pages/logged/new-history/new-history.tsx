@@ -1657,7 +1657,7 @@ const NewHistory = () => {
                         </Dropdown.Menu>
                       </Dropdown>
                     </span>
-                    <span className="float-end  w-25 text-end">
+                    <span className="float-end  w-25 text-end bg-danger">
                       <Dropdown drop="up">
                         <Dropdown.Toggle
                           className="btn bg-pink text-primary d-flex align-items-center justify-content-center rounded-5"
@@ -1683,7 +1683,7 @@ const NewHistory = () => {
                               src={artificialInteligence}
                               style={{ height: "20px", width: "20px" }}
                             />
-                            Texto sugerido pelo IAutor
+                            Texto sugerido pelo IAutor  
                           </Dropdown.Item>
                           <Dropdown.Item
                             className="d-flex align-items-center"
@@ -2181,51 +2181,29 @@ const NewHistory = () => {
                           </Dropdown>
                         </span>
                         <span className="float-end  w-25 text-end">
-                          <Dropdown drop="up">
-                            <Dropdown.Toggle
-                              className="btn bg-pink text-primary d-flex align-items-center justify-content-center rounded-5"
-                              style={{ width: "48px", height: "32px" }}
-                              id="dropdown-basic-1"
-                              as={CustomToggle}
-                            >
-                              <span
-                                className="material-symbols-outlined"
-                                style={{ fontSize: "16px" }}
-                              >
-                                more_vert
-                              </span>
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu className="f-14">
-                              <Dropdown.Item
-                                className="d-flex align-items-center"
-                                onClick={handleIASuggestionClick}
-                              >
-                                <img
-                                  className="me-2"
-                                  src={artificialInteligence}
-                                  style={{ height: "20px", width: "20px" }}
-                                />
-                                Texto sugerido pelo IAutor
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                className="d-flex align-items-center"
-                                onClick={() => setIsHelpModalOpen(true)}
-                              >
-                                <img
+                        <img
                                   className="me-2"
                                   src={help}
                                   style={{ height: "20px", width: "20px" }}
+                                  onClick={() => setIsHelpModalOpen(true)}
                                 />
-                                Ajuda
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                        </span>
+
+                        <span className="float-end  w-25 text-end ">
+                     
+
+                          <img
+                                  className="me-2"
+                                  src={artificialInteligence}
+                                  onClick={handleIASuggestionClick}
+                                  style={{ height: "20px", width: "20px" }}
+                                />      
+
                         </span>
                       </div>
 
                       {/* Botões navegação das perguntas */}
-                      <div className="d-flex align-items-center justify-content-between px-5 pt-3">
+                      <div className="d-flex align-items-center justify-content-between px-5 pt-5">
                         <div
                           className={` btn bg-disabled text-icon align-items-center justify-content-center rounded-5 p-3
                          d-none d-md-flex
