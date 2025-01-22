@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Card } from 'react-bootstrap';
+import { useState } from "react";
+import { Card } from "react-bootstrap";
 
-import './paymentForm.component.scss';
-import useScreenSize from '../../hooks/useScreenSize';
+import "./paymentForm.component.scss";
+import useScreenSize from "../../hooks/useScreenSize";
 
 export interface PaymentFormProps {
   onTermsAcceptanceChange: (accepted: boolean) => void;
@@ -10,21 +10,24 @@ export interface PaymentFormProps {
   termsAndConditions?: string;
   acceptedTerms: boolean;
   isLoading: boolean;
+  viewPaymentButton: boolean;
 }
 
 const PaymentForm = (p: PaymentFormProps) => {
   const { isLargeScreen, isExtraLargeScreen } = useScreenSize();
-  const Container = isExtraLargeScreen || isLargeScreen ? Card : 'div';
-  const [errorMessage, setErrorMessage] = useState('');
+  const Container = isExtraLargeScreen || isLargeScreen ? Card : "div";
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handlePaymentConfirmation = () => {
     if (!p.acceptedTerms) {
-      setErrorMessage("Antes de prosseguir, por favor, confirme que leu e concorda com nossos termos e condições.");
+      setErrorMessage(
+        "Antes de prosseguir, por favor, confirme que leu e concorda com nossos termos e condições.",
+      );
     } else {
-      setErrorMessage('');
+      setErrorMessage("");
       p.onConfirmPayment();
     }
-  }
+  };
 
   return (
     <div className="payment-form-container">
@@ -78,21 +81,23 @@ const PaymentForm = (p: PaymentFormProps) => {
             )}
           </div>
 
-          <div className="d-flex w-100 justify-content-center align-items-center mt-3">
-            <button
-              className="btn btn-primary text-white rounded-5 f-14 px-4 p-2"
-              onClick={handlePaymentConfirmation}
-            >
-              Efetuar Pagamento
-              {p.isLoading && (
-                <span
-                  className="spinner-border spinner-border-sm text-light ms-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-              )}
-            </button>
-          </div>
+          {p.viewPaymentButton && (
+            <div className="d-flex w-100 justify-content-center align-items-center mt-3">
+              <button
+                className="btn btn-primary text-white rounded-5 f-14 px-4 p-2"
+                onClick={handlePaymentConfirmation}
+              >
+                Efetuar Pagamento
+                {p.isLoading && (
+                  <span
+                    className="spinner-border spinner-border-sm text-light ms-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                )}
+              </button>
+            </div>
+          )}
 
           <div className="mt-3 px-4">
             <p className="text-center text-icon f-14 mb-0">
@@ -103,6 +108,6 @@ const PaymentForm = (p: PaymentFormProps) => {
       </Container>
     </div>
   );
-}
+};
 
 export default PaymentForm;

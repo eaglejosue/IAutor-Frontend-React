@@ -187,6 +187,7 @@ const MyAccount = () => {
               termsAndConditions={paramModel.value}
               acceptedTerms={acceptedTerms}
               isLoading={isLoading}
+              viewPaymentButton={planId > 0}
             />
             {isLoading && (
               <span
