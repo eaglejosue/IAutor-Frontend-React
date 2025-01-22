@@ -173,7 +173,7 @@ const MyHistories = () => {
                     <Dropdown.Item
                       title="Editar"
                       onClick={() =>
-                        navigate(`${paths.NEW_HISTORY}/${user?.lastBookId}`)
+                        navigate(`${paths.NEW_HISTORY}/${props.book.id}`)
                       }
                     >
                       Editar
