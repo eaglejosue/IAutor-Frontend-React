@@ -394,6 +394,7 @@ const SigIn = () => {
                   Li e concordo com os{" "}
                   <span
                     className="fw-bold"
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
                       window.open(`${paths.PAYMENT_TERMS}/0`, "_blank");
                     }}
