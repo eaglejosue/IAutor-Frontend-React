@@ -392,15 +392,14 @@ const SigIn = () => {
                     }}
                   />
                   Li e concordo com os{" "}
-                  <div
+                  <span
                     className="fw-bold"
                     onClick={() => {
-                      window.open(paths.TERMS, "_blank");
+                      window.open(`${paths.PAYMENT_TERMS}/0`, "_blank");
                     }}
                   >
                     Termos e Condições
-                  </div>{" "}
-                  da plataforma.
+                  </span> da plataforma.
                 </label>
               </div>
 
