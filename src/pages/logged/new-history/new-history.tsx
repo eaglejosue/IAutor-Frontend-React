@@ -635,6 +635,7 @@ const NewHistory = () => {
               <input
                 type="text"
                 value={title}
+                maxLength={50}
                 onChange={(e) => {
                   setTitle(e.target.value);
                 }}
@@ -688,6 +689,7 @@ const NewHistory = () => {
                   <input
                     type="text"
                     value={title}
+                    maxLength={50}
                     onChange={(e) => {
                       setTitle(e.target.value);
                     }}
@@ -1188,6 +1190,7 @@ const NewHistory = () => {
               >
                 Capítulo {chapter.chapterNumber}
               </div>
+              
               <div
                 id="title"
                 className="d-flex position-absolute text-center f-18"
@@ -1196,7 +1199,7 @@ const NewHistory = () => {
                   marginTop: "8vh",
                 }}
               >
-                <b>{question.subject}</b>
+                {question.subject.length>40 ?  <b>{question.subject.substring(0,40)}<br></br> {question.subject.substring(40,question.subject.length)}</b>:<b>{question.subject}</b> }
               </div>
 
               {question.questionUserAnswers &&
@@ -1204,7 +1207,7 @@ const NewHistory = () => {
                   <div
                     id="img"
                     className="d-flex position-absolute text-center "
-                    style={{ marginTop: "12vh" }}
+                    style={{ marginTop: question.subject.length>40? "14vh":"12vh" }}
                   >
                     <button
                       className="btn  p-0 my-2 border-0 bg-transparent"
@@ -1277,7 +1280,7 @@ const NewHistory = () => {
                   marginTop:
                     question.questionUserAnswers &&
                     question.questionUserAnswers[0]?.imagePhotoUrl == null
-                      ? "12vh"
+                      ? question.subject.length>40? "14vh":   "12vh"
                       : "36vh",
                   marginLeft: "9%",
                   marginRight: "9%",
