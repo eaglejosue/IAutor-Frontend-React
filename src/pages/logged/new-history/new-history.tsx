@@ -1137,7 +1137,7 @@ const NewHistory = () => {
           <div className="d-flex f-14">Ferramentas de Edição</div>
           <div className="d-flex text-icon ps-4">
             <span
-              className="material-symbols-outlined text-primary px-2 d-none d-md-block"
+              className="material-symbols-outlined text-primary px-2 "
               style={{ fontSize: "24px", cursor: "pointer" }}
               onClick={() => setIsBookPreviewModalOpen(true)}
               title="Visualizar livro"
